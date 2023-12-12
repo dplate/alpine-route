@@ -39,3 +39,10 @@ Thoughts:
 - Storing height map as 16 bit gray scale png, 24bit split r/g/b or custom binary data
 - Fits the whole height map as texture into memory or is some kind of mip mapping needed and async loading needed?
 - 2m grid resolution should be good enough, with a texture size of 4096x4096px this would allow a 8km x 8km area
+
+## Credits
+
+### Map data
+
+- Federal Office of Topography swisstopo
+- ©swisstopo

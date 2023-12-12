@@ -1,0 +1,10 @@
+{
+  "name": "helper-tools",
+  "description": "",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "extract-zip": "^2.0.1",
+    "pngjs": "^7.0.0"
+  }
+}

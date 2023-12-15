@@ -5,7 +5,7 @@ import { finished } from 'stream/promises';
 import extract from 'extract-zip';
 import { PNG } from 'pngjs';
 
-const mapName = 'saentis';
+const mapName = 'albula';
 const textureWidth = 4096;
 const textureHeight = 4096;
 const resolutionInMeter = 2;
@@ -36,8 +36,6 @@ const collectMapData = async (segmentUrls) => {
   const points = Array.from({ length: textureWidth }, () => 
     Array.from({ length: textureHeight }, () => ({}))
   );
-  let minHeight = null;
-  let maxHeight = null;
 
   for (let segmentX = minSegmentX; segmentX <= maxSegmentX; segmentX++) {
     for (let segmentY = minSegmentY; segmentY <= maxSegmentY; segmentY++) {
@@ -57,19 +55,13 @@ const collectMapData = async (segmentUrls) => {
           const y = textureHeight - (absoluteY - minSegmentY * 1000 - 1) / resolutionInMeter - 1;
           if (x < textureWidth && y >= 0) {
             points[x][y].height = height;
-            if (minHeight === null || height < minHeight) {
-              minHeight = height;
-            }
-            if (maxHeight === null || height > maxHeight) {
-              maxHeight = height;
-            }
           }
         }
       });
     }
   }
 
-  return { minHeight, maxHeight, points };
+  return { points };
 }
 
 const createTexture = async (mapData) => {
@@ -84,12 +76,10 @@ const createTexture = async (mapData) => {
     for (let y = 0; y < textureHeight; y++) {
       const point = mapData.points[x][y];
       
-      const heightColor = Math.floor(256 * 256 * (point.height - mapData.minHeight) / (mapData.maxHeight + 0.01 - mapData.minHeight));
-
       const index = (textureWidth * y + x) * 3;
-      bitmap[index] = Math.floor((heightColor & 0xFFFF) / 256);
-      bitmap[index + 1] = Math.floor((heightColor & 0xFFFF) % 256);
-      bitmap[index + 2] = 0;
+      bitmap[index] = Math.floor((point.height & 0xFFFFFF) / (256 * 256));
+      bitmap[index + 1] = Math.floor((point.height & 0x00FFFF) / 256);
+      bitmap[index + 2] = point.height & 0x0000FF;
     }
   }
 
@@ -102,7 +92,6 @@ const createTexture = async (mapData) => {
       inputHasAlpha: false
     }));
 }
-
 
 console.log('Loading segmentUrls...')
 const segmentUrls = fs.readFileSync(`${mapDirectory}/segmentUrls.csv`, 'utf8').toString().split('\n');

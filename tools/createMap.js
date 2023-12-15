@@ -78,29 +78,42 @@ const createTexture = async (mapData) => {
     height: textureHeight
   });
 
+  const buffer = Buffer.alloc(textureWidth * textureHeight * 3);
+  const bitmap = new Uint8Array(buffer.buffer);
   for (let x = 0; x < textureWidth; x++) {
     for (let y = 0; y < textureHeight; y++) {
-      const index = (textureWidth * y + x) << 2;
-      const heightColor = Math.floor(255 * (mapData.points[x][y].height - mapData.minHeight) / (mapData.maxHeight - mapData.minHeight))
-      texture.data[index] = heightColor;
-      texture.data[index + 1] = heightColor;
-      texture.data[index + 2] = heightColor;
-      texture.data[index + 3] = 255;
+      const point = mapData.points[x][y];
+      
+      const heightColor = Math.floor(256 * 256 * (point.height - mapData.minHeight) / (mapData.maxHeight + 0.01 - mapData.minHeight));
+
+      const index = (textureWidth * y + x) * 3;
+      bitmap[index] = Math.floor((heightColor & 0xFFFF) / 256);
+      bitmap[index + 1] = Math.floor((heightColor & 0xFFFF) % 256);
+      bitmap[index + 2] = 0;
     }
   }
 
-  return texture;
+  texture.data = buffer;
+
+  fs.writeFileSync(
+    `${mapDirectory}/map.png`, 
+    PNG.sync.write(texture, { 
+      colorType: 2, 
+      inputHasAlpha: false
+    }));
 }
 
+
+console.log('Loading segmentUrls...')
 const segmentUrls = fs.readFileSync(`${mapDirectory}/segmentUrls.csv`, 'utf8').toString().split('\n');
 
-await downloadSegments(segmentUrls);
+console.log('Downloading segments...')
+//await downloadSegments(segmentUrls);
 
-const mapData = await collectMapData(segmentUrls)
+console.log('Collecting map data...')
+const mapData = await collectMapData(segmentUrls);
 
-console.log(mapData.minHeight, mapData.maxHeight);
+console.log('Creating texture...')
+await createTexture(mapData);
 
-const texture = await createTexture(mapData);
-
-fs.writeFileSync(`${mapDirectory}/map.png`, PNG.sync.write(texture, { colorType: 6 }));
-
+console.log('Done');

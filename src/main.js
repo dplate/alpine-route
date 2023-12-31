@@ -45,7 +45,6 @@ async function main() {
       }
 
       override texelInMeters: f32;
-      override heightInMeters: f32;
 
       const northWestOffset = vec2i(-1, 1);
       const westOffset = vec2i(-1, 0);
@@ -56,97 +55,154 @@ async function main() {
       const northEastOffset = vec2i(1, 1);
       const northOffset = vec2i(0, 1);
 
-      @group(0) @binding(1) var mapSampler: sampler;
-      @group(0) @binding(2) var mapTexture: texture_2d<f32>;
+      @group(0) @binding(1) var mapTexture: texture_2d<f32>;
 
-      fn getHeight(textureCoordinate: vec2f) -> f32 {
-        let sample = textureSample(mapTexture, mapSampler, textureCoordinate);
-        return (sample[0] * 256 * 256 + sample[1] * 256 + sample[2]);
+      fn convertColorToHeight(color: vec4f) -> f32 {
+        return dot( color, vec4f(256.0 * 256.0, 256.0, 1.0, 0) ) * 2.55;
       }
 
-      fn getNeighbor(sample: vec4f, offset: vec2i) -> vec3f {
+      fn getNeighbor(height: f32, offset: vec2i) -> vec3f {
         return vec3f(
           texelInMeters * f32(offset[0]),
           - texelInMeters * f32(offset[1]),
-          (sample[0] * 256 * 256 + sample[1] * 256 + sample[2])
+          height
         );
       }
 
-      fn calculateShading(textureCoordinate: vec2f) -> f32 {
-        let neighbors: array<vec3f, 8> = array(
+      fn getInterpolatedHeight(textureCoordinate: vec2f) -> f32 {
+        let textureSize = vec2f(textureDimensions(mapTexture));
+        let fraction = fract(textureCoordinate * textureSize);
+        let flooredTextureCoordinate = vec2i(textureCoordinate * textureSize);
+
+        let height = convertColorToHeight(
+          textureLoad(mapTexture, flooredTextureCoordinate, 0)
+        );
+        let eastHeight = convertColorToHeight(
+          textureLoad(mapTexture, flooredTextureCoordinate + eastOffset, 0)
+        );
+        let northHeight = convertColorToHeight(
+          textureLoad(mapTexture, flooredTextureCoordinate + northOffset, 0)
+        );
+        let northEastHeight = convertColorToHeight(
+          textureLoad(mapTexture, flooredTextureCoordinate + northEastOffset, 0)
+        );
+
+        let interpolated1 = mix(height, eastHeight, fraction[0]);
+        let interpolated2 = mix(northHeight, northEastHeight, fraction[0]);
+
+        return mix(interpolated1, interpolated2, fraction[1]);
+      }
+
+      fn getNeighbors(textureCoordinate: vec2f) -> array<vec3f, 8> {
+        let textureSize = vec2f(textureDimensions(mapTexture));
+        return array(
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, northWestOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(northWestOffset) / textureSize ), 
             northWestOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, westOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(westOffset) / textureSize), 
             westOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, southWestOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(southWestOffset) / textureSize), 
             southWestOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, southOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(southOffset) / textureSize), 
             southOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, southEastOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(southEastOffset) / textureSize), 
             southEastOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, eastOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(eastOffset) / textureSize), 
             eastOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, northEastOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(northEastOffset) / textureSize), 
             northEastOffset
           ),
           getNeighbor(
-            textureSample(mapTexture, mapSampler, textureCoordinate, northOffset), 
+            getInterpolatedHeight(textureCoordinate + vec2f(northOffset) / textureSize), 
             northOffset
           ),
         );
-        
+      }
+
+      fn calculateSmoothHeight(neighbors: array<vec3f, 8>) -> f32 {
+        var height = 0.0;
+        for (var i: i32 = 0; i < 8; i++) {
+          height = height + neighbors[i][2];
+        }
+        return height / 8;
+      }
+
+      fn calculateShading(neighbors: array<vec3f, 8>) -> f32 {
         var normal = vec3f(0, 0, 0);
-        for (var i: i32 = 0; i <= 8; i++) {
+        for (var i: i32 = 0; i < 8; i++) {
           let pointA = neighbors[i];
           let pointB = neighbors[(i + 2) % 8];
           let pointC = neighbors[(i + 5) % 8];
           normal += normalize(cross(pointA - pointB, pointC - pointA));
         }
         normal = normalize(normal);
-        let light = normalize(vec3f(0, -1, -1));
-        let maxShading = length(light + vec3f(0, -1, 0));
-        return 1 - length(light + normal) / maxShading;
+
+        let directLight = normalize(vec3f(1, 1, -1));
+        let maxDirectLightShading = length(directLight + normalize(vec3f(1, 1, 0)));
+        let directLightShading = length(directLight + normal) / maxDirectLightShading;
+
+        let slopeLight = normalize(vec3f(0, 0, -1));
+        let maxSlopeLightShading = length(slopeLight + normalize(vec3f(0, 1, 0)));
+        let slopeLightShading = length(slopeLight + normal) / maxSlopeLightShading;
+        
+        let darkness = mix(directLightShading, slopeLightShading, 0.3) * 1.25 - 0.25;
+        let brightness = 1.0 - darkness;
+
+        return brightness;
       }
 
-      fn addContour(baseColor: vec3f, height: f32) -> vec3f {
-        let heightFraction = abs(fract(height / 100) - 0.5); 
-        let detailFactor = fwidth(height / 100);
-        let contourMask = (1 - smoothstep(0, 1.2, heightFraction / detailFactor));
+      fn addContour(baseColor: vec3f, height: f32, distance: f32, contourWidth: f32) -> vec3f {
+        let heightFraction = abs(fract((height + distance / 2) / distance) - 0.5); 
+        let detailFactor = fwidth(height / distance) / 2;
+        let smoothWidth = 2.0;
+        let contourMask = (1 - smoothstep(
+          contourWidth * detailFactor, 
+          (contourWidth + smoothWidth) * detailFactor, 
+          heightFraction
+          ));
         let contourColor = vec3f(126.0/255.0, 119.0/255.0, 51.0/255.0);
-        return mix(baseColor, contourColor, contourMask);
+        return mix(baseColor, contourColor, contourMask * 0.7);
+      }
+
+      fn addContours(baseColor: vec3f, height: f32) -> vec3f {
+        let subContourAmounts = array(1.0, 5.0, 10.0, 20.0, 50.0, 100.0);
+        let subContourAmount = subContourAmounts[min(max(0, i32(round(sqrt(camera.scale[1] / 10)))), 5)];
+        return addContour(
+          addContour(baseColor, height, 100.0 / subContourAmount, 0.0), 
+          height, 100.0, 0.7
+        );
       }
        
       @fragment fn fs(fsInput: MapVertexShaderOutput) -> @location(0) vec4f {
-        let height = getHeight(fsInput.textureCoordinate);
-
-        let shading = calculateShading(fsInput.textureCoordinate);
-        let terrainColor = vec3(1.0, 1.0, 0.9);
-        let baseColor = mix(terrainColor, terrainColor * shading, 0.9);
-
+        let neighbors = getNeighbors(fsInput.textureCoordinate);
+        let smoothHeight = calculateSmoothHeight(neighbors);
+        let shading = calculateShading(neighbors);
+        let terrainColor = vec3(1.0, 1.0, 1.0);
+        let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
         return vec4f(
-          addContour(baseColor, height),
+          addContours(baseColor, smoothHeight),
           1
         );
       }
     `,
   });
 
-  //const textureResponse = await fetch('/tools/saentis/map.png');
-  const textureResponse = await fetch('/tools/albula/map.png');
+  const textureResponse = await fetch('/tools/saentis/map.png');
+  //const textureResponse = await fetch('/tools/albula/map.png');
   const textureSource = await createImageBitmap(await textureResponse.blob(), { colorSpaceConversion: 'none' });
+
   const texture = device.createTexture({
     label: 'Map texture',
     format: 'rgba8unorm',
@@ -155,15 +211,12 @@ async function main() {
            GPUTextureUsage.COPY_DST |
            GPUTextureUsage.RENDER_ATTACHMENT,
   });
+  
   device.queue.copyExternalImageToTexture(
     { source: textureSource, flipY: true },
     { texture },
     { width: textureSource.width, height: textureSource.height },
   );
-  const sampler = device.createSampler({
-    minFilter: 'linear',
-    magFilter: 'linear',
-  });
 
   const pipeline = device.createRenderPipeline({
     label: 'map pipeline',
@@ -180,8 +233,7 @@ async function main() {
       entryPoint: 'fs',
       targets: [{ format: presentationFormat }],
       constants: {
-        texelInMeters: 2,
-        /*heightInMeters: 1600*/
+        texelInMeters: 2
       },
     },
   });
@@ -219,10 +271,6 @@ async function main() {
       { binding: 0, resource: { buffer: cameraBuffer }},
       { 
         binding: 1, 
-        resource: sampler
-      },
-      { 
-        binding: 2, 
         resource: texture.createView()
       },
     ],

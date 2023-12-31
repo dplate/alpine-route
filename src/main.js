@@ -201,17 +201,18 @@ async function main() {
       }
 
       fn addForest(baseColor: vec3f, textureCoordinate: vec2f, normal: vec3f, height: f32) -> vec3f {
-        let noise = simplexNoise(textureCoordinate);
-
         let slope = 1.0 - asin(normal[2] / 1) / asin(1);
         let slopeProbability = min(step(0.3, slope), 1.0 - step(0.5, slope));
+
         let heightProbability = smoothstep(2300, 1700, height);
-        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, noise);
+        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate));
+        
         let probability = min(slopeProbability, heightNoiseProbability);
         
         let detailFactor = fwidth(textureCoordinate[0]);
         let forestMask = smoothstep(0.3, 0.3 + detailFactor, probability);
         let forestColor = vec3f(160.0/255.0, 200.0/255.0, 160.0/255.0);
+        
         return mix(baseColor, forestColor, forestMask);
       }
       

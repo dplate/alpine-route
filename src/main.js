@@ -139,7 +139,7 @@ async function main() {
         return height / 8;
       }
 
-      fn calculateShading(neighbors: array<vec3f, 8>) -> f32 {
+      fn calculateNormal(neighbors: array<vec3f, 8>) -> vec3f {
         var normal = vec3f(0, 0, 0);
         for (var i: i32 = 0; i < 8; i++) {
           let pointA = neighbors[i];
@@ -147,8 +147,10 @@ async function main() {
           let pointC = neighbors[(i + 5) % 8];
           normal += normalize(cross(pointA - pointB, pointC - pointA));
         }
-        normal = normalize(normal);
+        return normalize(normal);
+      }
 
+      fn calculateShading(normal: vec3f) -> f32 {
         let directLight = normalize(vec3f(1, 1, -1));
         let maxDirectLightShading = length(directLight + normalize(vec3f(1, 1, 0)));
         let directLightShading = length(directLight + normal) / maxDirectLightShading;
@@ -163,6 +165,56 @@ async function main() {
         return brightness;
       }
 
+      fn hash(p: vec2f) -> vec2f {
+        let value = vec2f(dot(p, vec2f(127.1, 311.7)), dot(p, vec2f(269.5, 183.3)));
+        return -1.0 + 2.0 * fract(sin(value) * 43758.5453123);
+      }
+
+      fn noise(p: vec2f) -> f32 {
+        let K1 = (sqrt(3.0) - 1.0) / 2.0;
+        let K2 = (3.0 - sqrt(3.0)) / 6.0;
+
+        let i = floor(p + (p[0] + p[1]) * K1);
+        let a = p - i + (i[0] + i[1]) * K2;
+        let m = step(a[1], a[0]); 
+        let o = vec2f(m, 1.0 - m);
+        let b = a - o + K2;
+        let c = a - 1.0 + 2.0 * K2;
+        let h = max(0.5 - vec3f(dot(a, a), dot(b, b), dot(c, c)), vec3f(0.0));
+        let n = h * h * h * h * vec3f(dot(a, hash(i + 0.0)), dot(b, hash(i + o)), dot(c, hash(i + 1.0)));
+        return dot(n, vec3(70.0));
+      }
+
+      fn simplexNoise(textureCoordinate: vec2f) -> f32 {
+        var value = textureCoordinate * 10.0;
+        let m = mat2x2(1.6,  1.2, -1.2,  1.6);
+        var f = 0.5 * noise(value); 
+        value = m * value;
+        f += 0.25 * noise(value);
+        value = m * value;
+        f += 0.125 * noise(value);
+        value = m * value;
+        f += 0.0625 * noise(value);
+
+        f = 0.5 + 0.5 * f;
+        return f;
+      }
+
+      fn addForest(baseColor: vec3f, textureCoordinate: vec2f, normal: vec3f, height: f32) -> vec3f {
+        let noise = simplexNoise(textureCoordinate);
+
+        let slope = 1.0 - asin(normal[2] / 1) / asin(1);
+        let slopeProbability = min(step(0.3, slope), 1.0 - step(0.5, slope));
+        let heightProbability = smoothstep(2300, 1700, height);
+        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, noise);
+        let probability = min(slopeProbability, heightNoiseProbability);
+        
+        let detailFactor = fwidth(textureCoordinate[0]);
+        let forestMask = smoothstep(0.3, 0.3 + detailFactor, probability);
+        let forestColor = vec3f(160.0/255.0, 200.0/255.0, 160.0/255.0);
+        return mix(baseColor, forestColor, forestMask);
+      }
+      
       fn addContour(baseColor: vec3f, height: f32, distance: f32, contourWidth: f32) -> vec3f {
         let heightFraction = abs(fract((height + distance / 2) / distance) - 0.5); 
         let detailFactor = fwidth(height / distance) / 2;
@@ -188,9 +240,12 @@ async function main() {
       @fragment fn fs(fsInput: MapVertexShaderOutput) -> @location(0) vec4f {
         let neighbors = getNeighbors(fsInput.textureCoordinate);
         let smoothHeight = calculateSmoothHeight(neighbors);
-        let shading = calculateShading(neighbors);
+        let normal = calculateNormal(neighbors);
+
         let terrainColor = vec3(1.0, 1.0, 1.0);
-        let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
+        let terrainWithForestColor = addForest(terrainColor, fsInput.textureCoordinate, normal, smoothHeight);
+        let shading = calculateShading(normal);
+        let baseColor = mix(terrainWithForestColor, terrainWithForestColor * shading, 0.7);
         return vec4f(
           addContours(baseColor, smoothHeight),
           1

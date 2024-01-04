@@ -58,7 +58,7 @@ async function main() {
       @group(0) @binding(1) var mapTexture: texture_2d<f32>;
 
       fn convertColorToHeight(color: vec4f) -> f32 {
-        return dot( color, vec4f(256.0 * 256.0, 256.0, 1.0, 0) ) * 2.55;
+        return dot(color, vec4f(256.0 * 256.0, 256.0, 1.0, 0)) * 2.55;
       }
 
       fn getNeighbor(height: f32, offset: vec2i) -> vec3f {
@@ -150,6 +150,10 @@ async function main() {
         return normalize(normal);
       }
 
+      fn calculateSlope(normal: vec3f) -> f32 {
+        return 1.0 - asin(normal[2] / 1) / asin(1);
+      }
+
       fn calculateShading(normal: vec3f) -> f32 {
         let directLight = normalize(vec3f(1, 1, -1));
         let maxDirectLightShading = length(directLight + normalize(vec3f(1, 1, 0)));
@@ -185,8 +189,8 @@ async function main() {
         return dot(n, vec3(70.0));
       }
 
-      fn simplexNoise(textureCoordinate: vec2f) -> f32 {
-        var value = textureCoordinate * 10.0;
+      fn simplexNoise(textureCoordinate: vec2f, details: f32) -> f32 {
+        var value = textureCoordinate * details;
         let m = mat2x2(1.6,  1.2, -1.2,  1.6);
         var f = 0.5 * noise(value); 
         value = m * value;
@@ -200,12 +204,29 @@ async function main() {
         return f;
       }
 
-      fn addForest(baseColor: vec3f, textureCoordinate: vec2f, normal: vec3f, height: f32) -> vec3f {
-        let slope = 1.0 - asin(normal[2] / 1) / asin(1);
+      fn addStones(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
+        let slopeProbability = 1.0 - step(0.7, slope);
+
+        let heightProbability = smoothstep(1800, 2200, height);
+        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate, 10));
+
+        let stonePattern = simplexNoise(textureCoordinate, 1000);
+        
+        let probability = min(slopeProbability, heightNoiseProbability);
+        let smoothMask = min(probability, stonePattern);
+        
+        let detailFactor = fwidth(textureCoordinate[0]);
+        let stonesMask = smoothstep(0.68, 0.68 + detailFactor,smoothMask);
+        let stonesColor = vec3f(150.0/255.0);
+        
+        return mix(baseColor, stonesColor, stonesMask);
+      }
+
+      fn addForest(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
         let slopeProbability = min(step(0.3, slope), 1.0 - step(0.5, slope));
 
         let heightProbability = smoothstep(2300, 1700, height);
-        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate));
+        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate, 10));
         
         let probability = min(slopeProbability, heightNoiseProbability);
         
@@ -242,11 +263,13 @@ async function main() {
         let neighbors = getNeighbors(fsInput.textureCoordinate);
         let smoothHeight = calculateSmoothHeight(neighbors);
         let normal = calculateNormal(neighbors);
+        let slope = calculateSlope(normal);
 
-        let terrainColor = vec3(1.0, 1.0, 1.0);
-        let terrainWithForestColor = addForest(terrainColor, fsInput.textureCoordinate, normal, smoothHeight);
+        var terrainColor = vec3(1.0, 1.0, 1.0);
+        terrainColor = addStones(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
+        terrainColor = addForest(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
         let shading = calculateShading(normal);
-        let baseColor = mix(terrainWithForestColor, terrainWithForestColor * shading, 0.7);
+        let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
         return vec4f(
           addContours(baseColor, smoothHeight),
           1

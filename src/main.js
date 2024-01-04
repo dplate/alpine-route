@@ -39,7 +39,7 @@ async function main() {
           vec2f( 1.0,  1.0)
         );
         var vsOutput: MapVertexShaderOutput;
-        vsOutput.position = vec4f(pos[vertexIndex] * camera.scale + camera.offset, 0.0, 1.0);
+        vsOutput.position = vec4f(pos[vertexIndex] * camera.scale + camera.offset * camera.scale, 0.0, 1.0);
         vsOutput.textureCoordinate = pos[vertexIndex] / 2 + 0.5;
         return vsOutput;
       }
@@ -369,8 +369,8 @@ async function main() {
   };
   canvas. onmousemove = (event) => {
     if (event.buttons === 1) {
-      camera.offset.x += event.movementX/(canvas.width/2);
-      camera.offset.y -= event.movementY/(canvas.height/2);
+      camera.offset.x += event.movementX / (canvas.width * camera.scale / 4);
+      camera.offset.y -= event.movementY / (canvas.height * camera.scale / 2);
       render();
     }
   };

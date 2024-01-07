@@ -215,26 +215,42 @@ async function main() {
         let probability = min(slopeProbability, heightNoiseProbability);
         let smoothMask = min(probability, stonePattern);
         
-        let detailFactor = fwidth(textureCoordinate[0]);
-        let stonesMask = smoothstep(0.68, 0.68 + detailFactor,smoothMask);
+        let detailFactor = fwidth(smoothMask) * 2;
+        let stonesMask = smoothstep(0.68, 0.68 + detailFactor, smoothMask);
         let stonesColor = vec3f(150.0/255.0);
         
         return mix(baseColor, stonesColor, stonesMask);
       }
 
       fn addForest(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
-        let slopeProbability = min(step(0.3, slope), 1.0 - step(0.5, slope));
+        let lowerSlopeMask = smoothstep(0.0, 0.35, slope);
+        let upperSlopeMask = 1.0 - smoothstep(0.35, 0.7, slope);
+        let slopeMask = lowerSlopeMask * upperSlopeMask;
 
-        let heightProbability = smoothstep(2300, 1700, height);
-        let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate, 10));
-        
-        let probability = min(slopeProbability, heightNoiseProbability);
-        
-        let detailFactor = fwidth(textureCoordinate[0]);
-        let forestMask = smoothstep(0.3, 0.3 + detailFactor, probability);
+        let heightMask = smoothstep(2300, 1700, height);
+
+        let probability = heightMask * slopeMask;
+        let noise = simplexNoise(textureCoordinate, 10);
+        let limit = 1.0 - probability * 0.7;
+        let forestMask = step(limit, noise);
+ 
         let forestColor = vec3f(160.0/255.0, 200.0/255.0, 160.0/255.0);
-        
         return mix(baseColor, forestColor, forestMask);
+      }
+
+      fn addSnow(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
+        let slopeMask = 1.0 - smoothstep(0.2, 0.6, slope);
+  
+        let heightMask = smoothstep(2300, 2500, height);
+
+        let probability = heightMask * slopeMask;
+        let noise = simplexNoise(textureCoordinate, 10);
+        let limit = 1.0 - probability * 0.7;
+        let snowMask = step(limit, noise);
+ 
+        let snowColor = vec3f(210.0/255.0, 240.0/255.0, 255.0/255.0);
+
+        return mix(baseColor, snowColor, snowMask);
       }
       
       fn addContour(baseColor: vec3f, height: f32, distance: f32, contourWidth: f32) -> vec3f {
@@ -265,9 +281,11 @@ async function main() {
         let normal = calculateNormal(neighbors);
         let slope = calculateSlope(normal);
 
-        var terrainColor = vec3(1.0, 1.0, 1.0);
+        var terrainColor = vec3(250.0/255.0, 255.0/255.0, 245.0/255.0);
         terrainColor = addStones(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
         terrainColor = addForest(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
+        terrainColor = addSnow(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
+
         let shading = calculateShading(normal);
         let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
         return vec4f(
@@ -278,8 +296,8 @@ async function main() {
     `,
   });
 
-  const textureResponse = await fetch('/tools/saentis/map.png');
-  //const textureResponse = await fetch('/tools/albula/map.png');
+  //const textureResponse = await fetch('/tools/saentis/map.png');
+  const textureResponse = await fetch('/tools/albula/map.png');
   const textureSource = await createImageBitmap(await textureResponse.blob(), { colorSpaceConversion: 'none' });
 
   const texture = device.createTexture({

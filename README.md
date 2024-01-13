@@ -1,4 +1,4 @@
-# Alpine Routes
+# Alpine Route
 
 A game about planing mountain routes. 
 
@@ -6,11 +6,11 @@ On a high resolution map (displayed in 2D) a route between two points must be pl
 
 ## Todo
 
-- [ ] Automate process to create high resolution height maps from public available data
-- [ ] Render height map as texture with WebGPU shader
-- [ ] Use a color ramp to color the height of the map
-- [ ] Render contour lines with help of shader magic
-- [ ] Add shading to map
+- [X] Automate process to create high resolution height maps from public available data
+- [X] Render height map as texture with WebGPU shader
+- [X] Use a color ramp to color the height of the map
+- [X] Render contour lines with help of shader magic
+- [X] Add shading to map
 - [ ] Zoom and panning of map
 - [ ] Overlay with a cubic spline curve
 - [ ] Make curve editable by adding, moving and removing control points

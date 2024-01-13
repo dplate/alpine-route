@@ -1,0 +1,53 @@
+html, body {
+  cursor: pointer;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#desk {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-areas:
+    'magnifier map'
+    'notes     map'
+    'profile   profile';
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 200px 1fr 100px;
+}
+
+#magnifier {
+  grid-area: magnifier;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#map {
+  grid-area: map;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#notes {
+  grid-area: notes;
+  background-color: greenyellow;
+  width: 100%;
+  height: 100%;
+}
+
+#profile {
+  grid-area: profile;
+  background-color:bisque;
+  width: 100%;
+  height: 100%;
+}

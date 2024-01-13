@@ -5,7 +5,7 @@ import { finished } from 'stream/promises';
 import extract from 'extract-zip';
 import { PNG } from 'pngjs';
 
-const mapName = 'albula';
+const mapName = 'saentis';
 const textureWidth = 4096;
 const textureHeight = 4096;
 const resolutionInMeter = 2;
@@ -98,7 +98,7 @@ console.log('Loading segmentUrls...')
 const segmentUrls = fs.readFileSync(`${mapDirectory}/segmentUrls.csv`, 'utf8').toString().split('\n');
 
 console.log('Downloading segments...')
-//await downloadSegments(segmentUrls);
+await downloadSegments(segmentUrls);
 
 console.log('Collecting map data...')
 const mapData = await collectMapData(segmentUrls);

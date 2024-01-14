@@ -1,7 +1,7 @@
 import mapShader from './mapShader.js';
 
 const loadMapTexture = async (system, level) => {
-  const textureResponse = await fetch(`/assets/maps/${level.map}.webp`);
+  const textureResponse = await fetch(`assets/maps/${level.map}.webp`);
   const textureSource = await createImageBitmap(await textureResponse.blob(), { colorSpaceConversion: 'none' });
 
   const texture = system.gpuDevice.createTexture({
@@ -48,14 +48,6 @@ const createPipeline = (system, presentationFormat) => {
     },
   });
 };
-
-const createCamera = () => ({
-  scale: 1.0,
-  center: {
-    x: 0.5,
-    y: 0.5
-  }
-});
 
 const createBindGroup = (system, pipeline, buffer, texture) => system.gpuDevice.createBindGroup({
   layout: pipeline.getBindGroupLayout(0),
@@ -122,16 +114,14 @@ const executeRenderPass = (encoder, renderTarget, pipeline) => {
   pass.end();
 };
 
-export default async (system, layout, level) => {
+export default async (system, layout, cameras, level) => {
   const presentationFormat = system.window.navigator.gpu.getPreferredCanvasFormat();
   const pipeline = createPipeline(system, presentationFormat);
-  const mapCamera = createCamera(system);
-  const magnifierCamera = createCamera(system);
   const texture = await loadMapTexture(system, level);
 
   const renderTargets = [
-    createRenderTarget(system, presentationFormat, pipeline, texture, mapCamera, layout.map),
-    createRenderTarget(system, presentationFormat, pipeline, texture, magnifierCamera, layout.magnifier)
+    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.map, layout.map),
+    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.magnifier, layout.magnifier)
   ];
 
   const render = () => {
@@ -153,14 +143,13 @@ export default async (system, layout, level) => {
       const height = entry.contentBoxSize[0].blockSize;
       canvas.width = Math.max(1, Math.min(width, system.gpuDevice.limits.maxTextureDimension2D));
       canvas.height = Math.max(1, Math.min(height, system.gpuDevice.limits.maxTextureDimension2D));
+      cameras.restrictToLimits();
     }
     render();
   });
   renderTargets.forEach(renderTarget => observer.observe(renderTarget.canvas));
 
   return {
-    mapCamera,
-    magnifierCamera,
     render
   };
 };

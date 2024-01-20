@@ -1,9 +1,7 @@
 import mapShader from './mapShader.js';
 
-const loadMapTexture = async (system, level) => {
-  const textureResponse = await fetch(`assets/maps/${level.map}.webp`);
-  const textureSource = await createImageBitmap(await textureResponse.blob(), { colorSpaceConversion: 'none' });
-
+const loadMapTexture = (system, map) => {
+  const textureSource = map.bitmap;
   const texture = system.gpuDevice.createTexture({
     label: 'Map texture',
     format: 'rgba8unorm',
@@ -22,7 +20,7 @@ const loadMapTexture = async (system, level) => {
   return texture;
 };
 
-const createPipeline = (system, presentationFormat) => {
+const createPipeline = (system, presentationFormat, map) => {
   const module = system.gpuDevice.createShaderModule({
     label: 'map shaders',
     code: mapShader,
@@ -43,7 +41,7 @@ const createPipeline = (system, presentationFormat) => {
       entryPoint: 'fs',
       targets: [{ format: presentationFormat }],
       constants: {
-        texelInMeters: 2
+        resolutionInMeters: map.resolutionInMeters
       },
     },
   });
@@ -114,10 +112,10 @@ const executeRenderPass = (encoder, renderTarget, pipeline) => {
   pass.end();
 };
 
-export default async (system, layout, cameras, level) => {
+export default (system, layout, cameras, map) => {
   const presentationFormat = system.window.navigator.gpu.getPreferredCanvasFormat();
-  const pipeline = createPipeline(system, presentationFormat);
-  const texture = await loadMapTexture(system, level);
+  const pipeline = createPipeline(system, presentationFormat, map);
+  const texture = loadMapTexture(system, map);
 
   const renderTargets = [
     createRenderTarget(system, presentationFormat, pipeline, texture, cameras.map, layout.map),

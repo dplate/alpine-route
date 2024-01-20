@@ -14,7 +14,7 @@ const restrictCenter = (camera, canvas) => {
   camera.center.y = Math.min(1.0 - (0.5 * canvas.height / pixelSize), camera.center.y);
 }
 
-export default (layout) => {
+export default (layout, map) => {
   const mapCamera = createCamera();
   const magnifierCamera = createCamera();
 
@@ -27,6 +27,16 @@ export default (layout) => {
     restrictCenter(magnifierCamera, layout.magnifier);
   };
 
+  const normalizePixels = (pixelX, pixelY) => ({
+    x: mapCamera.center.x + (pixelX - 0.5 * layout.map.width) / (layout.map.height * mapCamera.scale),
+    y: mapCamera.center.y + (pixelY - 0.5 * layout.map.height) / (layout.map.height * mapCamera.scale)
+  });
+
+  const transformNormalizedToPixels = (normalized) => ({
+    x: (normalized.x - mapCamera.center.x) * (layout.map.height * mapCamera.scale) + 0.5 * layout.map.width,
+    y: (normalized.y - mapCamera.center.y) * (layout.map.height * mapCamera.scale) + 0.5 * layout.map.height
+  });
+
   return {
     map: mapCamera,
     magnifier: magnifierCamera,
@@ -36,8 +46,9 @@ export default (layout) => {
       restrictToLimits();
     },
     setMagnifierByPixels: (pixelX, pixelY) => {
-      magnifierCamera.center.x = mapCamera.center.x + (pixelX - 0.5 * layout.map.width) / (layout.map.height * mapCamera.scale);
-      magnifierCamera.center.y = mapCamera.center.y + (pixelY - 0.5 * layout.map.height) / (layout.map.height * mapCamera.scale);
+      const normalized = normalizePixels(pixelX, pixelY);
+      magnifierCamera.center.x = normalized.x;
+      magnifierCamera.center.y = normalized.y;
       restrictToLimits();
     },
     zoomIn: (amount) => {
@@ -47,6 +58,20 @@ export default (layout) => {
     zoomOut: (amount) => {
       mapCamera.scale /= amount;
       restrictToLimits();
+    },
+    transformPixelsToMeters: (pixelX, pixelY) => {
+      const normalized = normalizePixels(pixelX, pixelY);
+      return {
+        x: normalized.x * map.getWidthInMeters(),
+        y: normalized.y * map.getHeightInMeters()
+      };
+    },
+    transformMetersToPixels: (point) => {
+      const normalized = {
+        x: point.x / map.getWidthInMeters(),
+        y: point.y / map.getHeightInMeters()
+      };
+      return transformNormalizedToPixels(normalized);
     },
     restrictToLimits
   };

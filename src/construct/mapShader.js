@@ -31,7 +31,7 @@ struct MapVertexShaderOutput {
   return vsOutput;
 }
 
-override texelInMeters: f32;
+override resolutionInMeters: f32;
 
 const northWestOffset = vec2i(-1, 1);
 const westOffset = vec2i(-1, 0);
@@ -50,8 +50,8 @@ fn convertColorToHeight(color: vec4f) -> f32 {
 
 fn getNeighbor(height: f32, offset: vec2i) -> vec3f {
   return vec3f(
-    texelInMeters * f32(offset[0]),
-    - texelInMeters * f32(offset[1]),
+    resolutionInMeters * f32(offset[0]),
+    - resolutionInMeters * f32(offset[1]),
     height
   );
 }

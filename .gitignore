@@ -1,3 +1,4 @@
+.vscode
 *.xyz
 node_modules
 tmp.zip

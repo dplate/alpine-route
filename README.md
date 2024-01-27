@@ -14,11 +14,11 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [X] Render contour lines with help of shader magic
 - [X] Add shading to map
 - [X] Zoom and panning of map
-- [ ] Overlay with a cubic spline curve
+- [X] Overlay with a cubic spline curve
 - [ ] Make curve editable by adding, moving and removing control points
 - [ ] Add height profile of curve
 - [ ] Make height profile editable by adding, moving and removing control points
-- [ ] Add magnified view to make touch usage easier by showing map under the finger bigger
+- [X] Add magnified view to make touch usage easier by showing map under the finger bigger
 - [ ] Calculate costs of route
 - [ ] Validate route (not breaking steepness, tunnel length, bridge length limits and enough money left)
 - [ ] Add scalable interface which includes map, profile, magnifier, costs and menu

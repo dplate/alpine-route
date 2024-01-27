@@ -1,21 +1,35 @@
 export default (system, layout, cameras, route) => {
+  const renderTargets = [
+    {
+      canvas: layout.mapRoute,
+      transformMetersToPixels: cameras.transformMetersToPixels
+    },
+    {
+      canvas: layout.magnifierRoute,
+      transformMetersToPixels: cameras.transformMetersToPixelsOnMagnifier
+    }
+  ];
+
   const render = () => {
     const segments = route.segments;
 
-    const context = layout.mapRoute.getContext('2d');
-    context.clearRect(0, 0, layout.mapRoute.width, layout.mapRoute.height);
-
-    context.beginPath();
-    const startPixels = cameras.transformMetersToPixels(segments[0]);
-    context.moveTo(startPixels.x, startPixels.y);
-    route.segments.forEach((segment) => {
-      const pixels = cameras.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
+    renderTargets.forEach(renderTarget => {
+      const context = renderTarget.canvas.getContext('2d');
+      context.clearRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
+  
+      context.beginPath();
+      const startPixels = renderTarget.transformMetersToPixels(segments[0]);
+      context.moveTo(startPixels.x, startPixels.y);
+      route.segments.forEach((segment) => {
+        const pixels = renderTarget.transformMetersToPixels(segment);
+        context.lineTo(pixels.x, pixels.y);
+      });
+      context.lineWidth = 5;
+      context.strokeStyle = 'rgb(150, 0, 0)';
+      context.lineCap = 'round';
+      context.stroke();
     });
-    context.lineWidth = 5;
-    context.strokeStyle = 'rgb(150, 0, 0)';
-    context.lineCap = 'round';
-    context.stroke();
+    
   };
 
   const observer = new ResizeObserver(entries => {
@@ -25,11 +39,10 @@ export default (system, layout, cameras, route) => {
       const height = entry.contentBoxSize[0].blockSize;
       canvas.width = Math.max(1, Math.min(width, system.gpuDevice.limits.maxTextureDimension2D));
       canvas.height = Math.max(1, Math.min(height, system.gpuDevice.limits.maxTextureDimension2D));
-      cameras.restrictToLimits();
     }
     render();
   });
-  observer.observe(layout.mapRoute);
+  renderTargets.forEach(renderTarget => observer.observe(renderTarget.canvas));
 
   return {
     render

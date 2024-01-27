@@ -24,28 +24,28 @@ html, body {
   grid-template-rows: 200px 1fr 100px;
 }
 
-#magnifier {
+#magnifierContainer {
   grid-area: magnifier;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
 
 #mapContainer {
   grid-area: map;
+}
+
+#magnifierContainer, #mapContainer {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-#map {
+#magnifier, #map {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-#mapRoute {
+#magnifierRoute, #mapRoute {
   position: absolute;
   width: 100%;
   height: 100%;

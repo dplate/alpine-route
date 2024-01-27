@@ -2,9 +2,18 @@ export default (system) => {
   const desk = document.createElement('desk');
   desk.id = 'desk';
   
+  const magnifierContainer = document.createElement('div');
+  magnifierContainer.id = 'magnifierContainer';
+
   const magnifier = document.createElement('canvas');
   magnifier.id = 'magnifier';
-  desk.appendChild(magnifier);
+  magnifierContainer.appendChild(magnifier);
+
+  const magnifierRoute = document.createElement('canvas');
+  magnifierRoute.id = 'magnifierRoute';
+  magnifierContainer.appendChild(magnifierRoute);
+
+  desk.appendChild(magnifierContainer);
 
   const mapContainer = document.createElement('div');
   mapContainer.id = 'mapContainer';
@@ -31,7 +40,9 @@ export default (system) => {
 
   return {
     desk,
+    magnifierContainer,
     magnifier,
+    magnifierRoute,
     mapContainer,
     map,
     mapRoute,

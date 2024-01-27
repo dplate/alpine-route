@@ -37,6 +37,11 @@ export default (layout, map) => {
     y: (normalized.y - mapCamera.center.y) * (layout.map.height * mapCamera.scale) + 0.5 * layout.map.height
   });
 
+  const transformNormalizedToPixelsOnMagnifier = (normalized) => ({
+    x: (normalized.x - magnifierCamera.center.x) * (layout.magnifier.height * magnifierCamera.scale) + 0.5 * layout.magnifier.width,
+    y: (normalized.y - magnifierCamera.center.y) * (layout.magnifier.height * magnifierCamera.scale) + 0.5 * layout.magnifier.height
+  });
+
   return {
     map: mapCamera,
     magnifier: magnifierCamera,
@@ -72,6 +77,13 @@ export default (layout, map) => {
         y: point.y / map.getHeightInMeters()
       };
       return transformNormalizedToPixels(normalized);
+    },
+    transformMetersToPixelsOnMagnifier: (point) => {
+      const normalized = {
+        x: point.x / map.getWidthInMeters(),
+        y: point.y / map.getHeightInMeters()
+      };
+      return transformNormalizedToPixelsOnMagnifier(normalized);
     },
     restrictToLimits
   };

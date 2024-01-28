@@ -27,9 +27,9 @@ export default (layout, map) => {
     restrictCenter(magnifierCamera, layout.magnifier);
   };
 
-  const normalizePixels = (pixelX, pixelY) => ({
-    x: mapCamera.center.x + (pixelX - 0.5 * layout.map.width) / (layout.map.height * mapCamera.scale),
-    y: mapCamera.center.y + (pixelY - 0.5 * layout.map.height) / (layout.map.height * mapCamera.scale)
+  const normalizePixels = (pixels) => ({
+    x: mapCamera.center.x + (pixels.x - 0.5 * layout.map.width) / (layout.map.height * mapCamera.scale),
+    y: mapCamera.center.y + (pixels.y - 0.5 * layout.map.height) / (layout.map.height * mapCamera.scale)
   });
 
   const transformNormalizedToPixels = (normalized) => ({
@@ -45,13 +45,13 @@ export default (layout, map) => {
   return {
     map: mapCamera,
     magnifier: magnifierCamera,
-    moveMapByPixels: (pixelMovementX, pixelMovementY) => {
-      mapCamera.center.x += pixelMovementX / (layout.map.height * mapCamera.scale);
-      mapCamera.center.y += pixelMovementY / (layout.map.height * mapCamera.scale);
+    moveMapByPixels: (pixelMovement) => {
+      mapCamera.center.x += pixelMovement.x / (layout.map.height * mapCamera.scale);
+      mapCamera.center.y += pixelMovement.y / (layout.map.height * mapCamera.scale);
       restrictToLimits();
     },
-    setMagnifierByPixels: (pixelX, pixelY) => {
-      const normalized = normalizePixels(pixelX, pixelY);
+    setMagnifierByPixels: (pixels) => {
+      const normalized = normalizePixels(pixels);
       magnifierCamera.center.x = normalized.x;
       magnifierCamera.center.y = normalized.y;
       restrictToLimits();
@@ -64,8 +64,8 @@ export default (layout, map) => {
       mapCamera.scale /= amount;
       restrictToLimits();
     },
-    transformPixelsToMeters: (pixelX, pixelY) => {
-      const normalized = normalizePixels(pixelX, pixelY);
+    transformPixelsToMeters: (pixels) => {
+      const normalized = normalizePixels(pixels);
       return {
         x: normalized.x * map.getWidthInMeters(),
         y: normalized.y * map.getHeightInMeters()

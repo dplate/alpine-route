@@ -10,9 +10,8 @@ export default async (system, level) => {
     const layout = createLayout(system);
     const map = await loadMap(level);
     const route = createRoute(level);
-    console.log(route);
     const cameras = createCameras(layout, map);
     const mapRenderer = createMapRenderer(system, layout, cameras, map);
     const routeRenderer = createRouteRenderer(system, layout, cameras, route);
-    setupControl(layout, cameras, mapRenderer, routeRenderer);
+    setupControl(layout, cameras, route, mapRenderer, routeRenderer);
 };

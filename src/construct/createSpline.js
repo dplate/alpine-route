@@ -49,7 +49,7 @@ export default (controlPoints) => {
   for (let i = 0; i < points.length - 2; i++){
     segmentLengths.push(measureSegment(points, i, i + 1));
   }
-  const length = segmentLengths.reduce((sum, l) => sum + l, 0);
+  const length = segmentLengths.reduce((sum, length) => sum + length, 0);
 
   return {
     length,

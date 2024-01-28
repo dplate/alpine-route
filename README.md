@@ -15,7 +15,7 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [X] Add shading to map
 - [X] Zoom and panning of map
 - [X] Overlay with a cubic spline curve
-- [ ] Make curve editable by adding, moving and removing control points
+- [X] Make curve editable by adding, moving and removing control points
 - [ ] Add height profile of curve
 - [ ] Make height profile editable by adding, moving and removing control points
 - [X] Add magnified view to make touch usage easier by showing map under the finger bigger

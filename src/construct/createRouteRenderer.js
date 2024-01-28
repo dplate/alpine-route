@@ -1,11 +1,15 @@
 const pointVariants = {
-  fixedPoint: {
+  fixPoint: {
     fillStyle: 'rgba(150, 0, 0, 0.3)',
     strokeStyle: 'rgba(150, 0, 0, 0.6)'
   },
-  markedPoint: {
+  editPoint: {
     fillStyle: 'rgba(200, 200, 50, 0.6)',
     strokeStyle: 'rgba(200, 200, 50, 1.0)'
+  },
+  deletablePoint: {
+    fillStyle: 'rgba(200, 50, 200, 0.6)',
+    strokeStyle: 'rgba(200, 50, 200, 1.0)'
   }
 };
 
@@ -26,14 +30,16 @@ const drawPoint = (context, point, variant, fillFactor, renderTarget) => {
 
 const drawControlPoints = (context, route, renderTarget) => {
   route.controlPoints.forEach(controlPoint => {
-    const isEdit = route.edit?.controlPoint === controlPoint;
-    drawPoint(
-      context, 
-      controlPoint, 
-      isEdit ? pointVariants.markedPoint : pointVariants.fixedPoint, 
-      isEdit ? 1.0 : 0.0, 
-      renderTarget
-      );
+    if (controlPoint.editable) {
+      const isEdit = route.edit?.controlPoint === controlPoint;
+      drawPoint(
+        context, 
+        controlPoint, 
+        isEdit ? (route.edit.deletable ? pointVariants.deletablePoint : pointVariants.editPoint) : pointVariants.fixPoint, 
+        isEdit ? 1.0 : 0.0, 
+        renderTarget
+        );
+    }
   });
 };
 
@@ -43,7 +49,7 @@ const drawSegments = (context, route, renderTarget) => {
       drawPoint(
         context, 
         segment, 
-        pointVariants.markedPoint, 
+        pointVariants.editPoint, 
         route.edit.activateFactor || 0.0,
         renderTarget
       );

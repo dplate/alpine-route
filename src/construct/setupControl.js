@@ -1,20 +1,33 @@
 import calculateDistance from './calculateDistance.js';
 
-const updateRouteEditPoint = (cameras, route, pixels) => {
+const proposeRouteEditPoint = (cameras, route, pixels) => {
   const point = cameras.transformPixelsToMeters(pixels);
-  const nearestControlPoint = route.findNearestControlPoint(point);
-  const nearestControlPixels = cameras.transformMetersToPixels(nearestControlPoint);
-  if (calculateDistance(pixels, nearestControlPixels) < 50) {
-    route.createEditByControlPoint(nearestControlPoint);
-  } else {
-    const nearestSegment = route.findNearestSegment(point);
-    const nearestSegmentPixels = cameras.transformMetersToPixels(nearestSegment);
-    if (calculateDistance(pixels, nearestSegmentPixels) < 20) {
-      route.createEditBySegment(nearestSegment);
-    } else {
-      route.removeEdit(null);
+  const nearestControlPoint = route.findNearestEditableControlPoint(point);
+  if (nearestControlPoint) {
+    const nearestControlPixels = cameras.transformMetersToPixels(nearestControlPoint);
+    if (calculateDistance(pixels, nearestControlPixels) < 50) {
+      route.createEditByControlPoint(nearestControlPoint);
+      return;
     }
   }
+  const nearestSegment = route.findNearestSegment(point);
+  const nearestSegmentPixels = cameras.transformMetersToPixels(nearestSegment);
+  if (calculateDistance(pixels, nearestSegmentPixels) < 20) {
+    route.createEditBySegment(nearestSegment);
+  } else {
+    route.abortEdit();
+  }
+};
+
+const handleRouteEditing = (cameras, route, pixels) => {
+  const newPoint = cameras.transformPixelsToMeters(pixels);
+  const nearestControlPoint = route.moveEdit(newPoint);
+  if (!nearestControlPoint) {
+    return false;
+  }
+  const nearestControlPixels = cameras.transformMetersToPixels(nearestControlPoint);
+  route.markEditAsDeletable(calculateDistance(pixels, nearestControlPixels) < 20);
+  return true;
 };
 
 export default (layout, cameras, route, mapRenderer, routeRenderer) => {
@@ -31,13 +44,13 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     if (event.buttons === 1) {
-      if (!route.moveEdit(cameras.transformPixelsToMeters(pixels))) {
+      if (!handleRouteEditing(cameras, route, pixels)) {
         cameras.moveMapByPixels({ x: -event.movementX, y: -event.movementY });
       }
     }
     cameras.setMagnifierByPixels(pixels);
 
-    updateRouteEditPoint(cameras, route, pixels);
+    proposeRouteEditPoint(cameras, route, pixels);
 
     mapRenderer.render();
     routeRenderer.render();
@@ -52,7 +65,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   };
   layout.mapContainer.onmouseup = () => {
     clearInterval(state.touchInterval);
-    route.removeEdit();
+    route.confirmEdit();
   };
   layout.mapContainer.onclick = (event) => {
     console.log(cameras.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));

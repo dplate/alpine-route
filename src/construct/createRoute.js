@@ -3,21 +3,23 @@ import createSpline from './createSpline.js';
 
 const segmentDistance = 5;
 
+const createControlPoint = (point, editable = true) => ({
+  x: point.x,
+  y: point.y,
+  editable
+});
+
+const sortPointsByDistance = (points, point) => {
+  return [...points].sort((point1, point2) =>
+    calculateDistance(point, point1) - calculateDistance(point, point2)
+  );
+};
+
 export default (level) => {
   const route = {
     controlPoints: [
-      {
-        x: level.start.x,
-        y: level.start.y
-      },
-      {
-        x: level.start.x,
-        y: level.end.y
-      },
-      {
-        x: level.end.x,
-        y: level.end.y
-      }
+      createControlPoint(level.start, false),
+      createControlPoint(level.end, false)
     ],
     segments: [],
     edit: null,
@@ -34,9 +36,11 @@ export default (level) => {
   };
   route.updateSegments();
 
-  route.findNearestControlPoint = (position) => [...route.controlPoints].sort((controlPoint1, controlPoint2) =>
-    calculateDistance(position, controlPoint1) - calculateDistance(position, controlPoint2)
-  )[0];
+  route.findNearestEditableControlPoint = (position) => {
+    const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
+    const sortedControlPoints = sortPointsByDistance(editableControlPoints, position);
+    return sortedControlPoints[0];
+  };
 
   route.findNearestSegment = (position) => [...route.segments].sort((segment1, segment2) =>
     calculateDistance(position, segment1) - calculateDistance(position, segment2)
@@ -81,10 +85,7 @@ export default (level) => {
             break;
           }
         }
-        const newControlPoint = {
-          x: edit.segment.x,
-          y: edit.segment.y
-        };
+        const newControlPoint = createControlPoint(edit.segment);
         route.controlPoints.splice(controlPointIndex, 0, newControlPoint);
         edit.controlPoint = newControlPoint;
         edit.segment = null;
@@ -100,15 +101,34 @@ export default (level) => {
 
   route.moveEdit = (newPoint) => {
     if (route.edit?.status !== 'moveable') {
-      return false;
+      return null;
     }
     route.edit.controlPoint.x = newPoint.x;
     route.edit.controlPoint.y = newPoint.y;
     route.updateSegments();
-    return true;
+
+    const otherControlPoints = route.controlPoints.filter(controlPoint => controlPoint !== route.edit.controlPoint);
+    const nearestControlPoints = sortPointsByDistance(otherControlPoints, newPoint);
+    return nearestControlPoints[0];
   };
 
-  route.removeEdit = () => {
+  route.markEditAsDeletable = (deletable) => {
+    route.edit.deletable = deletable
+  };
+
+  route.confirmEdit = () => {
+    if (!route.edit) {
+      return;
+    }
+    if (route.edit.deletable) {
+      const controlPointIndex = route.controlPoints.indexOf(route.edit.controlPoint);
+      route.controlPoints.splice(controlPointIndex, 1);
+      route.updateSegments();
+    }
+    route.edit = null;
+  };
+
+  route.abortEdit = () => {
     route.edit = null;
   };
 

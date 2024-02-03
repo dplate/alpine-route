@@ -15,7 +15,7 @@ const sortPointsByDistance = (points, point) => {
   );
 };
 
-export default (level) => {
+export default (level, map) => {
   const route = {
     controlPoints: [
       createControlPoint(level.start, false),
@@ -29,8 +29,10 @@ export default (level) => {
     route.segments = [];
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter < spline.length; meter += segmentDistance) {
+      const point = spline.getAtMeter(meter);
       route.segments.push({
-        ...spline.getAtMeter(meter)
+        ...point,
+        height: map.getHeightAtPoint(point)
       });
     }
   };

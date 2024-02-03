@@ -1,13 +1,54 @@
 const resolutionInMeters = 2;
 
-export default async (level) => {
+export default async (system, level) => {
   const data = await fetch(`assets/maps/${level.map}.webp`);
   const bitmap = await createImageBitmap(await data.blob(), { colorSpaceConversion: 'none' });
+
+  const canvas = system.window.document.createElement('canvas');
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const context = canvas.getContext('2d');
+  context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
+  const pixelData = Array.from(Array(bitmap.height), _ => Array(bitmap.height).fill(null));
 
   return {
     bitmap,
     resolutionInMeters,
     getWidthInMeters: () => bitmap.width * resolutionInMeters,
-    getHeightInMeters: () => bitmap.height * resolutionInMeters
+    getHeightInMeters: () => bitmap.height * resolutionInMeters,
+    
+    getHeightAtPoint: (meters) => {
+      const pixels = {
+        x: meters.x / resolutionInMeters,
+        y: meters.y / resolutionInMeters
+      };
+      const topLeft = {
+        x: Math.floor(pixels.x),
+        y: Math.floor(pixels.y)
+      };
+      const surroundingHeights = [
+        pixelData[topLeft.x][topLeft.y],
+        pixelData[topLeft.x + 1][topLeft.y],
+        pixelData[topLeft.x][topLeft.y + 1],
+        pixelData[topLeft.x + 1][topLeft.y + 1],
+      ];
+      if (surroundingHeights.includes(null)) {
+        const imageData = context.getImageData(topLeft.x, topLeft.y, 2, 2).data;
+        for (let index = 0; index < 4; index++) {
+          if (surroundingHeights[index] === null) {
+            const height = ((imageData[index * 4] << 16) + (imageData[index * 4 + 1] << 8) + imageData[index * 4 + 2]) / 100.0;
+            pixelData[topLeft.x + index % 2][topLeft.y + Math.floor(index / 2)] = height;
+            surroundingHeights[index] = height;
+          }
+        }
+      }
+      const weight = {
+        x: pixels.x % 1,
+        y: pixels.y % 1
+      };
+      const interpolatedTop = surroundingHeights[0] * (1.0 - weight.x) + surroundingHeights[1] * weight.x;
+      const interpolatedBottom = surroundingHeights[2] * (1.0 - weight.x) + surroundingHeights[3] * weight.x;
+      return interpolatedTop * (1.0 - weight.y) + interpolatedBottom * weight.y;
+    }
   };
 }

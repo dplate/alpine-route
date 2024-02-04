@@ -6,7 +6,8 @@ const segmentDistance = 5;
 const createControlPoint = (point, editable = true) => ({
   x: point.x,
   y: point.y,
-  editable
+  z: point.z,
+  editable,
 });
 
 const sortPointsByDistance = (points, point) => {
@@ -27,12 +28,15 @@ export default (level, map) => {
 
   route.updateSegments = () => {
     route.segments = [];
+    route.controlPoints.forEach((controlPoint) => {
+      controlPoint.z = map.getHeightAtPoint(controlPoint);
+    });
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter < spline.length; meter += segmentDistance) {
       const point = spline.getAtMeter(meter);
       route.segments.push({
         ...point,
-        height: map.getHeightAtPoint(point)
+        mapHeight: map.getHeightAtPoint(point)
       });
     }
   };

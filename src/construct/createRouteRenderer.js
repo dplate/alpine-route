@@ -56,17 +56,17 @@ const drawSegments = (context, route, renderTarget) => {
     }
   });
 
-  context.beginPath();
   const startPixels = renderTarget.transformMetersToPixels(route.segments[0]);
   context.moveTo(startPixels.x, startPixels.y);
+  context.lineWidth = 5;
+  context.lineCap = 'round';
+  context.strokeStyle = `rgb(150, 0, 0)`;
+  context.beginPath();
   route.segments.forEach((segment) => {
     const pixels = renderTarget.transformMetersToPixels(segment);
     context.lineTo(pixels.x, pixels.y);
   });
-  context.lineWidth = 5;
-  context.strokeStyle = 'rgb(150, 0, 0)';
-  context.lineCap = 'round';
-  context.stroke();
+  context.stroke(); 
 };
 
 export default (system, layout, cameras, route) => {

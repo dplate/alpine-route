@@ -69,15 +69,52 @@ const drawSegments = (context, route, renderTarget) => {
   context.stroke(); 
 };
 
+const drawRidge = (context, route, renderTarget) => {
+  const transformToPixels = (segment) => renderTarget.transformMetersToPixels({ meter: segment.meter, z: segment.mapHeight });
+  const startPixels = transformToPixels(route.segments[0]);
+  
+  context.save();
+  context.moveTo(0, renderTarget.canvas.height);
+  context.beginPath();
+  route.segments.forEach((segment) => {
+    const pixels = transformToPixels(segment);
+    context.lineTo(pixels.x, pixels.y);
+  });
+  context.lineTo(renderTarget.canvas.width, renderTarget.canvas.height);
+  context.lineTo(0, renderTarget.canvas.height);
+  context.clip();
+
+  context.moveTo(startPixels.x, startPixels.y);
+  context.lineWidth = 5;
+  context.lineCap = 'round';
+  context.strokeStyle = 'rgb(150, 150, 150)';
+  context.shadowColor = 'rgba(0, 0, 0)';
+  context.shadowBlur = 30; 
+  
+  context.beginPath();
+  route.segments.forEach((segment) => {
+    const pixels = transformToPixels(segment);
+    context.lineTo(pixels.x, pixels.y);
+  });
+  context.stroke(); 
+  
+  context.restore();
+};
+
 export default (system, layout, cameras, route) => {
   const renderTargets = [
     {
       canvas: layout.mapRoute,
-      transformMetersToPixels: cameras.transformMetersToPixels
+      transformMetersToPixels: cameras.transformMetersToPixels,
+    },
+    {
+      canvas: layout.profile,
+      transformMetersToPixels: (point) => cameras.transformMetersToPixelsOnProfile(point.meter, point.z),
+      profile: true,
     },
     {
       canvas: layout.magnifierRoute,
-      transformMetersToPixels: cameras.transformMetersToPixelsOnMagnifier
+      transformMetersToPixels: cameras.transformMetersToPixelsOnMagnifier,
     }
   ];
 
@@ -86,23 +123,16 @@ export default (system, layout, cameras, route) => {
       const context = renderTarget.canvas.getContext('2d');
       context.clearRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
   
+      if (renderTarget.profile) {
+        drawRidge(context, route, renderTarget)
+      }
       drawControlPoints(context, route, renderTarget);
       drawSegments(context, route, renderTarget);
     });
     
   };
 
-  const observer = new ResizeObserver(entries => {
-    for (const entry of entries) {
-      const canvas = entry.target;
-      const width = entry.contentBoxSize[0].inlineSize;
-      const height = entry.contentBoxSize[0].blockSize;
-      canvas.width = Math.max(1, Math.min(width, system.gpuDevice.limits.maxTextureDimension2D));
-      canvas.height = Math.max(1, Math.min(height, system.gpuDevice.limits.maxTextureDimension2D));
-    }
-    render();
-  });
-  renderTargets.forEach(renderTarget => observer.observe(renderTarget.canvas));
+  system.handleCanvasResize(renderTargets.map(renderTarget => renderTarget.canvas), render);
 
   return {
     render

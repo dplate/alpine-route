@@ -21,7 +21,7 @@ html, body {
     'notes     map'
     'profile   profile';
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 200px 1fr 100px;
+  grid-template-rows: 200px 1fr 200px;
 }
 
 #magnifierContainer {
@@ -62,7 +62,7 @@ html, body {
 
 #profile {
   grid-area: profile;
-  background-color:bisque;
+  background-color:rgb(250, 255, 245);
   width: 100%;
   height: 100%;
 }

@@ -7,7 +7,7 @@ export default async (system, level) => {
   const canvas = system.window.document.createElement('canvas');
   canvas.width = bitmap.width;
   canvas.height = bitmap.height;
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d', { willReadFrequently: true });
   context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
   const pixelData = Array.from(Array(bitmap.height), _ => Array(bitmap.height).fill(null));
 

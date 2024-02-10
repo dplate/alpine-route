@@ -134,18 +134,13 @@ export default (system, layout, cameras, map) => {
     system.gpuDevice.queue.submit([commandBuffer]);
   };
 
-  const observer = new ResizeObserver(entries => {
-    for (const entry of entries) {
-      const canvas = entry.target;
-      const width = entry.contentBoxSize[0].inlineSize;
-      const height = entry.contentBoxSize[0].blockSize;
-      canvas.width = Math.max(1, Math.min(width, system.gpuDevice.limits.maxTextureDimension2D));
-      canvas.height = Math.max(1, Math.min(height, system.gpuDevice.limits.maxTextureDimension2D));
+  system.handleCanvasResize(
+    renderTargets.map(renderTarget => renderTarget.canvas), 
+    () => {
       cameras.restrictToLimits();
+      render();
     }
-    render();
-  });
-  renderTargets.forEach(renderTarget => observer.observe(renderTarget.canvas));
+  );
 
   return {
     render

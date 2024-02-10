@@ -7,6 +7,7 @@ const createControlPoint = (point, editable = true) => ({
   x: point.x,
   y: point.y,
   z: point.z,
+  meter: null,
   editable,
 });
 
@@ -36,9 +37,13 @@ export default (level, map) => {
       const point = spline.getAtMeter(meter);
       route.segments.push({
         ...point,
-        mapHeight: map.getHeightAtPoint(point)
+        mapHeight: map.getHeightAtPoint(point),
+        meter
       });
     }
+    route.controlPoints.forEach((controlPoint, index) => {
+      controlPoint.meter = spline.getLengthAtPointIndex(index);
+    });
   };
   route.updateSegments();
 

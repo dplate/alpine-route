@@ -125,6 +125,9 @@ export default (points) => {
 
   return {
     length,
+    getLengthAtPointIndex: (pointIndex) => {
+      return segmentLengths.slice(0, pointIndex + 1).reduce((sum, length) => sum + length, 0);
+    },
     getAtMeter: (meter) => {
       let totalSegmentLength = 0;
       let segmentIndex = 0;

@@ -68,6 +68,6 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     route.confirmEdit();
   };
   layout.mapContainer.onclick = (event) => {
-    console.log(cameras.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
+    console.log(cameras.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }), cameras.profile);
   }
 };

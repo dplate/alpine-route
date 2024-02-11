@@ -36,7 +36,7 @@ export default async (system, level) => {
         const imageData = context.getImageData(topLeft.x, topLeft.y, 2, 2).data;
         for (let index = 0; index < 4; index++) {
           if (surroundingHeights[index] === null) {
-            const height = ((imageData[index * 4] << 16) + (imageData[index * 4 + 1] << 8) + imageData[index * 4 + 2]) / 100.0;
+            const height = ((imageData[index * 4] << 8) + imageData[index * 4 + 1]) / 10.0;
             pixelData[topLeft.x + index % 2][topLeft.y + Math.floor(index / 2)] = height;
             surroundingHeights[index] = height;
           }

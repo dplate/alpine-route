@@ -45,7 +45,7 @@ const northOffset = vec2i(0, 1);
 @group(0) @binding(1) var mapTexture: texture_2d<f32>;
 
 fn convertColorToHeight(color: vec4f) -> f32 {
-  return dot(color, vec4f(256.0 * 256.0, 256.0, 1.0, 0)) * 2.55;
+  return dot(color, vec4f(256.0, 1.0, 0, 0)) * 25.5;
 }
 
 fn getNeighbor(height: f32, offset: vec2i) -> vec3f {

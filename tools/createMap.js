@@ -75,13 +75,12 @@ const createTexture = async (mapData) => {
   for (let x = 0; x < textureWidth; x++) {
     for (let y = 0; y < textureHeight; y++) {
       const point = mapData.points[x][y];
-      const heightColor = Math.floor(0xFFFFFF & point.height);
+      const heightColor = Math.floor(0xFFFF & Math.round(point.height / 10));
       
       const index = (textureWidth * y + x) * 3;
             
-      bitmap[index] = (heightColor >> 16) & 0xFF;
-      bitmap[index + 1] = (heightColor >> 8) & 0xFF;
-      bitmap[index + 2] = heightColor & 0xFF;
+      bitmap[index] = (heightColor >> 8) & 0xFF;
+      bitmap[index + 1] = heightColor & 0xFF;
     }
   }
   texture.data = buffer;

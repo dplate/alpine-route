@@ -90,7 +90,7 @@ const copyCameraToGpu = (system, renderTarget) => {
   const aspect = renderTarget.canvas.width / renderTarget.canvas.height;
   renderTarget.values.set([aspect], 0);
   renderTarget.values.set([renderTarget.camera.scale], 1); 
-  renderTarget.values.set([renderTarget.camera.center.x, renderTarget.camera.center.y], 2); 
+  renderTarget.values.set([renderTarget.camera.normalizedCenter.x, renderTarget.camera.normalizedCenter.y], 2); 
   system.gpuDevice.queue.writeBuffer(renderTarget.buffer, 0, renderTarget.values);
 };
 
@@ -126,7 +126,7 @@ export default (system, layout, cameras, map) => {
     const encoder = system.gpuDevice.createCommandEncoder({ label: 'map command encoder' });
 
     renderTargets.forEach(renderTarget => {
-      if (renderTarget.camera.profileActive) {
+      if (renderTarget.camera.isProfile()) {
         return;
       }
       copyCameraToGpu(system, renderTarget);
@@ -140,7 +140,7 @@ export default (system, layout, cameras, map) => {
   system.handleCanvasResize(
     renderTargets.map(renderTarget => renderTarget.canvas), 
     () => {
-      cameras.restrictToLimits();
+      cameras.update();
       render();
     }
   );

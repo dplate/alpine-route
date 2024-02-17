@@ -1,18 +1,41 @@
-import calculateDistance from './calculateDistance.js';
+import calculateMapDistance from './map/calculateMapDistance.js';
+import calculateProfileDistance from './route/calculateProfileDistance.js';
 
-const proposeRouteEditPoint = (cameras, route, pixels) => {
-  const point = cameras.transformPixelsToMeters(pixels);
-  const nearestControlPoint = route.findNearestEditableControlPoint(point);
+const controlPointSnapDistance = 50;
+const segmentSnapDistances = 20;
+
+const proposeRouteEditPointOnMap = (cameras, route, pixels) => {
+  const point = cameras.map.transformPixelsToMeters(pixels);
+  const nearestControlPoint = route.findNearestEditableControlPointByMapMeters(point);
   if (nearestControlPoint) {
-    const nearestControlPixels = cameras.transformMetersToPixels(nearestControlPoint);
-    if (calculateDistance(pixels, nearestControlPixels) < 50) {
+    const nearestControlPixels = cameras.map.transformMetersToPixels(nearestControlPoint);
+    if (calculateMapDistance(pixels, nearestControlPixels) < controlPointSnapDistance) {
       route.createEditByControlPoint(nearestControlPoint);
       return;
     }
   }
-  const nearestSegment = route.findNearestSegment(point);
-  const nearestSegmentPixels = cameras.transformMetersToPixels(nearestSegment);
-  if (calculateDistance(pixels, nearestSegmentPixels) < 20) {
+  const nearestSegment = route.findNearestSegmentByMapMeters(point);
+  const nearestSegmentPixels = cameras.map.transformMetersToPixels(nearestSegment);
+  if (calculateMapDistance(pixels, nearestSegmentPixels) < segmentSnapDistances) {
+    route.createEditBySegment(nearestSegment);
+  } else {
+    route.abortEdit();
+  }
+};
+
+const proposeRouteEditPointOnProfile = (cameras, route, pixels) => {
+  const point = cameras.profile.transformPixelsToMeters(pixels);
+  const nearestControlPoint = route.findNearestEditableControlPointByProfileMeters(point);
+  if (nearestControlPoint) {
+    const nearestControlPixels = cameras.profile.transformMetersToPixels(nearestControlPoint);
+    if (calculateMapDistance(pixels, nearestControlPixels) < controlPointSnapDistance) {
+      route.createEditByControlPoint(nearestControlPoint);
+      return;
+    }
+  }
+  const nearestSegment = route.findNearestSegmentByProfileMeters(point);
+  const nearestSegmentPixels = cameras.profile.transformMetersToPixels(nearestSegment);
+  if (calculateMapDistance(pixels, nearestSegmentPixels) < segmentSnapDistances) {
     route.createEditBySegment(nearestSegment);
   } else {
     route.abortEdit();
@@ -20,13 +43,13 @@ const proposeRouteEditPoint = (cameras, route, pixels) => {
 };
 
 const handleRouteEditing = (cameras, route, pixels) => {
-  const newPoint = cameras.transformPixelsToMeters(pixels);
+  const newPoint = cameras.map.transformPixelsToMeters(pixels);
   const nearestControlPoint = route.moveEdit(newPoint);
   if (!nearestControlPoint) {
     return false;
   }
-  const nearestControlPixels = cameras.transformMetersToPixels(nearestControlPoint);
-  route.markEditAsDeletable(calculateDistance(pixels, nearestControlPixels) < 20);
+  const nearestControlPixels = cameras.map.transformMetersToPixels(nearestControlPoint);
+  route.markEditAsDeletable(calculateMapDistance(pixels, nearestControlPixels) < segmentSnapDistances);
   return true;
 };
 
@@ -37,7 +60,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
 
   layout.mapContainer.onwheel = (event) => {
     const amount = event.deltaY / 90.0;
-    amount < 0 ? cameras.zoomIn(-amount) : cameras.zoomOut(amount);
+    amount < 0 ? cameras.map.zoomIn(-amount) : cameras.map.zoomOut(amount);
     mapRenderer.render();
     routeRenderer.render();
   };
@@ -45,12 +68,12 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     if (event.buttons === 1) {
       if (!handleRouteEditing(cameras, route, pixels)) {
-        cameras.moveMapByPixels({ x: -event.movementX, y: -event.movementY });
+        cameras.map.moveByPixels({ x: -event.movementX, y: -event.movementY });
       }
     }
-    cameras.setMagnifierByMapPixels(pixels);
+    cameras.magnifier.setByMapPixels(pixels);
 
-    proposeRouteEditPoint(cameras, route, pixels);
+    proposeRouteEditPointOnMap(cameras, route, pixels);
 
     mapRenderer.render();
     routeRenderer.render();
@@ -68,16 +91,20 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     route.confirmEdit();
   };
   layout.mapContainer.onclick = (event) => {
-    console.log(cameras.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }), cameras.profile);
+    console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
   }
 
   layout.profile.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     
-    cameras.setMagnifierByProfilePixels(pixels);
+    cameras.magnifier.setByProfilePixels(pixels);
 
-    //proposeRouteEditPoint(cameras, route, pixels);
+    proposeRouteEditPointOnProfile(cameras, route, pixels);
 
     routeRenderer.render();
   };
+
+  layout.profile.onclick = (event) => {
+    console.log(cameras.profile.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
+  }
 };

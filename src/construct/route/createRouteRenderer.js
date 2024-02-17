@@ -18,7 +18,7 @@ const drawPoint = (context, point, variant, fillFactor, renderTarget) => {
   const minStrokeWidth = 2;
   const strokeWidth = minStrokeWidth + (realRadius - minStrokeWidth) * fillFactor;
   const radius = realRadius - strokeWidth / 2.0;
-  const pixels = renderTarget.transformMetersToPixels(point);
+  const pixels = renderTarget.camera.transformMetersToPixels(point);
   context.beginPath();
   context.arc(pixels.x, pixels.y, radius, 0, 2 * Math.PI);
   context.fillStyle = variant.fillStyle;
@@ -56,14 +56,14 @@ const drawSegments = (context, route, renderTarget) => {
     }
   });
 
-  const startPixels = renderTarget.transformMetersToPixels(route.segments[0]);
+  const startPixels = renderTarget.camera.transformMetersToPixels(route.segments[0]);
   context.moveTo(startPixels.x, startPixels.y);
   context.lineWidth = 5;
   context.lineCap = 'round';
   context.strokeStyle = `rgb(150, 0, 0)`;
   context.beginPath();
   route.segments.forEach((segment) => {
-    const pixels = renderTarget.transformMetersToPixels(segment);
+    const pixels = renderTarget.camera.transformMetersToPixels(segment);
     context.lineTo(pixels.x, pixels.y);
   });
   context.stroke(); 
@@ -73,7 +73,7 @@ const drawRidge = (context, route, renderTarget) => {
   context.fillStyle = 'rgb(250, 255, 245)';
   context.fillRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
 
-  const transformToPixels = (segment) => renderTarget.transformMetersToPixels({ meter: segment.meter, z: segment.mapHeight });
+  const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ meter: segment.meter, z: segment.mapHeight });
   const startPixels = transformToPixels(route.segments[0]);
   
   context.save();
@@ -108,23 +108,15 @@ export default (system, layout, cameras, route) => {
   const renderTargets = [
     {
       canvas: layout.mapRoute,
-      transformMetersToPixels: cameras.transformMetersToPixels,
-      isProfile: () => false,
+      camera: cameras.map,
     },
     {
       canvas: layout.profile,
-      transformMetersToPixels: (point) => cameras.transformMetersToProfilePixels(point.meter, point.z),
-      isProfile: () => true,
+      camera: cameras.profile,
     },
     {
       canvas: layout.magnifierRoute,
-      transformMetersToPixels: (point) => {
-        if (cameras.magnifier.profileActive) {
-          return cameras.transformMetersToProfilePixels(point.meter, point.z, true);
-        } 
-        return cameras.transformMetersToMagnifierPixels(point);
-      },
-      isProfile: () => cameras.magnifier.profileActive,
+      camera: cameras.magnifier,
     }
   ];
 
@@ -133,7 +125,7 @@ export default (system, layout, cameras, route) => {
       const context = renderTarget.canvas.getContext('2d');
       context.clearRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
   
-      if (renderTarget.isProfile()) {
+      if (renderTarget.camera.isProfile()) {
         drawRidge(context, route, renderTarget)
       }
       drawControlPoints(context, route, renderTarget);

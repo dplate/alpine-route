@@ -1,4 +1,5 @@
-import calculateDistance from './calculateDistance.js';
+import calculateMapDistance from '../map/calculateMapDistance.js';
+import calculateProfileDistance from './calculateProfileDistance.js';
 import createSpline from './createSpline.js';
 
 const segmentDistance = 5;
@@ -11,9 +12,15 @@ const createControlPoint = (point, editable = true) => ({
   editable,
 });
 
-const sortPointsByDistance = (points, point) => {
+const sortPointsByMapDistance = (points, point) => {
   return [...points].sort((point1, point2) =>
-    calculateDistance(point, point1) - calculateDistance(point, point2)
+    calculateMapDistance(point, point1) - calculateMapDistance(point, point2)
+  );
+};
+
+const sortPointsByProfileDistance = (points, point) => {
+  return [...points].sort((point1, point2) =>
+    calculateProfileDistance(point, point1) - calculateProfileDistance(point, point2)
   );
 };
 
@@ -47,14 +54,24 @@ export default (level, map) => {
   };
   route.updateSegments();
 
-  route.findNearestEditableControlPoint = (position) => {
+  route.findNearestEditableControlPointByMapMeters = (point) => {
     const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
-    const sortedControlPoints = sortPointsByDistance(editableControlPoints, position);
+    const sortedControlPoints = sortPointsByMapDistance(editableControlPoints, point);
     return sortedControlPoints[0];
   };
 
-  route.findNearestSegment = (position) => [...route.segments].sort((segment1, segment2) =>
-    calculateDistance(position, segment1) - calculateDistance(position, segment2)
+  route.findNearestEditableControlPointByProfileMeters = (point) => {
+    const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
+    const sortedControlPoints = sortPointsByProfileDistance(editableControlPoints, point);
+    return sortedControlPoints[0];
+  };
+
+  route.findNearestSegmentByMapMeters = (point) => [...route.segments].sort((segment1, segment2) =>
+    calculateMapDistance(point, segment1) - calculateMapDistance(point, segment2)
+  )[0];
+
+  route.findNearestSegmentByProfileMeters = (point) => [...route.segments].sort((segment1, segment2) =>
+    calculateProfileDistance(point, segment1) - calculateProfileDistance(point, segment2)
   )[0];
 
   route.createEditByControlPoint = (controlPoint) => {
@@ -89,7 +106,7 @@ export default (level, map) => {
       if (edit.activateFactor > 1.0) {
         let controlPointIndex = 1;
         for (const segment of route.segments) {
-          if (calculateDistance(segment, route.controlPoints[controlPointIndex]) < segmentDistance) {
+          if (calculateMapDistance(segment, route.controlPoints[controlPointIndex]) < segmentDistance) {
             controlPointIndex++;
           }
           if (segment === edit.segment) {
@@ -119,7 +136,7 @@ export default (level, map) => {
     route.updateSegments();
 
     const otherControlPoints = route.controlPoints.filter(controlPoint => controlPoint !== route.edit.controlPoint);
-    const nearestControlPoints = sortPointsByDistance(otherControlPoints, newPoint);
+    const nearestControlPoints = sortPointsByMapDistance(otherControlPoints, newPoint);
     return nearestControlPoints[0];
   };
 

@@ -9,7 +9,10 @@ export default async (system, level) => {
   canvas.height = bitmap.height;
   const context = canvas.getContext('2d', { willReadFrequently: true });
   context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
-  const pixelData = Array.from(Array(bitmap.height), _ => Array(bitmap.height).fill(null));
+  let pixelData = Array.from(Array(bitmap.height), _ => Array(bitmap.height).fill(null));
+
+  // delete array on unload, because Chrome fills memory otherwise with every reload
+  system.window.addEventListener('beforeunload', () => pixelData = null);
 
   return {
     bitmap,

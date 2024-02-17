@@ -1,9 +1,9 @@
-import createCameras from './createCameras.js';
+import createCameras from './cameras/createCameras.js';
 import createLayout from './createLayout.js';
-import createMapRenderer from './createMapRenderer.js';
-import createRoute from './createRoute.js';
-import createRouteRenderer from './createRouteRenderer.js';
-import loadMap from './loadMap.js';
+import createMapRenderer from './map/createMapRenderer.js';
+import createRoute from './route/createRoute.js';
+import createRouteRenderer from './route/createRouteRenderer.js';
+import loadMap from './map/loadMap.js';
 import setupControl from './setupControl.js';
 
 export default async (system, level) => {

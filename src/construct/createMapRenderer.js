@@ -119,13 +119,16 @@ export default (system, layout, cameras, map) => {
 
   const renderTargets = [
     createRenderTarget(system, presentationFormat, pipeline, texture, cameras.map, layout.map),
-    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.magnifier, layout.magnifier)
+    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.magnifier.map, layout.magnifier)
   ];
 
   const render = () => {
     const encoder = system.gpuDevice.createCommandEncoder({ label: 'map command encoder' });
 
     renderTargets.forEach(renderTarget => {
+      if (renderTarget.camera.profileActive) {
+        return;
+      }
       copyCameraToGpu(system, renderTarget);
       executeRenderPass(encoder, renderTarget, pipeline);
     });

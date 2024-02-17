@@ -25,8 +25,12 @@ const restrictCenter = (camera, canvas) => {
 
 export default (layout, map, route) => {
   const mapCamera = createMapCamera();
-  const magnifierCamera = createMapCamera();
   const profileCamera = createProfileCamera();
+  const magnifierCamera = {
+    map: createMapCamera(),
+    profilePixelPosition: { x: 0, y: 0 },
+    profileActive: false
+  }
 
   const normalizePixels = (pixels) => ({
     x: mapCamera.center.x + (pixels.x - 0.5 * layout.map.width) / (layout.map.height * mapCamera.scale),
@@ -38,9 +42,9 @@ export default (layout, map, route) => {
     y: (normalized.y - mapCamera.center.y) * (layout.map.height * mapCamera.scale) + 0.5 * layout.map.height
   });
 
-  const transformNormalizedToPixelsOnMagnifier = (normalized) => ({
-    x: (normalized.x - magnifierCamera.center.x) * (layout.magnifier.height * magnifierCamera.scale) + 0.5 * layout.magnifier.width,
-    y: (normalized.y - magnifierCamera.center.y) * (layout.magnifier.height * magnifierCamera.scale) + 0.5 * layout.magnifier.height
+  const transformNormalizedToMagnifierPixels = (normalized) => ({
+    x: (normalized.x - magnifierCamera.map.center.x) * (layout.magnifier.height * magnifierCamera.map.scale) + 0.5 * layout.magnifier.width,
+    y: (normalized.y - magnifierCamera.map.center.y) * (layout.magnifier.height * magnifierCamera.map.scale) + 0.5 * layout.magnifier.height
   });
 
   const transformPixelsToMeters = (pixels) => {
@@ -87,8 +91,8 @@ export default (layout, map, route) => {
     mapCamera.scale = Math.min(100, mapCamera.scale);
     restrictCenter(mapCamera, layout.map);
     
-    magnifierCamera.scale = mapCamera.scale * 15;
-    restrictCenter(magnifierCamera, layout.magnifier);
+    magnifierCamera.map.scale = mapCamera.scale * 15;
+    restrictCenter(magnifierCamera.map, layout.magnifier);
 
     updateProfileCamera();
   };
@@ -102,11 +106,17 @@ export default (layout, map, route) => {
       mapCamera.center.y += pixelMovement.y / (layout.map.height * mapCamera.scale);
       restrictToLimits();
     },
-    setMagnifierByPixels: (pixels) => {
+    setMagnifierByMapPixels: (pixels) => {
       const normalized = normalizePixels(pixels);
-      magnifierCamera.center.x = normalized.x;
-      magnifierCamera.center.y = normalized.y;
+      magnifierCamera.profileActive = false;
+      magnifierCamera.map.center.x = normalized.x;
+      magnifierCamera.map.center.y = normalized.y;
       restrictToLimits();
+    },
+    setMagnifierByProfilePixels: (pixels) => {
+      magnifierCamera.profileActive = true;
+      magnifierCamera.profilePixelPosition.x = pixels.x;
+      magnifierCamera.profilePixelPosition.y = pixels.y;
     },
     zoomIn: (amount) => {
       mapCamera.scale *= amount;
@@ -118,21 +128,36 @@ export default (layout, map, route) => {
     },
     transformPixelsToMeters,
     transformMetersToPixels,
-    transformMetersToPixelsOnMagnifier: (point) => {
+    transformMetersToMagnifierPixels: (point) => {
       const normalized = {
         x: point.x / map.getWidthInMeters(),
         y: point.y / map.getHeightInMeters()
       };
-      return transformNormalizedToPixelsOnMagnifier(normalized);
+      return transformNormalizedToMagnifierPixels(normalized);
     },
-    transformMetersToPixelsOnProfile: (meter, height) => {
+    transformMetersToProfilePixels: (meter, height, magnifier = false) => {
       const meterNormalized = (meter - profileCamera.minMeter) / (profileCamera.maxMeter - profileCamera.minMeter);
       const heightNormalized = (height - profileCamera.minHeight) / (profileCamera.maxHeight - profileCamera.minHeight);
 
-      return {
+      const pixels = {
         x: meterNormalized * layout.profile.width,
         y: profilePadding + (1.0 - heightNormalized) * (layout.profile.height - 2 * profilePadding)
+      };
+
+      if (!magnifier) {
+        return pixels;
       }
+
+      const scale = 3.0;
+      const scalePixels = (pixelsToScale) => ({
+        x: (pixelsToScale.x - layout.profile.width / 2.0) * scale + layout.profile.width / 2.0,
+        y: (pixelsToScale.y - layout.profile.height / 2.0) * scale + layout.profile.height / 2.0
+      });
+      const scaledPixels = scalePixels(pixels);
+      const scaledProfilePixelPosition = scalePixels(magnifierCamera.profilePixelPosition);
+      scaledPixels.x -= scaledProfilePixelPosition.x - layout.magnifier.width / 2.0;
+      scaledPixels.y -= scaledProfilePixelPosition.y - layout.magnifier.height / 2.0;
+      return scaledPixels;
     },
     restrictToLimits
   };

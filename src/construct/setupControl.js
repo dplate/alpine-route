@@ -48,7 +48,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
         cameras.moveMapByPixels({ x: -event.movementX, y: -event.movementY });
       }
     }
-    cameras.setMagnifierByPixels(pixels);
+    cameras.setMagnifierByMapPixels(pixels);
 
     proposeRouteEditPoint(cameras, route, pixels);
 
@@ -70,4 +70,14 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   layout.mapContainer.onclick = (event) => {
     console.log(cameras.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }), cameras.profile);
   }
+
+  layout.profile.onmousemove = (event) => {
+    const pixels = { x: event.offsetX, y: event.offsetY };
+    
+    cameras.setMagnifierByProfilePixels(pixels);
+
+    //proposeRouteEditPoint(cameras, route, pixels);
+
+    routeRenderer.render();
+  };
 };

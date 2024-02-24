@@ -1,40 +1,20 @@
 import calculateMapDistance from './map/calculateMapDistance.js';
-import calculateProfileDistance from './route/calculateProfileDistance.js';
 
 const controlPointSnapDistance = 50;
 const segmentSnapDistances = 20;
 
-const proposeRouteEditPointOnMap = (cameras, route, pixels) => {
-  const point = cameras.map.transformPixelsToMeters(pixels);
-  const nearestControlPoint = route.findNearestEditableControlPointByMapMeters(point);
+const proposeRouteEditPoint = (camera, route, pixels, findNearestEditableControlPoint, findNearestSegment) => {
+  const point = camera.transformPixelsToMeters(pixels);
+  const nearestControlPoint = findNearestEditableControlPoint(point);
   if (nearestControlPoint) {
-    const nearestControlPixels = cameras.map.transformMetersToPixels(nearestControlPoint);
+    const nearestControlPixels = camera.transformMetersToPixels(nearestControlPoint);
     if (calculateMapDistance(pixels, nearestControlPixels) < controlPointSnapDistance) {
       route.createEditByControlPoint(nearestControlPoint);
       return;
     }
   }
-  const nearestSegment = route.findNearestSegmentByMapMeters(point);
-  const nearestSegmentPixels = cameras.map.transformMetersToPixels(nearestSegment);
-  if (calculateMapDistance(pixels, nearestSegmentPixels) < segmentSnapDistances) {
-    route.createEditBySegment(nearestSegment);
-  } else {
-    route.abortEdit();
-  }
-};
-
-const proposeRouteEditPointOnProfile = (cameras, route, pixels) => {
-  const point = cameras.profile.transformPixelsToMeters(pixels);
-  const nearestControlPoint = route.findNearestEditableControlPointByProfileMeters(point);
-  if (nearestControlPoint) {
-    const nearestControlPixels = cameras.profile.transformMetersToPixels(nearestControlPoint);
-    if (calculateMapDistance(pixels, nearestControlPixels) < controlPointSnapDistance) {
-      route.createEditByControlPoint(nearestControlPoint);
-      return;
-    }
-  }
-  const nearestSegment = route.findNearestSegmentByProfileMeters(point);
-  const nearestSegmentPixels = cameras.profile.transformMetersToPixels(nearestSegment);
+  const nearestSegment = findNearestSegment(point);
+  const nearestSegmentPixels = camera.transformMetersToPixels(nearestSegment);
   if (calculateMapDistance(pixels, nearestSegmentPixels) < segmentSnapDistances) {
     route.createEditBySegment(nearestSegment);
   } else {
@@ -58,6 +38,20 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     touchInterval: null
   };
 
+  const startEditing = () => {
+    clearInterval(state.touchInterval);
+    state.touchInterval = setInterval(() => {
+      if (route.activateEdit()) {
+        routeRenderer.render();
+      }
+    }, 20);
+  };
+
+  const stopEditing = () => {
+    clearInterval(state.touchInterval);
+    route.confirmEdit();
+  };
+
   layout.mapContainer.onwheel = (event) => {
     const amount = event.deltaY / 90.0;
     amount < 0 ? cameras.map.zoomIn(-amount) : cameras.map.zoomOut(amount);
@@ -73,23 +67,19 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     }
     cameras.magnifier.setByMapPixels(pixels);
 
-    proposeRouteEditPointOnMap(cameras, route, pixels);
+    proposeRouteEditPoint(
+      cameras.map, 
+      route,
+      pixels,
+      (point) => route.findNearestEditableControlPointByMapMeters(point),
+      (point) => route.findNearestSegmentByMapMeters(point)
+    );
 
     mapRenderer.render();
     routeRenderer.render();
   };
-  layout.mapContainer.onmousedown = () => {
-    clearInterval(state.touchInterval);
-    state.touchInterval = setInterval(() => {
-      if (route.activateEdit()) {
-        routeRenderer.render();
-      }
-    }, 20);
-  };
-  layout.mapContainer.onmouseup = () => {
-    clearInterval(state.touchInterval);
-    route.confirmEdit();
-  };
+  layout.mapContainer.onmousedown = startEditing;
+  layout.mapContainer.onmouseup = stopEditing;
   layout.mapContainer.onclick = (event) => {
     console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
   }
@@ -99,10 +89,19 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     
     cameras.magnifier.setByProfilePixels(pixels);
 
-    proposeRouteEditPointOnProfile(cameras, route, pixels);
+    proposeRouteEditPoint(
+      cameras.profile, 
+      route,
+      pixels,
+      (point) => route.findNearestEditableControlPointByProfileMeters(point),
+      (point) => route.findNearestSegmentByProfileMeters(point)
+    );
 
     routeRenderer.render();
   };
+
+  layout.profile.onmousedown = startEditing;
+  layout.profile.onmouseup = stopEditing;
 
   layout.profile.onclick = (event) => {
     console.log(cameras.profile.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));

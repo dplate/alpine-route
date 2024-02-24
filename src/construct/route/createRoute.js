@@ -9,6 +9,7 @@ const createControlPoint = (point, editable = true) => ({
   y: point.y,
   z: point.z,
   meter: null,
+  flatMeter: null,
   editable,
 });
 
@@ -42,14 +43,18 @@ export default (level, map) => {
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter < spline.length; meter += segmentDistance) {
       const point = spline.getAtMeter(meter);
+      const lastPoint = route.segments[route.segments.length - 1];
+      const flatMeter = lastPoint ? lastPoint.flatMeter + Math.sqrt((point.x - lastPoint.x)**2 + (point.y - lastPoint.y)**2) : 0;
       route.segments.push({
         ...point,
         mapHeight: map.getHeightAtPoint(point),
-        meter
+        meter,
+        flatMeter
       });
     }
     route.controlPoints.forEach((controlPoint, index) => {
       controlPoint.meter = spline.getLengthAtPointIndex(index);
+      controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
     });
   };
   route.updateSegments();

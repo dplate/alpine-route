@@ -2,7 +2,7 @@ import restrictCameraCenter from './restrictCameraCenter.js';
 
 const scale = 2.0;
 const scaleNormalized = (normalized) => ({
-  meter: (normalized.meter - 0.5) * scale + 0.5,
+  flatMeter: (normalized.flatMeter - 0.5) * scale + 0.5,
   z: (normalized.z - 0.5) * scale + 0.5,
 });
 
@@ -18,7 +18,7 @@ export default (layout, mapCamera, profileCamera) => {
     },
     profile: {
       normalizedCenter: { 
-        meter: 0.5, 
+        flatMeter: 0.5, 
         z: 0.5 
       },
     }
@@ -68,7 +68,7 @@ export default (layout, mapCamera, profileCamera) => {
 
   magnifierCamera.setByProfilePixels = (pixels) => {
     const normalized = profileCamera.normalizePixels(pixels);
-    magnifierCamera.profile.normalizedCenter.meter = normalized.meter;
+    magnifierCamera.profile.normalizedCenter.flatMeter = normalized.flatMeter;
     magnifierCamera.profile.normalizedCenter.z = normalized.z;
     magnifierCamera.active = magnifierCamera.profile;
   };

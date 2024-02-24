@@ -3,24 +3,24 @@ const profilePadding = 15;
 export default (layout, route, mapCamera) => {
   const canvas = layout.profile;
   const camera = {
-    minMeter: 0,
-    maxMeter: 100,
+    minFlatMeter: 0,
+    maxFlatMeter: 100,
     minHeight: 0,
     maxHeight: 100
   };
 
   camera.normalizePixels = (pixels) => ({
-    meter: pixels.x / canvas.width,
+    flatMeter: pixels.x / canvas.width,
     z: 1.0 - (pixels.y  - profilePadding) / (canvas.height - 2 * profilePadding)
   });
 
   camera.normalizeMeters = (point) => ({
-    meter: (point.meter - camera.minMeter) / (camera.maxMeter - camera.minMeter),
+    flatMeter: (point.flatMeter - camera.minFlatMeter) / (camera.maxFlatMeter - camera.minFlatMeter),
     z: (point.z - camera.minHeight) / (camera.maxHeight - camera.minHeight)
   });
 
   camera.transformNormalizedToPixels = (normalized) => ({
-    x: normalized.meter * canvas.width,
+    x: normalized.flatMeter * canvas.width,
     y: profilePadding + (1.0 - normalized.z) * (canvas.height - 2 * profilePadding)
   });
 
@@ -32,7 +32,7 @@ export default (layout, route, mapCamera) => {
   camera.transformPixelsToMeters = (pixels) => {
     const normalized = camera.normalizePixels(pixels);
     return {
-      meter: normalized.meter * (camera.maxMeter - camera.minMeter) + camera.minMeter,
+      flatMeter: normalized.flatMeter * (camera.maxFlatMeter - camera.minFlatMeter) + camera.minFlatMeter,
       z: normalized.z * (camera.maxHeight - camera.minHeight) + camera.minHeight
     };
   };
@@ -44,13 +44,13 @@ export default (layout, route, mapCamera) => {
       segment.y >= minMapMeters.y && segment.y < maxMapMeters.y;
 
     const firstVisibleSegmentIndex = Math.max(0, route.segments.findIndex(isVisible));
-    camera.minMeter = route.segments[firstVisibleSegmentIndex].meter;
+    camera.minFlatMeter = route.segments[firstVisibleSegmentIndex].flatMeter;
 
     let lastVisibleSegmentIndex = route.segments.findLastIndex(isVisible);
     if (lastVisibleSegmentIndex < 0) {
       lastVisibleSegmentIndex = route.segments.length - 1
     }
-    camera.maxMeter = route.segments[lastVisibleSegmentIndex].meter;
+    camera.maxFlatMeter = route.segments[lastVisibleSegmentIndex].flatMeter;
 
     camera.minHeight = Number.MAX_VALUE;
     camera.maxHeight = 0;

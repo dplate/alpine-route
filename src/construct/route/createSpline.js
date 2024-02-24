@@ -104,39 +104,53 @@ const measureSegment = (evaluateSpline, min, max) => {
     detailPoints.push(evaluateSpline(t));
   }
 
-  let length = 0;
+  const measurement = {
+    length: 0,
+    flatLength: 0
+  };
   let lastPoint = detailPoints[0];
   for (let i = 1; i < detailPoints.length; i++){
     const currentPoint = detailPoints[i];
-    length += Math.sqrt((currentPoint.x - lastPoint.x)**2 + (currentPoint.y - lastPoint.y)**2 + (currentPoint.z - lastPoint.z)**2);
+    measurement.length += Math.sqrt((currentPoint.x - lastPoint.x)**2 + (currentPoint.y - lastPoint.y)**2 + (currentPoint.z - lastPoint.z)**2);
+    measurement.flatLength += Math.sqrt((currentPoint.x - lastPoint.x)**2 + (currentPoint.y - lastPoint.y)**2);
     lastPoint = currentPoint;
   }
-  return length;
+  return measurement;
 };
 
 export default (points) => {
   const evaluateSpline = createSplineEvaluator(points);
 
-  const segmentLengths = [0];
+  const segmentMeasurements = [{
+    length: 0,
+    flatLength: 0
+  }];
   for (let i = 0; i < points.length - 1; i++) {
-    segmentLengths.push(measureSegment(evaluateSpline, i, i + 1));
+    segmentMeasurements.push(measureSegment(evaluateSpline, i, i + 1));
   }
-  const length = segmentLengths.reduce((sum, length) => sum + length, 0);
+  const measurement = segmentMeasurements.reduce((measurement, segmentMeasurement) => ({
+    length: measurement.length + segmentMeasurement.length,
+    flatLength: measurement.flatLength + segmentMeasurement.flatLength
+  }), { length: 0, flatLength: 0 });
 
   return {
-    length,
+    length: measurement.length,
+    flatLength: measurement.flatLength,
     getLengthAtPointIndex: (pointIndex) => {
-      return segmentLengths.slice(0, pointIndex + 1).reduce((sum, length) => sum + length, 0);
+      return segmentMeasurements.slice(0, pointIndex + 1).reduce((sum, measurement) => sum + measurement.length, 0);
+    },
+    getFlatLengthAtPointIndex: (pointIndex) => {
+      return segmentMeasurements.slice(0, pointIndex + 1).reduce((sum, measurement) => sum + measurement.flatLength, 0);
     },
     getAtMeter: (meter) => {
       let totalSegmentLength = 0;
       let segmentIndex = 0;
-      while (meter > totalSegmentLength + segmentLengths[segmentIndex + 1]) {
+      while (meter > totalSegmentLength + segmentMeasurements[segmentIndex + 1].length) {
         segmentIndex++;
-        totalSegmentLength += segmentLengths[segmentIndex];
+        totalSegmentLength += segmentMeasurements[segmentIndex].length;
       }
   
-      const segmentLength = segmentLengths[segmentIndex + 1];
+      const segmentLength = segmentMeasurements[segmentIndex + 1].length;
       const remainingLength = meter - totalSegmentLength;
       const fraction = remainingLength / segmentLength;
       return evaluateSpline(segmentIndex + fraction);

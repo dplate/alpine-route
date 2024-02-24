@@ -4,13 +4,15 @@ import createSpline from './createSpline.js';
 
 const segmentDistance = 5;
 
-const createControlPoint = (point, editable = true) => ({
+const createControlPoint = (point, onGround, editable = true) => ({
   x: point.x,
   y: point.y,
   z: point.z,
   meter: null,
   flatMeter: null,
+  mapHeight: null,
   editable,
+  onGround
 });
 
 const sortPointsByMapDistance = (points, point) => {
@@ -28,8 +30,8 @@ const sortPointsByProfileDistance = (points, point) => {
 export default (level, map) => {
   const route = {
     controlPoints: [
-      createControlPoint(level.start, false),
-      createControlPoint(level.end, false)
+      createControlPoint(level.start, true, false),
+      createControlPoint(level.end, true, false)
     ],
     segments: [],
     edit: null,
@@ -38,7 +40,10 @@ export default (level, map) => {
   route.updateSegments = () => {
     route.segments = [];
     route.controlPoints.forEach((controlPoint) => {
-      controlPoint.z = map.getHeightAtPoint(controlPoint);
+      controlPoint.mapHeight = map.getHeightAtPoint(controlPoint);
+      if (controlPoint.onGround) {
+        controlPoint.z = controlPoint.mapHeight;
+      }
     });
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter < spline.length; meter += segmentDistance) {
@@ -99,7 +104,7 @@ export default (level, map) => {
     }
   };
 
-  route.activateEdit = () => {
+  route.activateEdit = (createOnGround) => {
     const edit = route.edit;
     if (edit?.status !== 'marked') {
       return false;
@@ -118,7 +123,7 @@ export default (level, map) => {
             break;
           }
         }
-        const newControlPoint = createControlPoint(edit.segment);
+        const newControlPoint = createControlPoint(edit.segment, createOnGround);
         route.controlPoints.splice(controlPointIndex, 0, newControlPoint);
         edit.controlPoint = newControlPoint;
         edit.segment = null;
@@ -143,6 +148,20 @@ export default (level, map) => {
     const otherControlPoints = route.controlPoints.filter(controlPoint => controlPoint !== route.edit.controlPoint);
     const nearestControlPoints = sortPointsByMapDistance(otherControlPoints, newPoint);
     return nearestControlPoints[0];
+  };
+
+  route.elevateEdit = (newPoint, snapHeight) => {
+    if (route.edit?.status !== 'moveable') {
+      return null;
+    }
+    if (Math.abs(newPoint.z - route.edit.controlPoint.mapHeight) < snapHeight) {
+      route.edit.controlPoint.z = route.edit.controlPoint.mapHeight;
+      route.edit.controlPoint.onGround = true;
+    } else {
+      route.edit.controlPoint.z = newPoint.z;
+      route.edit.controlPoint.onGround = false;
+    }
+    route.updateSegments();
   };
 
   route.markEditAsDeletable = (deletable) => {

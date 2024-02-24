@@ -2,6 +2,7 @@ import calculateMapDistance from './map/calculateMapDistance.js';
 
 const controlPointSnapDistance = 50;
 const segmentSnapDistances = 20;
+const heightSnapDistance = 20;
 
 const proposeRouteEditPoint = (camera, route, pixels, findNearestEditableControlPoint, findNearestSegment) => {
   const point = camera.transformPixelsToMeters(pixels);
@@ -22,7 +23,7 @@ const proposeRouteEditPoint = (camera, route, pixels, findNearestEditableControl
   }
 };
 
-const handleRouteEditing = (cameras, route, pixels) => {
+const handleRouteEditingOnMap = (cameras, route, pixels) => {
   const newPoint = cameras.map.transformPixelsToMeters(pixels);
   const nearestControlPoint = route.moveEdit(newPoint);
   if (!nearestControlPoint) {
@@ -33,15 +34,21 @@ const handleRouteEditing = (cameras, route, pixels) => {
   return true;
 };
 
+const handleRouteEditingOnProfile = (cameras, route, pixels) => {
+  const snapHeight = cameras.profile.transformPixelDistanceToHeightDifference(heightSnapDistance);
+  const newPoint = cameras.profile.transformPixelsToMeters(pixels);
+  route.elevateEdit(newPoint, snapHeight);
+};
+
 export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   const state = {
     touchInterval: null
   };
 
-  const startEditing = () => {
+  const startEditing = (createOnGround) => {
     clearInterval(state.touchInterval);
     state.touchInterval = setInterval(() => {
-      if (route.activateEdit()) {
+      if (route.activateEdit(createOnGround)) {
         routeRenderer.render();
       }
     }, 20);
@@ -61,7 +68,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     if (event.buttons === 1) {
-      if (!handleRouteEditing(cameras, route, pixels)) {
+      if (!handleRouteEditingOnMap(cameras, route, pixels)) {
         cameras.map.moveByPixels({ x: -event.movementX, y: -event.movementY });
       }
     }
@@ -78,7 +85,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     mapRenderer.render();
     routeRenderer.render();
   };
-  layout.mapContainer.onmousedown = startEditing;
+  layout.mapContainer.onmousedown = () => startEditing(true);
   layout.mapContainer.onmouseup = stopEditing;
   layout.mapContainer.onclick = (event) => {
     console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
@@ -86,6 +93,9 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
 
   layout.profile.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
+    if (event.buttons === 1) {
+      handleRouteEditingOnProfile(cameras, route, pixels);
+    }
     
     cameras.magnifier.setByProfilePixels(pixels);
 
@@ -100,7 +110,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     routeRenderer.render();
   };
 
-  layout.profile.onmousedown = startEditing;
+  layout.profile.onmousedown =  () => startEditing(false);
   layout.profile.onmouseup = stopEditing;
 
   layout.profile.onclick = (event) => {

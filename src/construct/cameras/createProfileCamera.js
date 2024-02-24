@@ -37,6 +37,12 @@ export default (layout, route, mapCamera) => {
     };
   };
 
+  camera.transformPixelDistanceToHeightDifference = (pixelDistance) => {
+    const normalizedZDifference = camera.normalizePixels({ x: 0, y: 0 }).z - 
+      camera.normalizePixels({ x: 0, y: pixelDistance }).z;
+    return normalizedZDifference * (camera.maxHeight - camera.minHeight);
+  };
+
   camera.update = () => {
     const minMapMeters = mapCamera.transformPixelsToMeters({ x: 0, y: 0 });
     const maxMapMeters = mapCamera.transformPixelsToMeters({ x: layout.map.width, y: layout.map.height });

@@ -1,3 +1,5 @@
+import { TYPE_BRIDGE, TYPE_GROUND, TYPE_TUNNEL } from './createRoute.js';
+
 const pointVariants = {
   fixPoint: {
     fillStyle: 'rgba(150, 0, 0, 0.3)',
@@ -43,6 +45,87 @@ const drawControlPoints = (context, route, renderTarget) => {
   });
 };
 
+const drawTunnels = (context, route, renderTarget) => {
+  let previousSegment = null;
+  route.segments.forEach((segment) => {
+    if (previousSegment?.type === TYPE_TUNNEL && segment.type !== TYPE_TUNNEL) {
+      const pixels = renderTarget.camera.transformMetersToPixels(segment);
+      context.lineTo(pixels.x, pixels.y);
+      context.stroke(); 
+    }
+    if (previousSegment?.type !== TYPE_TUNNEL && segment.type === TYPE_TUNNEL) {
+      context.lineWidth = 5;
+      context.strokeStyle = `rgb(150, 0, 0)`;
+      context.setLineDash([10, 10]);
+      context.beginPath();
+      const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
+      context.moveTo(pixels.x, pixels.y);
+    }
+    if (segment.type === TYPE_TUNNEL) {
+      const pixels = renderTarget.camera.transformMetersToPixels(segment);
+      context.lineTo(pixels.x, pixels.y);
+    }
+    previousSegment = segment;
+  });
+  if (previousSegment?.type === TYPE_TUNNEL) {
+    context.stroke(); 
+  }
+};
+
+const drawBridges = (context, route, renderTarget) => {
+  let previousSegment = null;
+  route.segments.forEach((segment) => {
+    if (previousSegment?.type === TYPE_BRIDGE && segment.type !== TYPE_BRIDGE) {
+      const pixels = renderTarget.camera.transformMetersToPixels(segment);
+      context.lineTo(pixels.x, pixels.y);
+      context.stroke(); 
+    }
+    if (previousSegment?.type !== TYPE_BRIDGE && segment.type === TYPE_BRIDGE) {
+      context.lineWidth = 8;
+      context.strokeStyle = `rgb(10, 10, 10)`;
+      context.setLineDash([]);
+      context.beginPath();
+      const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
+      context.moveTo(pixels.x, pixels.y);
+    }
+    if (segment.type === TYPE_BRIDGE) {
+      const pixels = renderTarget.camera.transformMetersToPixels(segment);
+      context.lineTo(pixels.x, pixels.y);
+    }
+    previousSegment = segment;
+  });
+  if (previousSegment?.type === TYPE_BRIDGE) {
+    context.stroke(); 
+  }
+};
+
+const drawTrack = (context, route, renderTarget) => {
+  let previousSegment = null;
+  route.segments.forEach((segment) => {
+    if ((previousSegment?.type === TYPE_GROUND || previousSegment?.type === TYPE_BRIDGE) && 
+      segment.type !== TYPE_GROUND && segment.type !== TYPE_BRIDGE) {
+      context.stroke(); 
+    }
+    if (segment.type === TYPE_GROUND || segment.type === TYPE_BRIDGE) {
+      if (previousSegment?.type !== TYPE_GROUND && previousSegment?.type !== TYPE_BRIDGE) {
+        context.lineWidth = 5;
+        context.strokeStyle = `rgb(150, 0, 0)`;
+        context.setLineDash([]);
+        context.beginPath();
+        const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
+        context.moveTo(pixels.x, pixels.y);
+      }
+      const pixels = renderTarget.camera.transformMetersToPixels(segment);
+      context.lineTo(pixels.x, pixels.y);
+    }
+    
+    previousSegment = segment;
+  });
+  if (previousSegment?.type === TYPE_GROUND || previousSegment?.type === TYPE_BRIDGE) {
+    context.stroke(); 
+  }
+};
+
 const drawSegments = (context, route, renderTarget) => {
   route.segments.forEach((segment) => {
     if (route.edit?.segment === segment) {
@@ -55,18 +138,13 @@ const drawSegments = (context, route, renderTarget) => {
       );
     }
   });
-
-  const startPixels = renderTarget.camera.transformMetersToPixels(route.segments[0]);
-  context.moveTo(startPixels.x, startPixels.y);
-  context.lineWidth = 5;
   context.lineCap = 'round';
-  context.strokeStyle = `rgb(150, 0, 0)`;
-  context.beginPath();
-  route.segments.forEach((segment) => {
-    const pixels = renderTarget.camera.transformMetersToPixels(segment);
-    context.lineTo(pixels.x, pixels.y);
-  });
-  context.stroke(); 
+
+  drawBridges(context, route, renderTarget);
+  drawTrack(context, route, renderTarget);
+  drawTunnels(context, route, renderTarget);
+
+  context.setLineDash([]);
 };
 
 const drawRidge = (context, route, renderTarget) => {

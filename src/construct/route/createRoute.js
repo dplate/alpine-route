@@ -3,6 +3,9 @@ import calculateProfileDistance from './calculateProfileDistance.js';
 import createSpline from './createSpline.js';
 
 const segmentDistance = 5;
+export const TYPE_BRIDGE = 'bridge';
+export const TYPE_TUNNEL = 'tunnel';
+export const TYPE_GROUND = 'ground';
 
 const createControlPoint = (point, onGround, editable = true) => ({
   x: point.x,
@@ -27,6 +30,17 @@ const sortPointsByProfileDistance = (points, point) => {
   );
 };
 
+const determineType = (trackHeight, mapHeight) => {
+  const difference = trackHeight - mapHeight;
+  if (difference > 5) {
+    return TYPE_BRIDGE;
+  }
+  if (difference < -5) {
+    return TYPE_TUNNEL;
+  }
+  return TYPE_GROUND;
+};
+
 export default (level, map) => {
   const route = {
     controlPoints: [
@@ -48,13 +62,16 @@ export default (level, map) => {
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter < spline.length; meter += segmentDistance) {
       const point = spline.getAtMeter(meter);
+      const mapHeight = map.getHeightAtPoint(point);
       const lastPoint = route.segments[route.segments.length - 1];
       const flatMeter = lastPoint ? lastPoint.flatMeter + Math.sqrt((point.x - lastPoint.x)**2 + (point.y - lastPoint.y)**2) : 0;
+      
       route.segments.push({
         ...point,
-        mapHeight: map.getHeightAtPoint(point),
+        mapHeight,
         meter,
-        flatMeter
+        flatMeter,
+        type: determineType(point.z, mapHeight)
       });
     }
     route.controlPoints.forEach((controlPoint, index) => {

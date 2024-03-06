@@ -1,4 +1,6 @@
-export default async (window) => {
+import createText from './createText.js';
+
+export default async (window, language) => {
   const adapter = await window.navigator.gpu?.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
   if (!gpuDevice) {
@@ -21,6 +23,7 @@ export default async (window) => {
         onResize();
       });
       canvases.forEach(canvas => observer.observe(canvas));
-    }
+    },
+    text: createText(language)
   };
 };

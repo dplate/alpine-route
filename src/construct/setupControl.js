@@ -40,7 +40,7 @@ const handleRouteEditingOnProfile = (cameras, route, pixels) => {
   route.elevateEdit(newPoint, snapHeight);
 };
 
-export default (layout, cameras, route, mapRenderer, routeRenderer) => {
+export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
   const state = {
     touchInterval: null
   };
@@ -85,6 +85,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
     cameras.update();
     mapRenderer.render();
     routeRenderer.render();
+    notesRenderer.render();
   };
   layout.mapContainer.onmousedown = () => startEditing(true);
   layout.mapContainer.onmouseup = stopEditing;
@@ -110,6 +111,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
 
     cameras.update();
     routeRenderer.render();
+    notesRenderer.render();
   };
 
   layout.profile.onmousedown =  () => startEditing(false);

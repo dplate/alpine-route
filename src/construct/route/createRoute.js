@@ -1,11 +1,10 @@
 import calculateMapDistance from '../map/calculateMapDistance.js';
+import calculateCosts from './calculateCosts.js';
 import calculateProfileDistance from './calculateProfileDistance.js';
 import createSpline from './createSpline.js';
+import {TYPE_TUNNEL, TYPE_BRIDGE, TYPE_GROUND} from './routeTypes.js';
 
 const segmentDistance = 5;
-export const TYPE_BRIDGE = 'bridge';
-export const TYPE_TUNNEL = 'tunnel';
-export const TYPE_GROUND = 'ground';
 
 const createControlPoint = (point, onGround, editable = true) => ({
   x: point.x,
@@ -78,6 +77,7 @@ export default (level, map) => {
       controlPoint.meter = spline.getLengthAtPointIndex(index);
       controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
     });
+    calculateCosts(route, level, map);
   };
   route.updateSegments();
 

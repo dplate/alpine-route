@@ -5,6 +5,7 @@ import createRoute from './route/createRoute.js';
 import createRouteRenderer from './route/createRouteRenderer.js';
 import loadMap from './map/loadMap.js';
 import setupControl from './setupControl.js';
+import createNotesRenderer from './notes/createNotesRenderer.js';
 
 export default async (system, level) => {
     const layout = createLayout(system);
@@ -13,5 +14,6 @@ export default async (system, level) => {
     const cameras = createCameras(layout, map, route);
     const mapRenderer = createMapRenderer(system, layout, cameras, map);
     const routeRenderer = createRouteRenderer(system, layout, cameras, route);
-    setupControl(layout, cameras, route, mapRenderer, routeRenderer);
+    const notesRenderer = createNotesRenderer(system, layout, route);
+    setupControl(layout, cameras, route, mapRenderer, routeRenderer, notesRenderer);
 };

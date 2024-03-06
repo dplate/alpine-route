@@ -1,4 +1,4 @@
-import { TYPE_BRIDGE, TYPE_GROUND, TYPE_TUNNEL } from './createRoute.js';
+import {TYPE_TUNNEL, TYPE_BRIDGE, TYPE_GROUND} from './routeTypes.js';
 import drawRidge from './drawRidge.js';
 
 const pointVariants = {

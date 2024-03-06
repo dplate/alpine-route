@@ -57,6 +57,8 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   const stopEditing = () => {
     clearInterval(state.touchInterval);
     route.confirmEdit();
+    cameras.update();
+    routeRenderer.render();
   };
 
   layout.mapContainer.onwheel = (event) => {

@@ -1,4 +1,5 @@
 import { TYPE_BRIDGE, TYPE_GROUND, TYPE_TUNNEL } from './createRoute.js';
+import drawRidge from './drawRidge.js';
 
 const pointVariants = {
   fixPoint: {
@@ -147,41 +148,6 @@ const drawSegments = (context, route, renderTarget) => {
   context.setLineDash([]);
 };
 
-const drawRidge = (context, route, renderTarget) => {
-  context.fillStyle = 'rgb(250, 255, 245)';
-  context.fillRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
-
-  const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ flatMeter: segment.flatMeter, z: segment.mapHeight });
-  const startPixels = transformToPixels(route.segments[0]);
-  
-  context.save();
-  context.moveTo(0, renderTarget.canvas.height);
-  context.beginPath();
-  route.segments.forEach((segment) => {
-    const pixels = transformToPixels(segment);
-    context.lineTo(pixels.x, pixels.y);
-  });
-  context.lineTo(renderTarget.canvas.width, renderTarget.canvas.height);
-  context.lineTo(0, renderTarget.canvas.height);
-  context.clip();
-
-  context.moveTo(startPixels.x, startPixels.y);
-  context.lineWidth = 5;
-  context.lineCap = 'round';
-  context.strokeStyle = 'rgb(150, 150, 150)';
-  context.shadowColor = 'rgba(0, 0, 0)';
-  context.shadowBlur = 30; 
-  
-  context.beginPath();
-  route.segments.forEach((segment) => {
-    const pixels = transformToPixels(segment);
-    context.lineTo(pixels.x, pixels.y);
-  });
-  context.stroke(); 
-  
-  context.restore();
-};
-
 export default (system, layout, cameras, route) => {
   const renderTargets = [
     {
@@ -204,7 +170,7 @@ export default (system, layout, cameras, route) => {
       context.clearRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
   
       if (renderTarget.camera.isProfile()) {
-        drawRidge(context, route, renderTarget)
+        drawRidge(context, route, renderTarget, cameras.profile);
       }
       drawControlPoints(context, route, renderTarget);
       drawSegments(context, route, renderTarget);

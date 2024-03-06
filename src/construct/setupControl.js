@@ -57,8 +57,6 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
   const stopEditing = () => {
     clearInterval(state.touchInterval);
     route.confirmEdit();
-    cameras.update();
-    routeRenderer.render();
   };
 
   layout.mapContainer.onwheel = (event) => {
@@ -84,6 +82,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
       (point) => route.findNearestSegmentByMapMeters(point)
     );
 
+    cameras.update();
     mapRenderer.render();
     routeRenderer.render();
   };
@@ -109,6 +108,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer) => {
       (point) => route.findNearestSegmentByProfileMeters(point)
     );
 
+    cameras.update();
     routeRenderer.render();
   };
 

@@ -77,7 +77,7 @@ const drawSubSection = (context, section) => {
     if (index > 0) {
       context.lineTo(corner.pixels.x, corner.pixels.y);
     }
-    gradient.addColorStop(index / section.corners.length, corner.color);
+    gradient.addColorStop(index / (section.corners.length - 1), corner.color);
   });
 
   if (section.type === TYPE_BRIDGE) {

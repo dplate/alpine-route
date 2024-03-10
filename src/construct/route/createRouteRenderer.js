@@ -1,5 +1,6 @@
 import drawRidge from './drawRidge.js';
 import drawSection from './drawSection.js';
+import { TYPE_GROUND } from './routeTypes.js';
 
 const pointVariants = {
   fixPoint: {
@@ -82,11 +83,15 @@ const drawSegments = (context, route, renderTarget) => {
     section.corners.push(corner);
     section.visible = section.visible || visible;
 
-    if (segment.type !== section.type || index >= route.segments.length - 1) {
+    const nextType = route.segments[index + 1]?.type;
+    if (index >= route.segments.length - 1 ||
+      (segment.type === TYPE_GROUND && nextType !== TYPE_GROUND) || 
+      segment.type !== section.type
+    ) {
       drawSection(context, section);
 
       section.visible = visible;
-      section.type = segment.type;
+      section.type = (segment.type === TYPE_GROUND && nextType) || segment.type;
       section.corners = [corner];
     }
   });

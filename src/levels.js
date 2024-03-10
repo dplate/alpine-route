@@ -15,8 +15,8 @@ export default [
       tunnelDepthFactor: 1,
       bridgeMeter: 5,
       bridgeHeightFactor: 3,
-      groundMeter: 1,
-      groundSlopeFactor: 4
+      groundMeter: 2,
+      groundSlopeFactor: 10
     }
   }
 ];

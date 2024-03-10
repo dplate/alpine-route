@@ -15,6 +15,7 @@ const texts = {
 
 export default (language) => {
   return {
-    get: (textId) => texts[language][textId] || texts['en'][textId]
+    get: (textId) => texts[language][textId] || texts['en'][textId],
+    formatCurrency: (new Intl.NumberFormat(language, { maximumFractionDigits: 0 })).format,
   };
 };

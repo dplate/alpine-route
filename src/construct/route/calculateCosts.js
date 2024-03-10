@@ -5,7 +5,9 @@ export default (route, level, map) => {
     tunnels: 0,
     bridges: 0,
     grounds: 0,
-    total: 0
+    total: 0,
+    minTotal: Number.MAX_VALUE,
+    maxTotal: 0
   };
 
   let previousSegment = null;
@@ -22,6 +24,7 @@ export default (route, level, map) => {
           for (let i = segmentIndex; i < route.segments.length; i++) {
             if (route.segments[i].type !== TYPE_TUNNEL) {
               tunnelExitMeter = route.segments[i].meter;
+              break;
             }
           }
         }
@@ -43,6 +46,8 @@ export default (route, level, map) => {
         route.costs.grounds += segment.costs;
         break;
     }
+    route.costs.minTotal = Math.min(route.costs.minTotal, segment.costs);
+    route.costs.maxTotal = Math.max(route.costs.maxTotal, segment.costs);
     previousSegment = segment;
   });
 

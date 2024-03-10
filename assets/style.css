@@ -10,6 +10,10 @@ html, body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  font-family: "Indie Flower", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
 
 #desk {
@@ -60,6 +64,20 @@ html, body {
   background-color: rgb(250, 255, 245);
   width: 100%;
   height: 100%;
+}
+
+#costsContainer {
+  display: grid;
+  margin: 10px;
+  grid-template-columns: auto 50%;
+}
+
+#tunnelCosts, #bridgeCosts, #groundCosts, #costs {
+  text-align: right;
+}
+
+#costsLabel, #costs {
+  border-top: 1px solid black;
 }
 
 #profile {

@@ -1,5 +1,5 @@
-import {TYPE_TUNNEL, TYPE_BRIDGE, TYPE_GROUND} from './routeTypes.js';
 import drawRidge from './drawRidge.js';
+import drawSection from './drawSection.js';
 
 const pointVariants = {
   fixPoint: {
@@ -15,6 +15,13 @@ const pointVariants = {
     strokeStyle: 'rgba(200, 50, 200, 1.0)'
   }
 };
+
+const getColorForSegment = (route, segment) => {
+  const normalizedCosts = (segment.costs - route.costs.minTotal) / (route.costs.maxTotal - route.costs.minTotal);
+  const red = Math.round(255 * Math.min(normalizedCosts * 2.0, 1.0));
+  const green = Math.round(255 * Math.min((1.0 - normalizedCosts) * 2.0, 1.0));
+  return `rgba(${red}, ${green}, 0, 1.0)`;
+}
 
 const drawPoint = (context, point, variant, fillFactor, renderTarget) => {
   const realRadius = 15;
@@ -46,89 +53,13 @@ const drawControlPoints = (context, route, renderTarget) => {
   });
 };
 
-const drawTunnels = (context, route, renderTarget) => {
-  let previousSegment = null;
-  route.segments.forEach((segment) => {
-    if (previousSegment?.type === TYPE_TUNNEL && segment.type !== TYPE_TUNNEL) {
-      const pixels = renderTarget.camera.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
-      context.stroke(); 
-    }
-    if (previousSegment?.type !== TYPE_TUNNEL && segment.type === TYPE_TUNNEL) {
-      context.lineWidth = 5;
-      context.strokeStyle = `rgb(150, 0, 0)`;
-      context.setLineDash([10, 10]);
-      context.beginPath();
-      const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
-      context.moveTo(pixels.x, pixels.y);
-    }
-    if (segment.type === TYPE_TUNNEL) {
-      const pixels = renderTarget.camera.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
-    }
-    previousSegment = segment;
-  });
-  if (previousSegment?.type === TYPE_TUNNEL) {
-    context.stroke(); 
-  }
-};
-
-const drawBridges = (context, route, renderTarget) => {
-  let previousSegment = null;
-  route.segments.forEach((segment) => {
-    if (previousSegment?.type === TYPE_BRIDGE && segment.type !== TYPE_BRIDGE) {
-      const pixels = renderTarget.camera.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
-      context.stroke(); 
-    }
-    if (previousSegment?.type !== TYPE_BRIDGE && segment.type === TYPE_BRIDGE) {
-      context.lineWidth = 8;
-      context.strokeStyle = `rgb(10, 10, 10)`;
-      context.setLineDash([]);
-      context.beginPath();
-      const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
-      context.moveTo(pixels.x, pixels.y);
-    }
-    if (segment.type === TYPE_BRIDGE) {
-      const pixels = renderTarget.camera.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
-    }
-    previousSegment = segment;
-  });
-  if (previousSegment?.type === TYPE_BRIDGE) {
-    context.stroke(); 
-  }
-};
-
-const drawTrack = (context, route, renderTarget) => {
-  let previousSegment = null;
-  route.segments.forEach((segment) => {
-    if ((previousSegment?.type === TYPE_GROUND || previousSegment?.type === TYPE_BRIDGE) && 
-      segment.type !== TYPE_GROUND && segment.type !== TYPE_BRIDGE) {
-      context.stroke(); 
-    }
-    if (segment.type === TYPE_GROUND || segment.type === TYPE_BRIDGE) {
-      if (previousSegment?.type !== TYPE_GROUND && previousSegment?.type !== TYPE_BRIDGE) {
-        context.lineWidth = 5;
-        context.strokeStyle = `rgb(150, 0, 0)`;
-        context.setLineDash([]);
-        context.beginPath();
-        const pixels = renderTarget.camera.transformMetersToPixels(previousSegment || segment);
-        context.moveTo(pixels.x, pixels.y);
-      }
-      const pixels = renderTarget.camera.transformMetersToPixels(segment);
-      context.lineTo(pixels.x, pixels.y);
-    }
-    
-    previousSegment = segment;
-  });
-  if (previousSegment?.type === TYPE_GROUND || previousSegment?.type === TYPE_BRIDGE) {
-    context.stroke(); 
-  }
-};
-
 const drawSegments = (context, route, renderTarget) => {
-  route.segments.forEach((segment) => {
+  const section = {
+    visible: false,
+    type: null,
+    corners: [],
+  };
+  route.segments.forEach((segment, index) => {
     if (route.edit?.segment === segment) {
       drawPoint(
         context, 
@@ -138,14 +69,27 @@ const drawSegments = (context, route, renderTarget) => {
         renderTarget
       );
     }
+
+    const pixels = renderTarget.camera.transformMetersToPixels(segment);
+    const visible = pixels.x >= 0 && pixels.x < renderTarget.canvas.width &&
+      pixels.y >= 0 && pixels.y < renderTarget.canvas.height;
+    const corner = {
+      pixels,
+      visible,
+      color: getColorForSegment(route, segment)
+    };
+    section.type = section.type || segment.type;
+    section.corners.push(corner);
+    section.visible = section.visible || visible;
+
+    if (segment.type !== section.type || index >= route.segments.length - 1) {
+      drawSection(context, section);
+
+      section.visible = visible;
+      section.type = segment.type;
+      section.corners = [corner];
+    }
   });
-  context.lineCap = 'round';
-
-  drawBridges(context, route, renderTarget);
-  drawTrack(context, route, renderTarget);
-  drawTunnels(context, route, renderTarget);
-
-  context.setLineDash([]);
 };
 
 export default (system, layout, cameras, route) => {

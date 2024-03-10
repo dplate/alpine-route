@@ -11,12 +11,12 @@ export default [
       y: 6280
     },
     costs: {
-      tunnelMeter: 10000,
-      tunnelDepthFactor: 2,
-      bridgeMeter: 5000,
-      bridgeHeightFactor: 2,
-      groundMeter: 1000,
-      groundSlopeFactor: 2
+      tunnelMeter: 10,
+      tunnelDepthFactor: 1,
+      bridgeMeter: 5,
+      bridgeHeightFactor: 3,
+      groundMeter: 1,
+      groundSlopeFactor: 4
     }
   }
 ];

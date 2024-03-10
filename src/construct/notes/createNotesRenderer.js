@@ -5,10 +5,10 @@ export default (system, layout, route) => {
   layout.costsLabel.textContent = system.text.get('COSTS_LABEL');
 
   const render = () => {
-    layout.tunnelCosts.textContent = Math.round(route.costs.tunnels);
-    layout.bridgeCosts.textContent = Math.round(route.costs.bridges);
-    layout.groundCosts.textContent = Math.round(route.costs.grounds);
-    layout.costs.textContent = Math.round(route.costs.total);
+    layout.tunnelCosts.textContent = system.text.formatCurrency(route.costs.tunnels);
+    layout.bridgeCosts.textContent = system.text.formatCurrency(route.costs.bridges);
+    layout.groundCosts.textContent = system.text.formatCurrency(route.costs.grounds);
+    layout.costs.textContent = system.text.formatCurrency(route.costs.total);
   };
 
   return {

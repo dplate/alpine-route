@@ -1,3 +1,4 @@
+import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from './cameras/highlightTypes.js';
 import calculateMapDistance from './map/calculateMapDistance.js';
 
 const controlPointSnapDistance = 50;
@@ -38,6 +39,16 @@ const handleRouteEditingOnProfile = (cameras, route, pixels) => {
   const snapHeight = cameras.profile.transformPixelDistanceToHeightDifference(heightSnapDistance);
   const newPoint = cameras.profile.transformPixelsToMeters(pixels);
   route.elevateEdit(newPoint, snapHeight);
+};
+
+const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, elements, highlightType) => {
+  elements.forEach(element => {
+    element.onclick = () => {
+      cameras.highlight = highlightType;
+      routeRenderer.render();
+      notesRenderer.render();
+    };
+  })
 };
 
 export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
@@ -114,10 +125,39 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     notesRenderer.render();
   };
 
-  layout.profile.onmousedown =  () => startEditing(false);
+  layout.profile.onmousedown = () => startEditing(false);
   layout.profile.onmouseup = stopEditing;
 
   layout.profile.onclick = (event) => {
     console.log(cameras.profile.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
   }
+
+  addHighlightSelectorHandling(
+    cameras, 
+    routeRenderer, 
+    notesRenderer, 
+    [ layout.tunnelCostsLabel, layout.tunnelCosts, layout.tunnelCostsSelector ], 
+    HIGHLIGHT_TUNNEL_COSTS
+  );
+  addHighlightSelectorHandling(
+    cameras, 
+    routeRenderer, 
+    notesRenderer, 
+    [ layout.bridgeCostsLabel, layout.bridgeCosts, layout.bridgeCostsSelector ], 
+    HIGHLIGHT_BRIDGE_COSTS
+  );
+  addHighlightSelectorHandling(
+    cameras, 
+    routeRenderer, 
+    notesRenderer, 
+    [ layout.groundCostsLabel, layout.groundCosts, layout.groundCostsSelector ], 
+    HIGHLIGHT_GROUND_COSTS
+  );
+  addHighlightSelectorHandling(
+    cameras, 
+    routeRenderer, 
+    notesRenderer, 
+    [ layout.costsLabel, layout.costs, layout.costsSelector ], 
+    HIGHLIGHT_COSTS
+  );
 };

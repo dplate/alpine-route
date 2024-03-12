@@ -69,11 +69,19 @@ html, body {
 #costsContainer {
   display: grid;
   margin: 10px;
-  grid-template-columns: auto 50%;
+  grid-template-columns: auto 50% 15px;
 }
 
 #tunnelCosts, #bridgeCosts, #groundCosts, #costs {
   text-align: right;
+}
+
+#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #costsSelector {
+  margin-left: 3px;
+  background-image: url("./eye.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 #costsLabel, #costs {

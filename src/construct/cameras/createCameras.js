@@ -1,6 +1,7 @@
 import createMagnifierCamera from './createMagnifierCamera.js';
 import createMapCamera from './createMapCamera.js';
 import createProfileCamera from './createProfileCamera.js';
+import {HIGHLIGHT_COSTS} from './highlightTypes.js';
 
 export default (layout, map, route) => {
   const mapCamera = createMapCamera(layout, map);
@@ -19,6 +20,7 @@ export default (layout, map, route) => {
     map: mapCamera,
     magnifier: magnifierCamera,
     profile: profileCamera,
-    update
+    update,
+    highlight: HIGHLIGHT_COSTS
   };
 };

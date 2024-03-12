@@ -44,6 +44,10 @@ export default (system) => {
   tunnelCosts.id = 'tunnelCosts';
   costsContainer.appendChild(tunnelCosts);
 
+  const tunnelCostsSelector = document.createElement('div');
+  tunnelCostsSelector.id = 'tunnelCostsSelector';
+  costsContainer.appendChild(tunnelCostsSelector);
+
   const bridgeCostsLabel = document.createElement('div');
   bridgeCostsLabel.id = 'bridgeCostsLabel';
   costsContainer.appendChild(bridgeCostsLabel);
@@ -51,6 +55,10 @@ export default (system) => {
   const bridgeCosts = document.createElement('div');
   bridgeCosts.id = 'bridgeCosts';
   costsContainer.appendChild(bridgeCosts);
+
+  const bridgeCostsSelector = document.createElement('div');
+  bridgeCostsSelector.id = 'bridgeCostsSelector';
+  costsContainer.appendChild(bridgeCostsSelector);
 
   const groundCostsLabel = document.createElement('div');
   groundCostsLabel.id = 'groundCostsLabel';
@@ -60,6 +68,10 @@ export default (system) => {
   groundCosts.id = 'groundCosts';
   costsContainer.appendChild(groundCosts);
 
+  const groundCostsSelector = document.createElement('div');
+  groundCostsSelector.id = 'groundCostsSelector';
+  costsContainer.appendChild(groundCostsSelector);
+
   const costsLabel = document.createElement('div');
   costsLabel.id = 'costsLabel';
   costsContainer.appendChild(costsLabel);
@@ -67,6 +79,10 @@ export default (system) => {
   const costs = document.createElement('div');
   costs.id = 'costs';
   costsContainer.appendChild(costs);
+
+  const costsSelector = document.createElement('div');
+  costsSelector.id = 'costsSelector';
+  costsContainer.appendChild(costsSelector);
 
   const profile = document.createElement('canvas');
   profile.id = 'profile';
@@ -84,12 +100,16 @@ export default (system) => {
     mapRoute,
     tunnelCostsLabel,
     tunnelCosts,
+    tunnelCostsSelector,
     bridgeCostsLabel,
     bridgeCosts,
+    bridgeCostsSelector,
     groundCostsLabel,
     groundCosts,
+    groundCostsSelector,
     costsLabel,
     costs,
+    costsSelector,
     profile
   };
 };

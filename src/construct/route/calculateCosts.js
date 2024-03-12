@@ -2,12 +2,26 @@ import {TYPE_BRIDGE, TYPE_TUNNEL} from './routeTypes.js';
 
 export default (route, level, map) => {
   route.costs = {
-    tunnels: 0,
-    bridges: 0,
-    grounds: 0,
-    total: 0,
-    minTotal: Number.MAX_VALUE,
-    maxTotal: 0
+    tunnel: {
+      sum: 0,
+      min: Number.MAX_VALUE,
+      max: 0,
+    },
+    bridge: {
+      sum: 0,
+      min: Number.MAX_VALUE,
+      max: 0,
+    },
+    ground: {
+      sum: 0,
+      min: Number.MAX_VALUE,
+      max: 0,
+    },
+    total: {
+      sum:0,
+      min: Number.MAX_VALUE,
+      max: 0
+    }
   };
 
   let previousSegment = null;
@@ -33,23 +47,28 @@ export default (route, level, map) => {
           tunnelExitMeter - segment.meter
         );
         segment.costs = segmentMeters * level.costs.tunnelMeter * distanceToOutside * level.costs.tunnelDepthFactor;
-        route.costs.tunnels += segment.costs;
+        route.costs.tunnel.sum += segment.costs;
+        route.costs.tunnel.min = Math.min( route.costs.tunnel.min, segment.costs || route.costs.tunnel.min);
+        route.costs.tunnel.max = Math.max(route.costs.tunnel.max, segment.costs);
         break;
       case TYPE_BRIDGE:
         const heightAboveGround = segment.z - segment.mapHeight;
         segment.costs = segmentMeters * level.costs.bridgeMeter * heightAboveGround * level.costs.bridgeHeightFactor;
-        route.costs.bridges += segment.costs;
+        route.costs.bridge.sum += segment.costs;
+        route.costs.bridge.min = Math.min( route.costs.bridge.min, segment.costs || route.costs.bridge.min);
+        route.costs.bridge.max = Math.max(route.costs.bridge.max, segment.costs);
         break;
       default: 
         const slope = map.getSlopeAtPoint(segment);
         segment.costs = segmentMeters * level.costs.groundMeter * slope * level.costs.groundSlopeFactor;
-        route.costs.grounds += segment.costs;
+        route.costs.ground.sum += segment.costs;
+        route.costs.ground.min = Math.min( route.costs.ground.min, segment.costs || route.costs.ground.min);
+        route.costs.ground.max = Math.max(route.costs.ground.max, segment.costs);
         break;
     }
-    route.costs.minTotal = Math.min(route.costs.minTotal, segment.costs);
-    route.costs.maxTotal = Math.max(route.costs.maxTotal, segment.costs);
+    route.costs.total.sum += segment.costs;
+    route.costs.total.min = Math.min( route.costs.total.min, segment.costs || route.costs.total.min);
+    route.costs.total.max = Math.max(route.costs.total.max, segment.costs);
     previousSegment = segment;
   });
-
-  route.costs.total = route.costs.tunnels + route.costs.bridges + route.costs.grounds;
 };

@@ -1,6 +1,7 @@
+import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from '../cameras/highlightTypes.js';
 import drawRidge from './drawRidge.js';
 import drawSection from './drawSection.js';
-import { TYPE_GROUND } from './routeTypes.js';
+import { TYPE_BRIDGE, TYPE_GROUND, TYPE_TUNNEL } from './routeTypes.js';
 
 const pointVariants = {
   fixPoint: {
@@ -17,8 +18,30 @@ const pointVariants = {
   }
 };
 
-const getColorForSegment = (route, segment) => {
-  const normalizedCosts = (segment.costs - route.costs.minTotal) / (route.costs.maxTotal - route.costs.minTotal);
+const isSegmentHighlighted = (segment, highlightType) => {
+  switch(highlightType) {
+    case HIGHLIGHT_TUNNEL_COSTS: return segment.type === TYPE_TUNNEL;
+    case HIGHLIGHT_BRIDGE_COSTS: return segment.type === TYPE_BRIDGE;
+    case HIGHLIGHT_GROUND_COSTS: return segment.type === TYPE_GROUND
+    default: return true;
+  }
+};
+
+const getHighlightCosts = (route, highlightType) => {
+  switch(highlightType) {
+    case HIGHLIGHT_TUNNEL_COSTS: return route.costs.tunnel;
+    case HIGHLIGHT_BRIDGE_COSTS: return route.costs.bridge;
+    case HIGHLIGHT_GROUND_COSTS: return route.costs.ground;
+    default: return route.costs.total;
+  }
+};
+
+const getColorForSegment = (route, segment, highlightType) => {
+  if (!isSegmentHighlighted(segment, highlightType)) {
+    return 'rgba(200, 200, 255, 1.0)';
+  }
+  const highlightCosts = getHighlightCosts(route, highlightType);
+  const normalizedCosts = (segment.costs - highlightCosts.min) / (highlightCosts.max - highlightCosts.min);
   const red = Math.round(255 * Math.min(normalizedCosts * 2.0, 1.0));
   const green = Math.round(255 * Math.min((1.0 - normalizedCosts) * 2.0, 1.0));
   return `rgba(${red}, ${green}, 0, 1.0)`;
@@ -54,7 +77,7 @@ const drawControlPoints = (context, route, renderTarget) => {
   });
 };
 
-const drawSegments = (context, route, renderTarget) => {
+const drawSegments = (context, route, renderTarget, highlightType) => {
   const section = {
     visible: false,
     type: null,
@@ -77,7 +100,7 @@ const drawSegments = (context, route, renderTarget) => {
     const corner = {
       pixels,
       visible,
-      color: getColorForSegment(route, segment)
+      color: getColorForSegment(route, segment, highlightType)
     };
     section.type = section.type || segment.type;
     section.corners.push(corner);
@@ -122,7 +145,7 @@ export default (system, layout, cameras, route) => {
         drawRidge(context, route, renderTarget, cameras.profile);
       }
       drawControlPoints(context, route, renderTarget);
-      drawSegments(context, route, renderTarget);
+      drawSegments(context, route, renderTarget, cameras.highlight);
     });
     
   };

@@ -2,7 +2,7 @@ import calculateMapDistance from '../map/calculateMapDistance.js';
 import calculateCosts from './calculateCosts.js';
 import calculateProfileDistance from './calculateProfileDistance.js';
 import createSpline from './createSpline.js';
-import {TYPE_TUNNEL, TYPE_BRIDGE, TYPE_GROUND} from './routeTypes.js';
+import {ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND} from './routeTypes.js';
 
 const segmentDistance = 5;
 
@@ -32,12 +32,12 @@ const sortPointsByProfileDistance = (points, point) => {
 const determineType = (trackHeight, mapHeight) => {
   const difference = trackHeight - mapHeight;
   if (difference > 5) {
-    return TYPE_BRIDGE;
+    return ROUTE_TYPE_BRIDGE;
   }
   if (difference < -5) {
-    return TYPE_TUNNEL;
+    return ROUTE_TYPE_TUNNEL;
   }
-  return TYPE_GROUND;
+  return ROUTE_TYPE_GROUND;
 };
 
 export default (level, map) => {

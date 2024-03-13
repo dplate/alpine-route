@@ -1,7 +1,7 @@
-import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from '../cameras/highlightTypes.js';
+import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from '../cameras/highlightTypes.js';
 import drawRidge from './drawRidge.js';
 import drawSection from './drawSection.js';
-import { TYPE_BRIDGE, TYPE_GROUND, TYPE_TUNNEL } from './routeTypes.js';
+import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPE_TUNNEL } from './routeTypes.js';
 
 const pointVariants = {
   fixPoint: {
@@ -18,29 +18,11 @@ const pointVariants = {
   }
 };
 
-const isSegmentHighlighted = (segment, highlightType) => {
-  switch(highlightType) {
-    case HIGHLIGHT_TUNNEL_COSTS: return segment.type === TYPE_TUNNEL;
-    case HIGHLIGHT_BRIDGE_COSTS: return segment.type === TYPE_BRIDGE;
-    case HIGHLIGHT_GROUND_COSTS: return segment.type === TYPE_GROUND
-    default: return true;
-  }
-};
-
-const getHighlightCosts = (route, highlightType) => {
-  switch(highlightType) {
-    case HIGHLIGHT_TUNNEL_COSTS: return route.costs.tunnel;
-    case HIGHLIGHT_BRIDGE_COSTS: return route.costs.bridge;
-    case HIGHLIGHT_GROUND_COSTS: return route.costs.ground;
-    default: return route.costs.total;
-  }
-};
-
-const getColorForSegment = (route, segment, highlightType) => {
-  if (!isSegmentHighlighted(segment, highlightType)) {
+const getColorForSegment = (segment, highlightType, highlightCosts) => {
+  if (highlightType !== HIGHLIGHT_COSTS && ROUTE_TYPES_TO_HIGHLIGHTS[segment.type] !== highlightType) {
     return 'rgba(200, 200, 255, 1.0)';
   }
-  const highlightCosts = getHighlightCosts(route, highlightType);
+  
   const normalizedCosts = (segment.costs - highlightCosts.min) / (highlightCosts.max - highlightCosts.min);
   const red = Math.round(255 * Math.min(normalizedCosts * 2.0, 1.0));
   const green = Math.round(255 * Math.min((1.0 - normalizedCosts) * 2.0, 1.0));
@@ -78,6 +60,9 @@ const drawControlPoints = (context, route, renderTarget) => {
 };
 
 const drawSegments = (context, route, renderTarget, highlightType) => {
+  const highlightedRouteType = ROUTE_TYPES.find((routeType) => ROUTE_TYPES_TO_HIGHLIGHTS[routeType] === highlightType);
+  const highlightCosts = route.costs[highlightedRouteType] || route.costs.total;
+
   const section = {
     visible: false,
     type: null,
@@ -100,7 +85,7 @@ const drawSegments = (context, route, renderTarget, highlightType) => {
     const corner = {
       pixels,
       visible,
-      color: getColorForSegment(route, segment, highlightType)
+      color: getColorForSegment(segment, highlightType, highlightCosts)
     };
     section.type = section.type || segment.type;
     section.corners.push(corner);
@@ -108,13 +93,13 @@ const drawSegments = (context, route, renderTarget, highlightType) => {
 
     const nextType = route.segments[index + 1]?.type;
     if (index >= route.segments.length - 1 ||
-      (segment.type === TYPE_GROUND && nextType !== TYPE_GROUND) || 
+      (segment.type === ROUTE_TYPE_GROUND && nextType !== ROUTE_TYPE_GROUND) || 
       segment.type !== section.type
     ) {
       drawSection(context, section);
 
       section.visible = visible;
-      section.type = (segment.type === TYPE_GROUND && nextType) || segment.type;
+      section.type = (segment.type === ROUTE_TYPE_GROUND && nextType) || segment.type;
       section.corners = [corner];
     }
   });

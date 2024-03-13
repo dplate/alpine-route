@@ -1,4 +1,4 @@
-import { TYPE_BRIDGE, TYPE_TUNNEL } from './routeTypes.js';
+import { ROUTE_TYPE_BRIDGE, ROUTE_TYPE_TUNNEL } from './routeTypes.js';
 
 const maxJitterPixelDistance = 10;
 
@@ -80,14 +80,14 @@ const drawSubSection = (context, section) => {
     gradient.addColorStop(index / (section.corners.length - 1), corner.color);
   });
 
-  if (section.type === TYPE_BRIDGE) {
+  if (section.type === ROUTE_TYPE_BRIDGE) {
     context.lineCap = 'butt';
     context.lineWidth = 8;
     context.strokeStyle = `rgb(10, 10, 10)`;
     context.stroke();
   }
 
-  if (section.type === TYPE_TUNNEL) {
+  if (section.type === ROUTE_TYPE_TUNNEL) {
     const lineDash = [5, 15];
     context.lineDashOffset = section.startDistance % (lineDash[0] + lineDash[1]);
     context.setLineDash(lineDash);

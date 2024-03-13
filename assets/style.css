@@ -72,11 +72,11 @@ html, body {
   grid-template-columns: auto 50% 15px;
 }
 
-#tunnelCosts, #bridgeCosts, #groundCosts, #costs {
+#tunnelCosts, #bridgeCosts, #groundCosts, #totalCosts {
   text-align: right;
 }
 
-#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #costsSelector {
+#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector {
   margin-left: 3px;
   background-image: url("./eye.svg");
   background-size: contain;
@@ -84,7 +84,7 @@ html, body {
   background-position: center;
 }
 
-#costsLabel, #costs {
+#totalCostsLabel, #totalCosts {
   border-top: 1px solid black;
 }
 

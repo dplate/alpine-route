@@ -1,5 +1,6 @@
 import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from './cameras/highlightTypes.js';
 import calculateMapDistance from './map/calculateMapDistance.js';
+import { ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND } from './route/routeTypes.js';
 
 const controlPointSnapDistance = 50;
 const segmentSnapDistances = 20;
@@ -41,7 +42,8 @@ const handleRouteEditingOnProfile = (cameras, route, pixels) => {
   route.elevateEdit(newPoint, snapHeight);
 };
 
-const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, elements, highlightType) => {
+const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, routeTypeCostsElements, highlightType) => {
+  const elements = [ routeTypeCostsElements.label, routeTypeCostsElements.costs, routeTypeCostsElements.selector ];
   elements.forEach(element => {
     element.onclick = () => {
       cameras.highlight = highlightType;
@@ -135,29 +137,29 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   addHighlightSelectorHandling(
     cameras, 
     routeRenderer, 
-    notesRenderer, 
-    [ layout.tunnelCostsLabel, layout.tunnelCosts, layout.tunnelCostsSelector ], 
+    notesRenderer,
+    layout.routeTypeCosts[ROUTE_TYPE_TUNNEL], 
     HIGHLIGHT_TUNNEL_COSTS
   );
   addHighlightSelectorHandling(
     cameras, 
     routeRenderer, 
     notesRenderer, 
-    [ layout.bridgeCostsLabel, layout.bridgeCosts, layout.bridgeCostsSelector ], 
+    layout.routeTypeCosts[ROUTE_TYPE_BRIDGE], 
     HIGHLIGHT_BRIDGE_COSTS
   );
   addHighlightSelectorHandling(
     cameras, 
     routeRenderer, 
     notesRenderer, 
-    [ layout.groundCostsLabel, layout.groundCosts, layout.groundCostsSelector ], 
+    layout.routeTypeCosts[ROUTE_TYPE_GROUND], 
     HIGHLIGHT_GROUND_COSTS
   );
   addHighlightSelectorHandling(
     cameras, 
     routeRenderer, 
     notesRenderer, 
-    [ layout.costsLabel, layout.costs, layout.costsSelector ], 
+    layout.totalCosts, 
     HIGHLIGHT_COSTS
   );
 };

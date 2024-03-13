@@ -1,3 +1,5 @@
+import { ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPE_TUNNEL } from './route/routeTypes.js';
+
 export default (system) => {
   const desk = document.createElement('desk');
   desk.id = 'desk';
@@ -36,53 +38,31 @@ export default (system) => {
   costsContainer.id = 'costsContainer';
   notes.appendChild(costsContainer);
 
-  const tunnelCostsLabel = document.createElement('div');
-  tunnelCostsLabel.id = 'tunnelCostsLabel';
-  costsContainer.appendChild(tunnelCostsLabel);
+  const createCostsElements = (type) => {
+    const label = document.createElement('div');
+    label.id = `${type}CostsLabel`;
+    costsContainer.appendChild(label);
+  
+    const costs = document.createElement('div');
+    costs.id = `${type}Costs`;
+    costsContainer.appendChild(costs);
+  
+    const selector = document.createElement('div');
+    selector.id = `${type}CostsSelector`;
+    costsContainer.appendChild(selector);
 
-  const tunnelCosts = document.createElement('div');
-  tunnelCosts.id = 'tunnelCosts';
-  costsContainer.appendChild(tunnelCosts);
+    return {
+      label,
+      costs,
+      selector
+    };
+  };
 
-  const tunnelCostsSelector = document.createElement('div');
-  tunnelCostsSelector.id = 'tunnelCostsSelector';
-  costsContainer.appendChild(tunnelCostsSelector);
-
-  const bridgeCostsLabel = document.createElement('div');
-  bridgeCostsLabel.id = 'bridgeCostsLabel';
-  costsContainer.appendChild(bridgeCostsLabel);
-
-  const bridgeCosts = document.createElement('div');
-  bridgeCosts.id = 'bridgeCosts';
-  costsContainer.appendChild(bridgeCosts);
-
-  const bridgeCostsSelector = document.createElement('div');
-  bridgeCostsSelector.id = 'bridgeCostsSelector';
-  costsContainer.appendChild(bridgeCostsSelector);
-
-  const groundCostsLabel = document.createElement('div');
-  groundCostsLabel.id = 'groundCostsLabel';
-  costsContainer.appendChild(groundCostsLabel);
-
-  const groundCosts = document.createElement('div');
-  groundCosts.id = 'groundCosts';
-  costsContainer.appendChild(groundCosts);
-
-  const groundCostsSelector = document.createElement('div');
-  groundCostsSelector.id = 'groundCostsSelector';
-  costsContainer.appendChild(groundCostsSelector);
-
-  const costsLabel = document.createElement('div');
-  costsLabel.id = 'costsLabel';
-  costsContainer.appendChild(costsLabel);
-
-  const costs = document.createElement('div');
-  costs.id = 'costs';
-  costsContainer.appendChild(costs);
-
-  const costsSelector = document.createElement('div');
-  costsSelector.id = 'costsSelector';
-  costsContainer.appendChild(costsSelector);
+  const routeTypeCosts = [ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND].reduce(
+    (routeTypeCosts, routeType) => ({ ...routeTypeCosts, [routeType]: createCostsElements(routeType) }),
+    {}
+  );
+  const totalCosts = createCostsElements('total');  
 
   const profile = document.createElement('canvas');
   profile.id = 'profile';
@@ -98,18 +78,8 @@ export default (system) => {
     mapContainer,
     map,
     mapRoute,
-    tunnelCostsLabel,
-    tunnelCosts,
-    tunnelCostsSelector,
-    bridgeCostsLabel,
-    bridgeCosts,
-    bridgeCostsSelector,
-    groundCostsLabel,
-    groundCosts,
-    groundCostsSelector,
-    costsLabel,
-    costs,
-    costsSelector,
+    routeTypeCosts,
+    totalCosts,
     profile
   };
 };

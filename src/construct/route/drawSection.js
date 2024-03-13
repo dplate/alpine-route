@@ -1,6 +1,7 @@
 import { ROUTE_TYPE_BRIDGE, ROUTE_TYPE_TUNNEL } from './routeTypes.js';
 
 const maxJitterPixelDistance = 10;
+const detailPixelDistance = 3;
 
 const calculateDistanceFromLine = (start, end, pixels) => {
   const diff = {
@@ -67,17 +68,23 @@ const splitSection = (section) => {
 const drawSubSection = (context, section) => {
   const firstPixels = section.corners[0].pixels;
   const lastPixels = section.corners[section.corners.length - 1].pixels;
-
+  
   context.setLineDash([]);
   context.beginPath();
   context.moveTo(firstPixels.x, firstPixels.y);
-
+  let previousUsedPixels = firstPixels;
+  
   const gradient = context.createLinearGradient(firstPixels.x, firstPixels.y, lastPixels.x, lastPixels.y); 
+  gradient.addColorStop(0, section.corners[0].color);
   section.corners.forEach((corner, index) => {
-    if (index > 0) {
+    if (index > 0 && (
+      index >= section.corners.length - 1 || 
+      Math.abs(previousUsedPixels.x - corner.pixels.x) > detailPixelDistance || 
+      Math.abs(previousUsedPixels.y - corner.pixels.y) > detailPixelDistance)) {
       context.lineTo(corner.pixels.x, corner.pixels.y);
+      gradient.addColorStop(index / (section.corners.length - 1), corner.color);
+      previousUsedPixels = corner.pixels;
     }
-    gradient.addColorStop(index / (section.corners.length - 1), corner.color);
   });
 
   if (section.type === ROUTE_TYPE_BRIDGE) {

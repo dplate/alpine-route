@@ -2,7 +2,7 @@ import calculateMapDistance from '../map/calculateMapDistance.js';
 import calculateCosts from './calculateCosts.js';
 import calculateProfileDistance from './calculateProfileDistance.js';
 import createSpline from './createSpline.js';
-import {ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND} from './routeTypes.js';
+import determineTypes from './determineTypes.js';
 
 const segmentDistance = 5;
 
@@ -27,17 +27,6 @@ const sortPointsByProfileDistance = (points, point) => {
   return [...points].sort((point1, point2) =>
     calculateProfileDistance(point, point1) - calculateProfileDistance(point, point2)
   );
-};
-
-const determineType = (trackHeight, mapHeight) => {
-  const difference = trackHeight - mapHeight;
-  if (difference > 5) {
-    return ROUTE_TYPE_BRIDGE;
-  }
-  if (difference < -5) {
-    return ROUTE_TYPE_TUNNEL;
-  }
-  return ROUTE_TYPE_GROUND;
 };
 
 export default (level, map) => {
@@ -70,13 +59,15 @@ export default (level, map) => {
         mapHeight,
         meter,
         flatMeter,
-        type: determineType(point.z, mapHeight)
+        type: null,
+        costs: null
       });
     }
     route.controlPoints.forEach((controlPoint, index) => {
       controlPoint.meter = spline.getLengthAtPointIndex(index);
       controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
     });
+    determineTypes(route);
     calculateCosts(route, level, map);
   };
   route.updateSegments();

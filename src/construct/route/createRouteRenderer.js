@@ -1,7 +1,7 @@
-import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from '../cameras/highlightTypes.js';
+import { HIGHLIGHT_COSTS } from '../cameras/highlightTypes.js';
 import drawRidge from './drawRidge.js';
 import drawSection from './drawSection.js';
-import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPE_TUNNEL } from './routeTypes.js';
+import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_GROUND } from './routeTypes.js';
 
 const pointVariants = {
   fixPoint: {

@@ -17,6 +17,9 @@ export default [
       bridgeHeightFactor: 3,
       groundMeter: 2,
       groundSlopeFactor: 10
+    },
+    limits: {
+      minRadius: 50
     }
   }
 ];

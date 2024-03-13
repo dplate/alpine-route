@@ -1,6 +1,7 @@
 import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from './cameras/highlightTypes.js';
 import calculateMapDistance from './map/calculateMapDistance.js';
-import { ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND } from './route/routeTypes.js';
+import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS } from './route/limitTypes.js';
+import { ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES } from './route/routeTypes.js';
 
 const controlPointSnapDistance = 50;
 const segmentSnapDistances = 20;
@@ -43,7 +44,7 @@ const handleRouteEditingOnProfile = (cameras, route, pixels) => {
 };
 
 const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, routeTypeCostsElements, highlightType) => {
-  const elements = [ routeTypeCostsElements.label, routeTypeCostsElements.costs, routeTypeCostsElements.selector ];
+  const elements = [ routeTypeCostsElements.label, routeTypeCostsElements.value, routeTypeCostsElements.selector ];
   elements.forEach(element => {
     element.onclick = () => {
       cameras.highlight = highlightType;
@@ -134,27 +135,15 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     console.log(cameras.profile.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
   }
 
-  addHighlightSelectorHandling(
-    cameras, 
-    routeRenderer, 
-    notesRenderer,
-    layout.routeTypeCosts[ROUTE_TYPE_TUNNEL], 
-    HIGHLIGHT_TUNNEL_COSTS
-  );
-  addHighlightSelectorHandling(
-    cameras, 
-    routeRenderer, 
-    notesRenderer, 
-    layout.routeTypeCosts[ROUTE_TYPE_BRIDGE], 
-    HIGHLIGHT_BRIDGE_COSTS
-  );
-  addHighlightSelectorHandling(
-    cameras, 
-    routeRenderer, 
-    notesRenderer, 
-    layout.routeTypeCosts[ROUTE_TYPE_GROUND], 
-    HIGHLIGHT_GROUND_COSTS
-  );
+  ROUTE_TYPES.forEach(routeType => {
+    addHighlightSelectorHandling(
+      cameras, 
+      routeRenderer, 
+      notesRenderer,
+      layout.routeTypeCosts[routeType], 
+      ROUTE_TYPES_TO_HIGHLIGHTS[routeType]
+    );
+  });
   addHighlightSelectorHandling(
     cameras, 
     routeRenderer, 
@@ -162,4 +151,13 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     layout.totalCosts, 
     HIGHLIGHT_COSTS
   );
+  LIMIT_TYPES.forEach(limitType => {
+    addHighlightSelectorHandling(
+      cameras, 
+      routeRenderer, 
+      notesRenderer,
+      layout.limits[limitType], 
+      LIMIT_TYPES_TO_HIGHLIGHTS[limitType]
+    );
+  });
 };

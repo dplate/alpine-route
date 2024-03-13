@@ -1,6 +1,8 @@
 import calculateMapDistance from '../map/calculateMapDistance.js';
 import calculateCosts from './calculateCosts.js';
 import calculateProfileDistance from './calculateProfileDistance.js';
+import calculateRadii from './calculateRadii.js';
+import checkLimits from './checkLimits.js';
 import createSpline from './createSpline.js';
 import determineTypes from './determineTypes.js';
 
@@ -68,7 +70,9 @@ export default (level, map) => {
       controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
     });
     determineTypes(route);
+    calculateRadii(route);
     calculateCosts(route, level, map);
+    checkLimits(route, level);
   };
   route.updateSegments();
 

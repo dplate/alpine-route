@@ -1,4 +1,6 @@
-import { ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPE_TUNNEL } from './route/routeTypes.js';
+import { LIMIT_TYPES } from './route/limitTypes.js';
+import { ROUTE_TYPES } from './route/routeTypes.js';
+
 
 export default (system) => {
   const desk = document.createElement('desk');
@@ -34,36 +36,45 @@ export default (system) => {
   notes.id = 'notes';
   desk.appendChild(notes);
 
-  const costsContainer = document.createElement('div');
-  costsContainer.id = 'costsContainer';
-  notes.appendChild(costsContainer);
-
-  const createCostsElements = (type) => {
+  const createNoteElements = (container, type) => {
     const label = document.createElement('div');
-    label.id = `${type}CostsLabel`;
-    costsContainer.appendChild(label);
+    label.id = `${type}Label`;
+    container.appendChild(label);
   
-    const costs = document.createElement('div');
-    costs.id = `${type}Costs`;
-    costsContainer.appendChild(costs);
+    const value = document.createElement('div');
+    value.id = `${type}Value`;
+    container.appendChild(value);
   
     const selector = document.createElement('div');
-    selector.id = `${type}CostsSelector`;
-    costsContainer.appendChild(selector);
+    selector.id = `${type}Selector`;
+    container.appendChild(selector);
 
     return {
       label,
-      costs,
+      value,
       selector
     };
   };
 
-  const routeTypeCosts = [ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND].reduce(
-    (routeTypeCosts, routeType) => ({ ...routeTypeCosts, [routeType]: createCostsElements(routeType) }),
+  const costsContainer = document.createElement('div');
+  costsContainer.id = 'costsContainer';
+  notes.appendChild(costsContainer);
+
+  const routeTypeCosts = ROUTE_TYPES.reduce(
+    (routeTypeCosts, routeType) => ({ ...routeTypeCosts, [routeType]: createNoteElements(costsContainer, `${routeType}Costs`) }),
     {}
   );
-  const totalCosts = createCostsElements('total');  
+  const totalCosts = createNoteElements(costsContainer, 'totalCosts');
 
+  const limitsContainer = document.createElement('div');
+  limitsContainer.id = 'limitsContainer';
+  notes.appendChild(limitsContainer);
+
+  const limits = LIMIT_TYPES.reduce(
+    (limits, limitType) => ({ ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limits`) }),
+    {}
+  );
+ 
   const profile = document.createElement('canvas');
   profile.id = 'profile';
   desk.appendChild(profile);
@@ -80,6 +91,7 @@ export default (system) => {
     mapRoute,
     routeTypeCosts,
     totalCosts,
+    limits,
     profile
   };
 };

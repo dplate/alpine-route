@@ -66,17 +66,17 @@ html, body {
   height: 100%;
 }
 
-#costsContainer {
+#costsContainer, #limitsContainer {
   display: grid;
   margin: 10px;
   grid-template-columns: auto 50% 15px;
 }
 
-#tunnelCosts, #bridgeCosts, #groundCosts, #totalCosts {
+#tunnelCostsValue, #bridgeCostsValue, #groundCostsValue, #totalCostsValue, #minRadiusLimitsValue {
   text-align: right;
 }
 
-#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector {
+#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector, #minRadiusLimitsSelector {
   margin-left: 3px;
   background-image: url("./eye.svg");
   background-size: contain;
@@ -84,7 +84,7 @@ html, body {
   background-position: center;
 }
 
-#totalCostsLabel, #totalCosts {
+#totalCostsLabel, #totalCostsValue {
   border-top: 1px solid black;
 }
 

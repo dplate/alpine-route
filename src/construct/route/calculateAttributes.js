@@ -23,12 +23,24 @@ const calculateRadius = (current, previous, next) => {
   return Math.sqrt((numerator1 / denominator)**2 + (numerator2 / denominator)**2);  
 };
 
+const calculateGradient = (previous, next) => {
+  const heightDiff = Math.abs(next.z - previous.z);
+  const length = next.meter - previous.meter;
+
+  return heightDiff / length * 100;
+};
+
 export default (route) => {
   route.segments.forEach((segment, index) => {
-    if (index <= 0 || index >= route.segments.length - 1) {
+    if (index <= 0) {
       segment.radius = Number.MAX_VALUE;
+      segment.gradient = calculateGradient(segment, route.segments[index + 1]);
+    } else if (index >= route.segments.length - 1) {
+      segment.radius = Number.MAX_VALUE;
+      segment.gradient = calculateGradient(route.segments[index - 1], segment);
     } else {
       segment.radius = calculateRadius(segment, route.segments[index - 1], route.segments[index + 1]);
+      segment.gradient = calculateGradient(route.segments[index - 1], route.segments[index + 1]);
     }
   });
 };

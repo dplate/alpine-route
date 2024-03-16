@@ -4,14 +4,16 @@ const texts = {
     BRIDGE_COSTS_LABEL: 'Brücken',
     GROUND_COSTS_LABEL: 'Strecke',
     COSTS_LABEL: 'Kosten',
-    RADIUS_LIMITS_LABEL: 'Radius'
+    MIN_RADIUS_LIMITS_LABEL: 'Radius',
+    MAX_GRADIENT_LIMITS_LABEL: 'Steigung'
   },
   en: {
     TUNNEL_COSTS_LABEL: 'Tunnels',
     BRIDGE_COSTS_LABEL: 'Bridges',
     GROUND_COSTS_LABEL: 'Track',
     COSTS_LABEL: 'Costs',
-    RADIUS_LIMITS_LABEL: 'Radius'
+    MIN_RADIUS_LIMITS_LABEL: 'Radius',
+    MAX_GRADIENT_LIMITS_LABEL: 'Gradient'
   }
 };
 

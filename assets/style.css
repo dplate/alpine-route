@@ -72,11 +72,11 @@ html, body {
   grid-template-columns: auto 50% 15px;
 }
 
-#tunnelCostsValue, #bridgeCostsValue, #groundCostsValue, #totalCostsValue, #minRadiusLimitsValue {
+#tunnelCostsValue, #bridgeCostsValue, #groundCostsValue, #totalCostsValue, #minRadiusLimitsValue, #maxGradientLimitsValue {
   text-align: right;
 }
 
-#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector, #minRadiusLimitsSelector {
+#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector, #minRadiusLimitsSelector, #maxGradientLimitsSelector {
   margin-left: 3px;
   background-image: url("./eye.svg");
   background-size: contain;

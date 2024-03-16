@@ -1,11 +1,11 @@
-import { HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_COSTS, HIGHLIGHT_GROUND_COSTS, HIGHLIGHT_TUNNEL_COSTS } from './cameras/highlightTypes.js';
+import { HIGHLIGHT_COSTS } from './cameras/highlightTypes.js';
 import calculateMapDistance from './map/calculateMapDistance.js';
 import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS } from './route/limitTypes.js';
-import { ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES } from './route/routeTypes.js';
+import { ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES } from './route/routeTypes.js';
 
 const controlPointSnapDistance = 50;
 const segmentSnapDistances = 20;
-const heightSnapDistance = 20;
+const heightSnapDistance = 10;
 
 const proposeRouteEditPoint = (camera, route, pixels, findNearestEditableControlPoint, findNearestSegment) => {
   const point = camera.transformPixelsToMeters(pixels);

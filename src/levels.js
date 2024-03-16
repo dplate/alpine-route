@@ -7,19 +7,20 @@ export default [
       y: 5237
     },
     end: {
-      x: 1172,
-      y: 6280
+      x: 1097,
+      y: 6289
     },
     costs: {
-      tunnelMeter: 10,
+      tunnelMeter: 7,
       tunnelDepthFactor: 1,
       bridgeMeter: 5,
-      bridgeHeightFactor: 3,
+      bridgeHeightFactor: 5,
       groundMeter: 2,
-      groundSlopeFactor: 10
+      groundSlopeFactor: 20
     },
     limits: {
-      minRadius: 50
+      minRadius: 50,
+      maxGradient: 40
     }
   }
 ];

@@ -50,7 +50,7 @@ export default (level, map) => {
       }
     });
     const spline = createSpline(route.controlPoints);
-    for (let meter = 0; meter < spline.length; meter += segmentDistance) {
+    for (let meter = 0; meter <= spline.length; meter += Math.max(0.1, Math.min(segmentDistance, spline.length - meter))) {
       const point = spline.getAtMeter(meter);
       const mapHeight = map.getHeightAtPoint(point);
       const lastPoint = route.segments[route.segments.length - 1];

@@ -60,7 +60,7 @@ const drawEditPoints = (context, route, renderTarget) => {
   });
 };
 
-export default (system, layout, cameras, route) => {
+export default (system, level, layout, cameras, route) => {
   const renderTargets = [
     {
       canvas: layout.mapRoute,
@@ -86,7 +86,7 @@ export default (system, layout, cameras, route) => {
       }
       drawControlPoints(context, route, renderTarget);
       drawEditPoints(context, route, renderTarget);
-      drawSegments(context, route, renderTarget, cameras.highlight);
+      drawSegments(context, level, route, renderTarget, cameras.highlight);
     });
     
   };

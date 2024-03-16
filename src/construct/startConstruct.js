@@ -13,7 +13,7 @@ export default async (system, level) => {
     const route = createRoute(level, map);
     const cameras = createCameras(layout, map, route);
     const mapRenderer = createMapRenderer(system, layout, cameras, map);
-    const routeRenderer = createRouteRenderer(system, layout, cameras, route);
+    const routeRenderer = createRouteRenderer(system, level, layout, cameras, route);
     const notesRenderer = createNotesRenderer(system, level, layout, cameras, route);
     setupControl(layout, cameras, route, mapRenderer, routeRenderer, notesRenderer);
 };

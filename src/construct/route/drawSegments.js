@@ -1,6 +1,7 @@
 import {HIGHLIGHT_COSTS} from '../cameras/highlightTypes.js';
+import calculateVariance from './calculateVariance.js';
 import drawSection from './drawSection.js';
-import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MIN_RADIUS } from './limitTypes.js';
+import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS } from './limitTypes.js';
 import {ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_GROUND} from './routeTypes.js';
 
 const neutralColor = 'rgba(200, 200, 255, 1.0)';
@@ -11,16 +12,19 @@ const convertNormalizedToColor = (normalized) => {
   return `rgba(${red}, ${green}, 0, 1.0)`;
 };
 
-const getColorForLimits = (level, segment, limitType) => {
+const getColorForLimits = (level, route, segment, limitType) => {
   if (!segment.limits[limitType]) {
     return 'rgba(150, 0, 255, 1.0)';
   }
   switch (limitType) {
     case LIMIT_TYPE_MIN_RADIUS:
-      const normalized = 1.0 - ((segment.radius - level.limits[limitType]) / (1000 - level.limits[limitType]));
-      return convertNormalizedToColor(normalized);
+      const normalizedRadius = 1.0 - ((segment.radius - level.limits[limitType]) / (1000 - level.limits[limitType]));
+      return convertNormalizedToColor(normalizedRadius);
     case LIMIT_TYPE_MAX_GRADIENT:
-      return convertNormalizedToColor(segment.gradient / level.limits[limitType]);
+      return convertNormalizedToColor(Math.abs(segment.gradient) / level.limits[limitType]);
+    case LIMIT_TYPE_MAX_VARIANCE:
+      const normalizedVariance = calculateVariance(route, segment) / level.limits[limitType];
+      return convertNormalizedToColor(normalizedVariance);
     default: 
       return neutralColor;
   }
@@ -38,7 +42,7 @@ const getColorForCosts = (route, segment, highlightType) => {
 const getColorForSegment = (level, route, segment, highlightType) => {
   const limitType = LIMIT_TYPES.find((limitType) => LIMIT_TYPES_TO_HIGHLIGHTS[limitType] === highlightType);
   if (limitType) {
-    return getColorForLimits(level, segment, limitType)
+    return getColorForLimits(level, route, segment, limitType);
   } else {
     return getColorForCosts(route, segment, highlightType);
   }

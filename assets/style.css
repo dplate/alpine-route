@@ -69,14 +69,26 @@ html, body {
 #costsContainer, #limitsContainer {
   display: grid;
   margin: 10px;
-  grid-template-columns: auto 50% 15px;
+  grid-template-columns: auto 60% 15px;
 }
 
-#tunnelCostsValue, #bridgeCostsValue, #groundCostsValue, #totalCostsValue, #minRadiusLimitsValue, #maxGradientLimitsValue {
+#tunnelCostsValue, 
+#bridgeCostsValue, 
+#groundCostsValue, 
+#totalCostsValue, 
+#minRadiusLimitsValue, 
+#maxGradientLimitsValue,
+#maxVarianceLimitsValue {
   text-align: right;
 }
 
-#tunnelCostsSelector, #bridgeCostsSelector, #groundCostsSelector, #totalCostsSelector, #minRadiusLimitsSelector, #maxGradientLimitsSelector {
+#tunnelCostsSelector, 
+#bridgeCostsSelector, 
+#groundCostsSelector, 
+#totalCostsSelector, 
+#minRadiusLimitsSelector, 
+#maxGradientLimitsSelector,
+#maxVarianceLimitsSelector {
   margin-left: 3px;
   background-image: url("./eye.svg");
   background-size: contain;

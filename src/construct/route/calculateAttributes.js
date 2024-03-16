@@ -31,6 +31,11 @@ const calculateGradient = (previous, next) => {
 };
 
 export default (route) => {
+  route.gradient = {
+    min: Number.MAX_VALUE,
+    max: 0,
+    avg: null
+  };
   route.segments.forEach((segment, index) => {
     if (index <= 0) {
       segment.radius = Number.MAX_VALUE;
@@ -42,5 +47,8 @@ export default (route) => {
       segment.radius = calculateRadius(segment, route.segments[index - 1], route.segments[index + 1]);
       segment.gradient = calculateGradient(route.segments[index - 1], route.segments[index + 1]);
     }
+    route.gradient.min = Math.min(route.gradient.min, segment.gradient);
+    route.gradient.max = Math.max(route.gradient.max, segment.gradient);
   });
+  route.gradient.avg = (route.gradient.min + route.gradient.max) / 2.0;
 };

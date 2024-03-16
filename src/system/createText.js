@@ -5,7 +5,8 @@ const texts = {
     GROUND_COSTS_LABEL: 'Strecke',
     COSTS_LABEL: 'Kosten',
     MIN_RADIUS_LIMITS_LABEL: 'Radius',
-    MAX_GRADIENT_LIMITS_LABEL: 'Steigung'
+    MAX_GRADIENT_LIMITS_LABEL: 'Steigung',
+    MAX_VARIANCE_LIMITS_LABEL: 'Varianz'
   },
   en: {
     TUNNEL_COSTS_LABEL: 'Tunnels',
@@ -13,7 +14,8 @@ const texts = {
     GROUND_COSTS_LABEL: 'Track',
     COSTS_LABEL: 'Costs',
     MIN_RADIUS_LIMITS_LABEL: 'Radius',
-    MAX_GRADIENT_LIMITS_LABEL: 'Gradient'
+    MAX_GRADIENT_LIMITS_LABEL: 'Gradient',
+    MAX_VARIANCE_LIMITS_LABEL: 'Variance'
   }
 };
 

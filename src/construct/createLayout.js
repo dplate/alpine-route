@@ -43,10 +43,12 @@ export default (system) => {
   
     const value = document.createElement('div');
     value.id = `${type}Value`;
+    value.className = 'value';
     container.appendChild(value);
   
     const selector = document.createElement('div');
     selector.id = `${type}Selector`;
+    selector.className = 'selector';
     container.appendChild(selector);
 
     return {
@@ -71,7 +73,7 @@ export default (system) => {
   notes.appendChild(limitsContainer);
 
   const limits = LIMIT_TYPES.reduce(
-    (limits, limitType) => ({ ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limits`) }),
+    (limits, limitType) => ({ ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`) }),
     {}
   );
  

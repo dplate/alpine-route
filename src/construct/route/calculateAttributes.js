@@ -1,3 +1,7 @@
+import calculateMapDistance from '../map/calculateMapDistance.js';
+
+const minOverlappingDistance = 10;
+
 const calculateRadius = (current, previous, next) => {
   const diffPrevious = {
     x: previous.x - current.x,
@@ -49,6 +53,17 @@ export default (route) => {
     }
     route.gradient.min = Math.min(route.gradient.min, segment.gradient);
     route.gradient.max = Math.max(route.gradient.max, segment.gradient);
+
+    segment.gap = Number.MAX_VALUE;
+    for (let previousIndex = 0; previousIndex < index; previousIndex++) {
+      const otherSegment = route.segments[previousIndex];
+      if (Math.abs(segment.flatMeter - otherSegment.flatMeter) > minOverlappingDistance * 5 && 
+        calculateMapDistance(segment, otherSegment) < minOverlappingDistance) {
+        const gap = Math.abs(segment.z - otherSegment.z);
+        otherSegment.gap = Math.min(otherSegment.gap, gap);
+        segment.gap = Math.min(segment.gap, gap);
+      }
+    }
   });
   route.gradient.avg = (route.gradient.min + route.gradient.max) / 2.0;
 };

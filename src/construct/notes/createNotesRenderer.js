@@ -1,5 +1,5 @@
 import { HIGHLIGHT_COSTS } from '../cameras/highlightTypes.js';
-import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPES_TO_LABEL, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS } from '../route/limitTypes.js';
+import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPES_TO_LABEL, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS, LIMIT_TYPE_MIN_GAP } from '../route/limitTypes.js';
 import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES_TO_COSTS_LABEL } from '../route/routeTypes.js';
 
 export default (system, level, layout, cameras, route) => {
@@ -16,10 +16,12 @@ export default (system, level, layout, cameras, route) => {
     switch(limitType) {
       case LIMIT_TYPE_MIN_RADIUS:
         return `${route.limits[limitType].value < 1000 ? Math.round(route.limits[limitType].value) + 'm' : '∞'} > ${level.limits[limitType]}m`;
+      case LIMIT_TYPE_MAX_VARIANCE:
+        return `Δ${Math.round(route.limits[limitType].value)}% < ${level.limits[limitType]}%`;
       case LIMIT_TYPE_MAX_GRADIENT:
         return `${Math.round(route.limits[limitType].value)}% < ${level.limits[limitType]}%`;
-      case LIMIT_TYPE_MAX_VARIANCE:
-        return `Δ${Math.round(route.limits[limitType].value)}% < ${level.limits[limitType]}%`;  
+      case LIMIT_TYPE_MIN_GAP:
+        return `${route.limits[limitType].value < 100 ? Math.round(route.limits[limitType].value) + 'm' : '∞'} > ${level.limits[limitType]}m`;
       default:
         return '?';
     }

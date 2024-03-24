@@ -1,14 +1,14 @@
 import {HIGHLIGHT_COSTS} from '../cameras/highlightTypes.js';
 import calculateVariance from './calculateVariance.js';
 import drawSection from './drawSection.js';
-import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS } from './limitTypes.js';
+import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS, LIMIT_TYPE_MIN_GAP } from './limitTypes.js';
 import {ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_GROUND} from './routeTypes.js';
 
 const neutralColor = 'rgba(200, 200, 255, 1.0)';
 
 const convertNormalizedToColor = (normalized) => {
-  const red = Math.round(255 * Math.min(normalized * 2.0, 1.0));
-  const green = Math.round(255 * Math.min((1.0 - normalized) * 2.0, 1.0));
+  const red = Math.round(255 * Math.max(0.0, Math.min(normalized * 2.0, 1.0)));
+  const green = Math.round(255 * Math.max(0.0, Math.min((1.0 - normalized) * 2.0, 1.0)));
   return `rgba(${red}, ${green}, 0, 1.0)`;
 };
 
@@ -25,6 +25,9 @@ const getColorForLimits = (level, route, segment, limitType) => {
     case LIMIT_TYPE_MAX_VARIANCE:
       const normalizedVariance = calculateVariance(route, segment) / level.limits[limitType];
       return convertNormalizedToColor(normalizedVariance);
+    case LIMIT_TYPE_MIN_GAP:
+      const normalizedGap = 1.0 - ((segment.gap - level.limits[limitType]) / (100 - level.limits[limitType]));
+      return convertNormalizedToColor(normalizedGap);
     default: 
       return neutralColor;
   }

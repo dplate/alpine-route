@@ -38,7 +38,7 @@ export default (route) => {
   route.gradient = {
     min: Number.MAX_VALUE,
     max: 0,
-    avg: null
+    mean: calculateGradient(route.segments[0], route.segments[route.segments.length - 1])
   };
   route.segments.forEach((segment, index) => {
     if (index <= 0) {
@@ -65,5 +65,4 @@ export default (route) => {
       }
     }
   });
-  route.gradient.avg = (route.gradient.min + route.gradient.max) / 2.0;
 };

@@ -1,3 +1,3 @@
 export default (route, segment) => {
-  return Math.abs(segment.gradient - route.gradient.avg) * 2;
+  return Math.abs(segment.gradient - route.gradient.mean);
 };

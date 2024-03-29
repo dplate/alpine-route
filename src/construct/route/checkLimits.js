@@ -2,7 +2,10 @@ import calculateVariance from './calculateVariance.js';
 import { LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS, LIMIT_TYPE_MIN_GAP } from './limitTypes.js';
 
 export default (route, level) => {
-  const varianceValue = Math.max(route.gradient.mean - route.gradient.min, route.gradient.max - route.gradient.mean);
+  const varianceValue = Math.max(
+    Math.abs(route.gradient.mean - route.gradient.absMin), 
+    Math.abs(route.gradient.mean - route.gradient.absMax)
+  );
   route.limits = {
     [LIMIT_TYPE_MIN_RADIUS]: {
       value: Number.MAX_VALUE,

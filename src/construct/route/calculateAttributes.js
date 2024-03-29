@@ -28,7 +28,7 @@ const calculateRadius = (current, previous, next) => {
 };
 
 const calculateGradient = (previous, next) => {
-  const heightDiff = Math.abs(next.z - previous.z);
+  const heightDiff = next.z - previous.z;
   const length = next.meter - previous.meter;
 
   return heightDiff / length * 100;
@@ -36,8 +36,8 @@ const calculateGradient = (previous, next) => {
 
 export default (route) => {
   route.gradient = {
-    min: Number.MAX_VALUE,
-    max: 0,
+    absMin: Number.MAX_VALUE,
+    absMax: 0,
     mean: calculateGradient(route.segments[0], route.segments[route.segments.length - 1])
   };
   route.segments.forEach((segment, index) => {
@@ -51,8 +51,8 @@ export default (route) => {
       segment.radius = calculateRadius(segment, route.segments[index - 1], route.segments[index + 1]);
       segment.gradient = calculateGradient(route.segments[index - 1], route.segments[index + 1]);
     }
-    route.gradient.min = Math.min(route.gradient.min, segment.gradient);
-    route.gradient.max = Math.max(route.gradient.max, segment.gradient);
+    route.gradient.absMin = Math.min(route.gradient.absMin, Math.abs(segment.gradient));
+    route.gradient.absMax = Math.max(route.gradient.absMax, Math.abs(segment.gradient));
 
     segment.gap = Number.MAX_VALUE;
     for (let previousIndex = 0; previousIndex < index; previousIndex++) {

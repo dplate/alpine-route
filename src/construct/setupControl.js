@@ -1,4 +1,4 @@
-import { HIGHLIGHT_COSTS } from './cameras/highlightTypes.js';
+import { COSTS_HIGHLIGHTS, LIMIT_HIGHLIGHTS } from './cameras/highlightTypes.js';
 import calculateMapDistance from './map/calculateMapDistance.js';
 import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS } from './route/limitTypes.js';
 import { ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES } from './route/routeTypes.js';
@@ -43,11 +43,19 @@ const handleRouteEditingOnProfile = (cameras, route, pixels) => {
   route.elevateEdit(newPoint, snapHeight);
 };
 
-const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, routeTypeCostsElements, highlightType) => {
-  const elements = [ routeTypeCostsElements.label, routeTypeCostsElements.value, routeTypeCostsElements.selector ];
-  elements.forEach(element => {
+const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, elements, highlightType) => {
+  [ elements.label, elements.value, elements.selector ].forEach(element => {
     element.onclick = () => {
-      cameras.highlight = highlightType;
+      if (cameras.highlights.has(highlightType)) {
+        cameras.highlights.delete(highlightType);
+      } else {
+        console.log(COSTS_HIGHLIGHTS.has(highlightType), cameras.highlights.values()[0], !COSTS_HIGHLIGHTS.has(cameras.highlights.values[0]) );
+        if ((COSTS_HIGHLIGHTS.has(highlightType) && !COSTS_HIGHLIGHTS.has(cameras.highlights.values().next().value)) ||
+            (LIMIT_HIGHLIGHTS.has(highlightType) && !LIMIT_HIGHLIGHTS.has(cameras.highlights.values().next().value))) {
+          cameras.highlights.clear();
+        }
+        cameras.highlights.add(highlightType);
+      }
       routeRenderer.render();
       notesRenderer.render();
     };
@@ -144,13 +152,6 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
       ROUTE_TYPES_TO_HIGHLIGHTS[routeType]
     );
   });
-  addHighlightSelectorHandling(
-    cameras, 
-    routeRenderer, 
-    notesRenderer, 
-    layout.totalCosts, 
-    HIGHLIGHT_COSTS
-  );
   LIMIT_TYPES.forEach(limitType => {
     addHighlightSelectorHandling(
       cameras, 

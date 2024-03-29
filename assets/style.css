@@ -69,7 +69,7 @@ html, body {
 #costsContainer, #limitsContainer {
   display: grid;
   margin: 10px;
-  grid-template-columns: auto 60% 15px;
+  grid-template-columns: auto 55% 15px;
 }
 
 .value {
@@ -84,7 +84,11 @@ html, body {
   background-position: center;
 }
 
-#totalCostsLabel, #totalCostsValue {
+#budgetLabel, #budgetValue {
+  border-bottom: 1px solid black;
+}
+
+#balanceLabel, #balanceValue {
   border-top: 1px solid black;
 }
 

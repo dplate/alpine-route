@@ -1,57 +1,89 @@
-import {HIGHLIGHT_COSTS} from '../cameras/highlightTypes.js';
 import calculateVariance from './calculateVariance.js';
 import drawSection from './drawSection.js';
 import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS, LIMIT_TYPE_MIN_GAP } from './limitTypes.js';
 import {ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPE_GROUND} from './routeTypes.js';
 
 const neutralColor = 'rgba(200, 200, 255, 1.0)';
+const impossibleColor = 'rgba(150, 0, 255, 1.0)';
 
 const convertNormalizedToColor = (normalized) => {
+  if (normalized === null) {
+    return neutralColor;
+  }
+  if (normalized > 1.0) {
+    return impossibleColor;
+  }
   const red = Math.round(255 * Math.max(0.0, Math.min(normalized * 2.0, 1.0)));
   const green = Math.round(255 * Math.max(0.0, Math.min((1.0 - normalized) * 2.0, 1.0)));
   return `rgba(${red}, ${green}, 0, 1.0)`;
 };
 
-const getColorForLimits = (level, route, segment, limitType) => {
+const mergeNormalized = (normalized1, normalized2) => {
+  if (normalized1 === null) {
+    return normalized2;
+  }
+  if (normalized2 === null) {
+    return normalized1;
+  }
+  return Math.max(normalized1, normalized2);
+};
+
+const getNormalizedForLimit = (level, route, segment, highlightType) => {
+  const limitType = LIMIT_TYPES.find((limitType) => highlightType === LIMIT_TYPES_TO_HIGHLIGHTS[limitType]);
   if (!segment.limits[limitType]) {
-    return 'rgba(150, 0, 255, 1.0)';
+    return 1.1;
   }
   switch (limitType) {
     case LIMIT_TYPE_MIN_RADIUS:
-      const normalizedRadius = 1.0 - ((segment.radius - level.limits[limitType]) / (1000 - level.limits[limitType]));
-      return convertNormalizedToColor(normalizedRadius);
+      return 1.0 - ((segment.radius - level.limits[limitType]) / (1000 - level.limits[limitType]));
     case LIMIT_TYPE_MAX_GRADIENT:
-      return convertNormalizedToColor((Math.abs(segment.gradient) - 0.5 * level.limits[limitType]) / (0.5 * level.limits[limitType]));
+      return (Math.abs(segment.gradient) - 0.5 * level.limits[limitType]) / (0.5 * level.limits[limitType]);
     case LIMIT_TYPE_MAX_VARIANCE:
-      const normalizedVariance = calculateVariance(route, segment) / level.limits[limitType];
-      return convertNormalizedToColor(normalizedVariance);
+      return calculateVariance(route, segment) / level.limits[limitType];
     case LIMIT_TYPE_MIN_GAP:
-      const normalizedGap = 1.0 - ((segment.gap - level.limits[limitType]) / (100 - level.limits[limitType]));
-      return convertNormalizedToColor(normalizedGap);
+      return 1.0 - ((segment.gap - level.limits[limitType]) / (100 - level.limits[limitType]));
     default: 
-      return neutralColor;
+      return null;
   }
 }
 
-const getColorForCosts = (route, segment, highlightType) => {
-  const routeType = ROUTE_TYPES.find((routeType) => ROUTE_TYPES_TO_HIGHLIGHTS[routeType] === highlightType);
-  const highlightCosts = route.costs[routeType] || route.costs.total;
-  if (highlightType !== HIGHLIGHT_COSTS && ROUTE_TYPES_TO_HIGHLIGHTS[segment.type] !== highlightType) {
-    return neutralColor;
+const getNormalizedForLimits = (level, route, segment, highlights) => {
+  return highlights.values().reduce((normalized, highlightType) => {
+    return mergeNormalized(
+      normalized,
+      getNormalizedForLimit(level, route, segment, highlightType)
+    );
+  }, null);
+};
+
+const getNormalizedForCosts = (route, segment, highlights) => {
+  if (!highlights.has(ROUTE_TYPES_TO_HIGHLIGHTS[segment.type])) {
+    return null;
   }
-  return convertNormalizedToColor((segment.costs - highlightCosts.min) / (highlightCosts.max - highlightCosts.min));
+  const highlightCosts = ROUTE_TYPES.reduce((highlightCosts, routeType) => {
+    if (highlights.has(ROUTE_TYPES_TO_HIGHLIGHTS[routeType])) {
+      return {
+        min: Math.min(highlightCosts.min, route.costs[routeType].min),
+        max: Math.max(highlightCosts.max, route.costs[routeType].max)
+      };
+    }
+    return highlightCosts;
+  }, {
+    min: Number.MAX_VALUE,
+    max: 0
+  });
+  return (segment.costs - highlightCosts.min) / (highlightCosts.max - highlightCosts.min);
 }
 
-const getColorForSegment = (level, route, segment, highlightType) => {
-  const limitType = LIMIT_TYPES.find((limitType) => LIMIT_TYPES_TO_HIGHLIGHTS[limitType] === highlightType);
-  if (limitType) {
-    return getColorForLimits(level, route, segment, limitType);
-  } else {
-    return getColorForCosts(route, segment, highlightType);
-  }
+const getColorForSegment = (level, route, segment, highlights) => {
+  const coloredLimits = LIMIT_TYPES.some((limitType) => highlights.has(LIMIT_TYPES_TO_HIGHLIGHTS[limitType]));
+  const normalized = coloredLimits ?
+    getNormalizedForLimits(level, route, segment, highlights) : 
+    getNormalizedForCosts(route, segment, highlights);
+  return convertNormalizedToColor(normalized);
 }
 
-export default (context, level, route, renderTarget, highlightType) => {
+export default (context, level, route, renderTarget, highlights) => {
   const section = {
     visible: false,
     type: null,
@@ -64,7 +96,7 @@ export default (context, level, route, renderTarget, highlightType) => {
     const corner = {
       pixels,
       visible,
-      color: getColorForSegment(level, route, segment, highlightType)
+      color: getColorForSegment(level, route, segment, highlights)
     };
     section.type = section.type || segment.type;
     section.corners.push(corner);

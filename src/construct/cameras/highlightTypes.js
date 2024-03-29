@@ -1,8 +1,10 @@
 export const HIGHLIGHT_BRIDGE_COSTS = 'bridgeCosts';
 export const HIGHLIGHT_TUNNEL_COSTS = 'tunnelCosts';
 export const HIGHLIGHT_GROUND_COSTS = 'groundCosts';
-export const HIGHLIGHT_COSTS = 'costs';
 export const HIGHLIGHT_MIN_RADIUS_LIMIT = 'minRadiusLimit';
 export const HIGHLIGHT_MAX_GRADIENT_LIMIT = 'maxGradientLimit';
 export const HIGHLIGHT_MAX_VARIANCE_LIMIT = 'maxVarianceLimit';
 export const HIGHLIGHT_MIN_GAP_LIMIT = 'minGapLimit';
+
+export const COSTS_HIGHLIGHTS = new Set([ HIGHLIGHT_BRIDGE_COSTS, HIGHLIGHT_TUNNEL_COSTS, HIGHLIGHT_GROUND_COSTS ]);
+export const LIMIT_HIGHLIGHTS = new Set([ HIGHLIGHT_MIN_RADIUS_LIMIT, HIGHLIGHT_MAX_GRADIENT_LIMIT, HIGHLIGHT_MAX_VARIANCE_LIMIT, HIGHLIGHT_MIN_GAP_LIMIT ]);

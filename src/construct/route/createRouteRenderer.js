@@ -86,7 +86,7 @@ export default (system, level, layout, cameras, route) => {
       }
       drawControlPoints(context, route, renderTarget);
       drawEditPoints(context, route, renderTarget);
-      drawSegments(context, level, route, renderTarget, cameras.highlight);
+      drawSegments(context, level, route, renderTarget, cameras.highlights);
     });
     
   };

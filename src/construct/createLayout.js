@@ -36,7 +36,7 @@ export default (system) => {
   notes.id = 'notes';
   desk.appendChild(notes);
 
-  const createNoteElements = (container, type) => {
+  const createNoteElements = (container, type, withSelector = true) => {
     const label = document.createElement('div');
     label.id = `${type}Label`;
     container.appendChild(label);
@@ -47,8 +47,11 @@ export default (system) => {
     container.appendChild(value);
   
     const selector = document.createElement('div');
-    selector.id = `${type}Selector`;
-    selector.className = 'selector';
+    if (withSelector) {
+      selector.id = `${type}Selector`;
+      selector.className = 'selector';
+      
+    }
     container.appendChild(selector);
 
     return {
@@ -62,11 +65,13 @@ export default (system) => {
   costsContainer.id = 'costsContainer';
   notes.appendChild(costsContainer);
 
+  const budget = createNoteElements(costsContainer, 'budget', false);
+
   const routeTypeCosts = ROUTE_TYPES.reduce(
     (routeTypeCosts, routeType) => ({ ...routeTypeCosts, [routeType]: createNoteElements(costsContainer, `${routeType}Costs`) }),
     {}
   );
-  const totalCosts = createNoteElements(costsContainer, 'totalCosts');
+  const balance = createNoteElements(costsContainer, 'balance', false);
 
   const limitsContainer = document.createElement('div');
   limitsContainer.id = 'limitsContainer';
@@ -91,8 +96,9 @@ export default (system) => {
     mapContainer,
     map,
     mapRoute,
+    budget,
     routeTypeCosts,
-    totalCosts,
+    balance,
     limits,
     profile
   };

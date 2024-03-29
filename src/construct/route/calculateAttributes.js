@@ -29,7 +29,7 @@ const calculateRadius = (current, previous, next) => {
 
 const calculateGradient = (previous, next) => {
   const heightDiff = next.z - previous.z;
-  const length = next.meter - previous.meter;
+  const length = next.flatMeter - previous.flatMeter;
 
   return heightDiff / length * 100;
 };

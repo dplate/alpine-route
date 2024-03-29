@@ -21,7 +21,7 @@ const getColorForLimits = (level, route, segment, limitType) => {
       const normalizedRadius = 1.0 - ((segment.radius - level.limits[limitType]) / (1000 - level.limits[limitType]));
       return convertNormalizedToColor(normalizedRadius);
     case LIMIT_TYPE_MAX_GRADIENT:
-      return convertNormalizedToColor(Math.abs(segment.gradient) / level.limits[limitType]);
+      return convertNormalizedToColor((Math.abs(segment.gradient) - 0.5 * level.limits[limitType]) / (0.5 * level.limits[limitType]));
     case LIMIT_TYPE_MAX_VARIANCE:
       const normalizedVariance = calculateVariance(route, segment) / level.limits[limitType];
       return convertNormalizedToColor(normalizedVariance);

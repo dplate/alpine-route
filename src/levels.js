@@ -21,7 +21,7 @@ export default [
     limits: {
       minRadius: 50,
       maxGradient: 40,
-      maxVariance: 10,
+      maxVariance: 15,
       minGap: 10
     }
   }

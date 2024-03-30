@@ -42,14 +42,16 @@ export default (context, route, renderTarget, profileCamera) => {
   const startPixels = transformToPixels(route.segments[0]);
   
   context.save();
-  context.moveTo(0, renderTarget.canvas.height);
+  context.moveTo(startPixels.x, renderTarget.canvas.height);
   context.beginPath();
-  route.segments.forEach((segment) => {
+  route.segments.forEach((segment, index) => {
     const pixels = transformToPixels(segment);
     context.lineTo(pixels.x, pixels.y);
+    if (index === route.segments.length - 1) {
+      context.lineTo(pixels.x, renderTarget.canvas.height);
+      context.lineTo(startPixels.x, renderTarget.canvas.height);
+    }
   });
-  context.lineTo(renderTarget.canvas.width, renderTarget.canvas.height);
-  context.lineTo(0, renderTarget.canvas.height);
   context.clip();
 
   context.moveTo(startPixels.x, startPixels.y);

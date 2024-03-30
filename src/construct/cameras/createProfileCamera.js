@@ -8,9 +8,10 @@ export default (layout, route, mapCamera) => {
     minHeight: 0,
     maxHeight: 100
   };
+  const leftToRight = route.segments[0].x < route.segments[route.segments.length - 1].x;
 
   camera.normalizePixels = (pixels) => ({
-    flatMeter: pixels.x / canvas.width,
+    flatMeter: leftToRight ? pixels.x / canvas.width : canvas.width - pixels.x / canvas.width,
     z: 1.0 - (pixels.y  - profilePadding) / (canvas.height - 2 * profilePadding)
   });
 
@@ -20,7 +21,7 @@ export default (layout, route, mapCamera) => {
   });
 
   camera.transformNormalizedToPixels = (normalized) => ({
-    x: normalized.flatMeter * canvas.width,
+    x: leftToRight ? normalized.flatMeter * canvas.width : canvas.width - normalized.flatMeter * canvas.width,
     y: profilePadding + (1.0 - normalized.z) * (canvas.height - 2 * profilePadding)
   });
 

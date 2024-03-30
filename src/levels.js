@@ -3,14 +3,14 @@ export default [
     id: 'saentisbahn-meglisalp-saentis',
     map: 'saentis',
     start: {
-      x: 4522,
-      y: 5237
+      x: 4423,
+      y: 5385
     },
     end: {
       x: 1097,
       y: 6289
     },
-    budget: 800000,
+    budget: 700000,
     costs: {
       tunnelMeter: 7,
       tunnelDepthFactor: 1,

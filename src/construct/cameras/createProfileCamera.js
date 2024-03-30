@@ -11,7 +11,7 @@ export default (layout, route, mapCamera) => {
   const leftToRight = route.segments[0].x < route.segments[route.segments.length - 1].x;
 
   camera.normalizePixels = (pixels) => ({
-    flatMeter: leftToRight ? pixels.x / canvas.width : canvas.width - pixels.x / canvas.width,
+    flatMeter: leftToRight ? pixels.x / canvas.width : 1.0 - pixels.x / canvas.width,
     z: 1.0 - (pixels.y  - profilePadding) / (canvas.height - 2 * profilePadding)
   });
 

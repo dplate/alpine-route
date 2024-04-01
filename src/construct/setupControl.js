@@ -120,6 +120,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
         state.startPinchDistance = pinchDistance;
       }
       cameras.map.setScale(pinchDistance / state.startPinchDistance);
+      event.preventDefault();
       return;
     }
 
@@ -128,7 +129,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
 
     const pixels = { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
     const movementPixels = state.previousTouchOfDrag ? 
-      { x: touch.clientX - state.previousTouchOfDrag.clientX, y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
+      { x: -(touch.clientX - state.previousTouchOfDrag.clientX), y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
       { x: 0, y: 0 };
     handleMapDrag(pixels, movementPixels, true)
 

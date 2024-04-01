@@ -9,7 +9,7 @@ const calculateDistanceFromLine = (start, end, pixels) => {
     y: end.y - start.y
   };
   return Math.abs(diff.x * (start.y - pixels.y) - diff.y * (start.x - pixels.x)) / 
-    Math.sqrt(diff.x ** 2, diff.y ** 2);
+    Math.sqrt(diff.x ** 2 + diff.y ** 2);
 };
 
 const splitSection = (section) => {

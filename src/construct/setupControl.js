@@ -129,7 +129,6 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
       (point) => route.findNearestSegmentByProfileMeters(point)
     );
 
-    cameras.update();
     routeRenderer.render();
     notesRenderer.render();
   };

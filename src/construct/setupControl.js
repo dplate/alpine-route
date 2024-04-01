@@ -111,6 +111,8 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   };
 
   layout.mapContainer.ontouchmove = (event) => {
+    console.log(event.targetTouches[0]);
+    console.log(event.targetTouches[1]);
     if (event.targetTouches.length === 2) {
       const pinchDistance = Math.sqrt(
         (event.targetTouches[0].clientX - event.targetTouches[1].clientX) ** 2 +
@@ -119,6 +121,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
       if (!state.startPinchDistance) {
         state.startPinchDistance = pinchDistance;
       }
+      console.log(cameras.map.scale, pinchDistance / state.startPinchDistance);
       cameras.map.setScale(pinchDistance / state.startPinchDistance);
       event.preventDefault();
       return;

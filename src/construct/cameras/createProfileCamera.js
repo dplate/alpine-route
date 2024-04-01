@@ -45,6 +45,9 @@ export default (layout, route, mapCamera) => {
   };
 
   camera.update = () => {
+    if (route.edit?.status === 'moveable') {
+      return;
+    }
     const minMapMeters = mapCamera.transformPixelsToMeters({ x: 0, y: 0 });
     const maxMapMeters = mapCamera.transformPixelsToMeters({ x: layout.map.width, y: layout.map.height });
     const isVisible = (segment) => segment.x >= minMapMeters.x && segment.x < maxMapMeters.x && 

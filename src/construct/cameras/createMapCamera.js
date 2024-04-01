@@ -51,19 +51,18 @@ export default (layout, map) => {
     camera.updateCameras();
   };
 
-  camera.zoomIn = (amount) => {
+  camera.zoomIn = (amount, pixelsStatic) => {
+    const normalizedStatic = camera.normalizePixels(pixelsStatic);
     camera.scale *= amount;
     camera.updateCameras();
-  };
-
-  camera.zoomOut = (amount) => {
-    camera.scale /= amount;
+    const newNormalizedStatic = camera.normalizePixels(pixelsStatic);
+    camera.normalizedCenter.x += normalizedStatic.x - newNormalizedStatic.x;
+    camera.normalizedCenter.y += normalizedStatic.y - newNormalizedStatic.y;
     camera.updateCameras();
   };
 
-  camera.setScale = (scale) => {
-    camera.scale = scale;
-    camera.updateCameras();
+  camera.zoomOut = (amount, pixelsStatic) => {
+    camera.zoomIn(1 / amount, pixelsStatic);
   };
 
   camera.isProfile = () => false;

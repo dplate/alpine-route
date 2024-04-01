@@ -66,7 +66,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   const state = {
     touchInterval: null,
     previousTouchOfDrag: null,
-    startPinchDistance: null
+    previousPinchDistance: null
   };
 
   const startEditing = (createOnGround) => {
@@ -104,33 +104,37 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   }
 
   layout.mapContainer.onwheel = (event) => {
+    const pixels = { x: event.offsetX, y: event.offsetY };
     const amount = event.deltaY / 90.0;
-    amount < 0 ? cameras.map.zoomIn(-amount) : cameras.map.zoomOut(amount);
+    amount < 0 ? cameras.map.zoomIn(-amount, pixels) : cameras.map.zoomOut(amount, pixels);
     mapRenderer.render();
     routeRenderer.render();
   };
 
   layout.mapContainer.ontouchmove = (event) => {
-    console.log(event.targetTouches[0]);
-    console.log(event.targetTouches[1]);
-    if (event.targetTouches.length === 2) {
+    const boundingRect = layout.mapContainer.getBoundingClientRect();
+    const touch = event.targetTouches[0];
+    const pixels = { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
+
+    const touch2 = event.targetTouches[1];
+    if (touch2) {
+      const pixels2 = { x: touch2.clientX - boundingRect.x, y: touch2.clientY - boundingRect.y };
       const pinchDistance = Math.sqrt(
-        (event.targetTouches[0].clientX - event.targetTouches[1].clientX) ** 2 +
-        (event.targetTouches[0].clientY - event.targetTouches[1].clientY) ** 2
+        (pixels.x - pixels2.x) ** 2 +
+        (pixels.y - pixels2.y) ** 2
       );
-      if (!state.startPinchDistance) {
-        state.startPinchDistance = pinchDistance;
+      if (!state.previousPinchDistance) {
+        state.previousPinchDistance = pinchDistance;
       }
-      console.log(cameras.map.scale, pinchDistance / state.startPinchDistance);
-      cameras.map.setScale(pinchDistance / state.startPinchDistance);
+      cameras.map.zoomIn(pinchDistance / state.previousPinchDistance, pixels);
+
+      state.previousPinchDistance = pinchDistance;
+      mapRenderer.render();
+      routeRenderer.render();
       event.preventDefault();
       return;
     }
-
-    const touch = event.targetTouches[0];
-    const boundingRect = layout.mapContainer.getBoundingClientRect();
-
-    const pixels = { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
+        
     const movementPixels = state.previousTouchOfDrag ? 
       { x: -(touch.clientX - state.previousTouchOfDrag.clientX), y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
       { x: 0, y: 0 };
@@ -141,12 +145,12 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
 
   layout.mapContainer.ontouchcancel = () => {
     state.previousTouchOfDrag = null;
-    state.startPinchDistance = null;
+    state.previousPinchDistance = null;
   };
 
   layout.mapContainer.ontouchend = () =>  {
     state.previousTouchOfDrag = null;
-    state.startPinchDistance = null;
+    state.previousPinchDistance = null;
   };
 
   layout.mapContainer.onmousemove = (event) => {

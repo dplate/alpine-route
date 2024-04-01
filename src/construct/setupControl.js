@@ -49,7 +49,6 @@ const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, ele
       if (cameras.highlights.has(highlightType)) {
         cameras.highlights.delete(highlightType);
       } else {
-        console.log(COSTS_HIGHLIGHTS.has(highlightType), cameras.highlights.values()[0], !COSTS_HIGHLIGHTS.has(cameras.highlights.values[0]) );
         if ((COSTS_HIGHLIGHTS.has(highlightType) && !COSTS_HIGHLIGHTS.has(cameras.highlights.values().next().value)) ||
             (LIMIT_HIGHLIGHTS.has(highlightType) && !LIMIT_HIGHLIGHTS.has(cameras.highlights.values().next().value))) {
           cameras.highlights.clear();
@@ -60,6 +59,11 @@ const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, ele
       notesRenderer.render();
     };
   })
+};
+
+const transformTouchToPixels = (touch, canvas) => {
+  const boundingRect = canvas.getBoundingClientRect();
+  return { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
 };
 
 export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
@@ -78,15 +82,21 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     }, 20);
   };
 
-  const stopEditing = () => {
+  const stopEditing = (event) => {
+    state.previousTouchOfDrag = null;
+    state.previousPinchDistance = null;
     clearInterval(state.touchInterval);
     route.confirmEdit();
+    mapRenderer.render();
+    routeRenderer.render();
+    event.preventDefault();
   };
 
   const handleMapDrag = (pixels, movementPixels, touched) => {
     cameras.magnifier.setByMapPixels(pixels);
     if (touched && !handleRouteEditingOnMap(cameras, route, pixels)) {
       cameras.map.moveByPixels(movementPixels);
+      cameras.update();
     } else {
       proposeRouteEditPoint(
         cameras.map, 
@@ -97,11 +107,28 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
       );
     }
 
-    cameras.update();
     mapRenderer.render();
     routeRenderer.render();
     notesRenderer.render();
-  }
+  };
+
+  const handleProfileDrag = (pixels, touched) => {
+    cameras.magnifier.setByProfilePixels(pixels);
+    if (touched) {
+      handleRouteEditingOnProfile(cameras, route, pixels);
+    } else {
+      proposeRouteEditPoint(
+        cameras.profile, 
+        route,
+        pixels,
+        (point) => route.findNearestEditableControlPointByProfileMeters(point),
+        (point) => route.findNearestSegmentByProfileMeters(point)
+      );
+    }
+
+    routeRenderer.render();
+    notesRenderer.render();
+  };
 
   layout.mapContainer.onwheel = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
@@ -111,14 +138,23 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     routeRenderer.render();
   };
 
-  layout.mapContainer.ontouchmove = (event) => {
-    const boundingRect = layout.mapContainer.getBoundingClientRect();
-    const touch = event.targetTouches[0];
-    const pixels = { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
+  layout.mapContainer.ontouchstart = (event) => {
+    startEditing(true);
+    proposeRouteEditPoint(
+      cameras.map, 
+      route,
+      transformTouchToPixels(event.targetTouches[0], layout.mapContainer),
+      (point) => route.findNearestEditableControlPointByMapMeters(point),
+      (point) => route.findNearestSegmentByMapMeters(point)
+    );
+  };
 
-    const touch2 = event.targetTouches[1];
-    if (touch2) {
-      const pixels2 = { x: touch2.clientX - boundingRect.x, y: touch2.clientY - boundingRect.y };
+  layout.mapContainer.ontouchmove = (event) => {
+    const touch = event.targetTouches[0];
+    const pixels = transformTouchToPixels(touch, layout.mapContainer);
+
+    if (event.targetTouches[1]) {
+      const pixels2 = transformTouchToPixels(event.targetTouches[1], layout.mapContainer);
       const pinchDistance = Math.sqrt(
         (pixels.x - pixels2.x) ** 2 +
         (pixels.y - pixels2.y) ** 2
@@ -147,15 +183,10 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     state.previousTouchOfDrag = touch;
   };
 
-  layout.mapContainer.ontouchcancel = () => {
-    state.previousTouchOfDrag = null;
-    state.previousPinchDistance = null;
-  };
+  layout.mapContainer.ontouchend = stopEditing;
+  layout.mapContainer.ontouchcancel = stopEditing;
 
-  layout.mapContainer.ontouchend = () =>  {
-    state.previousTouchOfDrag = null;
-    state.previousPinchDistance = null;
-  };
+  layout.mapContainer.onmousedown = () => startEditing(true);
 
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
@@ -163,41 +194,36 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     handleMapDrag(pixels, movementPixels, event.buttons === 1);
   };
 
-  layout.mapContainer.onmousedown = () => startEditing(true);
-
   layout.mapContainer.onmouseup = stopEditing;
 
-  layout.mapContainer.onclick = (event) => {
-    console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
-  }
-
-  layout.profile.onmousemove = (event) => {
-    const pixels = { x: event.offsetX, y: event.offsetY };
-    if (event.buttons === 1) {
-      handleRouteEditingOnProfile(cameras, route, pixels);
-    }
-    
-    cameras.magnifier.setByProfilePixels(pixels);
-
+  layout.profile.ontouchstart = (event) => {
+    startEditing(false);
     proposeRouteEditPoint(
       cameras.profile, 
       route,
-      pixels,
+      transformTouchToPixels(event.targetTouches[0], layout.profile),
       (point) => route.findNearestEditableControlPointByProfileMeters(point),
       (point) => route.findNearestSegmentByProfileMeters(point)
     );
+  }
 
-    routeRenderer.render();
-    notesRenderer.render();
+  layout.profile.ontouchmove = (event) => {
+    const pixels = transformTouchToPixels(event.targetTouches[0], layout.profile);
+    handleProfileDrag(pixels, true);
   };
+
+  layout.profile.ontouchend = stopEditing;
+  
+  layout.profile.ontouchcancel = stopEditing;
 
   layout.profile.onmousedown = () => startEditing(false);
 
-  layout.profile.onmouseup = stopEditing;
+  layout.profile.onmousemove = (event) => {
+    const pixels = { x: event.offsetX, y: event.offsetY };
+    handleProfileDrag(pixels, event.buttons === 1);
+  };
 
-  layout.profile.onclick = (event) => {
-    console.log(cameras.profile.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
-  }
+  layout.profile.onmouseup = stopEditing;
 
   ROUTE_TYPES.forEach(routeType => {
     addHighlightSelectorHandling(

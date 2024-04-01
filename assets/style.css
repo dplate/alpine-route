@@ -23,9 +23,9 @@ html, body {
   grid-template-areas:
     'magnifier map'
     'notes     map'
-    'profile   profile';
+    'notes     profile';
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 200px 1fr 200px;
+  grid-template-rows: 200px 1fr minmax(150px, 0.5fr);
   gap: 7px;
   background-color: burlywood;
 }

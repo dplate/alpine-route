@@ -139,9 +139,15 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     state.previousTouchOfDrag = touch;
   };
 
-  layout.mapContainer.ontouchcancel = () => state.previousTouchOfDrag = null;
+  layout.mapContainer.ontouchcancel = () => {
+    state.previousTouchOfDrag = null;
+    state.startPinchDistance = null;
+  };
 
-  layout.mapContainer.ontouchend = () => state.previousTouchOfDrag = null;
+  layout.mapContainer.ontouchend = () =>  {
+    state.previousTouchOfDrag = null;
+    state.startPinchDistance = null;
+  };
 
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };

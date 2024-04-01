@@ -123,10 +123,14 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
         (pixels.x - pixels2.x) ** 2 +
         (pixels.y - pixels2.y) ** 2
       );
+      const centerPixels = {
+        x: (pixels.x + pixels2.x) / 2.0,
+        y: (pixels.y + pixels2.y) / 2.0
+      };
       if (!state.previousPinchDistance) {
         state.previousPinchDistance = pinchDistance;
       }
-      cameras.map.zoomIn(pinchDistance / state.previousPinchDistance, pixels);
+      cameras.map.zoomIn(pinchDistance / state.previousPinchDistance, centerPixels);
 
       state.previousPinchDistance = pinchDistance;
       mapRenderer.render();

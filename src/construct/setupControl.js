@@ -89,20 +89,18 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   };
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
-    if (event.buttons === 1) {
-      if (!handleRouteEditingOnMap(cameras, route, pixels)) {
-        cameras.map.moveByPixels({ x: -event.movementX, y: -event.movementY });
-      }
-    }
     cameras.magnifier.setByMapPixels(pixels);
-
-    proposeRouteEditPoint(
-      cameras.map, 
-      route,
-      pixels,
-      (point) => route.findNearestEditableControlPointByMapMeters(point),
-      (point) => route.findNearestSegmentByMapMeters(point)
-    );
+    if (event.buttons === 1 && !handleRouteEditingOnMap(cameras, route, pixels)) {
+      cameras.map.moveByPixels({ x: -event.movementX, y: -event.movementY });
+    } else {
+      proposeRouteEditPoint(
+        cameras.map, 
+        route,
+        pixels,
+        (point) => route.findNearestEditableControlPointByMapMeters(point),
+        (point) => route.findNearestSegmentByMapMeters(point)
+      );
+    }
 
     cameras.update();
     mapRenderer.render();

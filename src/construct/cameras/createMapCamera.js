@@ -61,6 +61,10 @@ export default (layout, map) => {
     camera.updateCameras();
   };
 
+  camera.setScale = (scale) => {
+    camera.scale = scale;
+  };
+
   camera.isProfile = () => false;
 
   return camera;

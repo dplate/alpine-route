@@ -64,7 +64,9 @@ const addHighlightSelectorHandling = (cameras, routeRenderer, notesRenderer, ele
 
 export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
   const state = {
-    touchInterval: null
+    touchInterval: null,
+    previousTouchOfDrag: null,
+    startPinchDistance: null
   };
 
   const startEditing = (createOnGround) => {
@@ -81,17 +83,10 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     route.confirmEdit();
   };
 
-  layout.mapContainer.onwheel = (event) => {
-    const amount = event.deltaY / 90.0;
-    amount < 0 ? cameras.map.zoomIn(-amount) : cameras.map.zoomOut(amount);
-    mapRenderer.render();
-    routeRenderer.render();
-  };
-  layout.mapContainer.onmousemove = (event) => {
-    const pixels = { x: event.offsetX, y: event.offsetY };
+  const handleMapDrag = (pixels, movementPixels, touched) => {
     cameras.magnifier.setByMapPixels(pixels);
-    if (event.buttons === 1 && !handleRouteEditingOnMap(cameras, route, pixels)) {
-      cameras.map.moveByPixels({ x: -event.movementX, y: -event.movementY });
+    if (touched && !handleRouteEditingOnMap(cameras, route, pixels)) {
+      cameras.map.moveByPixels(movementPixels);
     } else {
       proposeRouteEditPoint(
         cameras.map, 
@@ -106,9 +101,54 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     mapRenderer.render();
     routeRenderer.render();
     notesRenderer.render();
+  }
+
+  layout.mapContainer.onwheel = (event) => {
+    const amount = event.deltaY / 90.0;
+    amount < 0 ? cameras.map.zoomIn(-amount) : cameras.map.zoomOut(amount);
+    mapRenderer.render();
+    routeRenderer.render();
   };
+
+  layout.mapContainer.ontouchmove = (event) => {
+    if (event.targetTouches.length === 2) {
+      const pinchDistance = Math.sqrt(
+        (event.targetTouches[0].clientX - event.targetTouches[1].clientX) ** 2 +
+        (event.targetTouches[0].clientY - event.targetTouches[1].clientY) ** 2
+      );
+      if (!state.startPinchDistance) {
+        state.startPinchDistance = pinchDistance;
+      }
+      cameras.map.setScale(pinchDistance / state.startPinchDistance);
+      return;
+    }
+
+    const touch = event.targetTouches[0];
+    const boundingRect = layout.mapContainer.getBoundingClientRect();
+
+    const pixels = { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
+    const movementPixels = state.previousTouchOfDrag ? 
+      { x: touch.clientX - state.previousTouchOfDrag.clientX, y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
+      { x: 0, y: 0 };
+    handleMapDrag(pixels, movementPixels, true)
+
+    state.previousTouchOfDrag = touch;
+  };
+
+  layout.mapContainer.ontouchcancel = () => state.previousTouchOfDrag = null;
+
+  layout.mapContainer.ontouchend = () => state.previousTouchOfDrag = null;
+
+  layout.mapContainer.onmousemove = (event) => {
+    const pixels = { x: event.offsetX, y: event.offsetY };
+    const movementPixels = { x: -event.movementX, y: -event.movementY };
+    handleMapDrag(pixels, movementPixels, event.buttons === 1);
+  };
+
   layout.mapContainer.onmousedown = () => startEditing(true);
+
   layout.mapContainer.onmouseup = stopEditing;
+
   layout.mapContainer.onclick = (event) => {
     console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
   }
@@ -134,6 +174,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   };
 
   layout.profile.onmousedown = () => startEditing(false);
+
   layout.profile.onmouseup = stopEditing;
 
   layout.profile.onclick = (event) => {

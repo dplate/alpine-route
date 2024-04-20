@@ -52,8 +52,8 @@ export default async (system, level) => {
   return {
     bitmap,
     resolutionInMeters,
-    getWidthInMeters: () => bitmap.width * resolutionInMeters,
-    getHeightInMeters: () => bitmap.height * resolutionInMeters,
+    widthInMeters: bitmap.width * resolutionInMeters,
+    heightInMeters: bitmap.height * resolutionInMeters,
     getHeightAtPoint,
     getSlopeAtPoint: (meters) => {
       const centerHeight = getHeightAtPoint(meters);

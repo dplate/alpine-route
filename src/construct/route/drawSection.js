@@ -1,7 +1,7 @@
 import { ROUTE_TYPE_BRIDGE, ROUTE_TYPE_TUNNEL } from './routeTypes.js';
 
 const maxJitterPixelDistance = 10;
-const detailPixelDistance = 3;
+const detailPixelDistance = 6;
 
 const calculateDistanceFromLine = (start, end, pixels) => {
   const diff = {

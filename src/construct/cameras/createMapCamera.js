@@ -17,8 +17,8 @@ export default (layout, map) => {
   });
 
   camera.normalizeMeters = (point) => ({
-    x: point.x / map.getWidthInMeters(),
-    y: point.y / map.getHeightInMeters()
+    x: point.x / map.widthInMeters,
+    y: point.y / map.heightInMeters
   });
 
   const transformNormalizedToPixels = (normalized) => ({
@@ -29,8 +29,8 @@ export default (layout, map) => {
   camera.transformPixelsToMeters = (pixels) => {
     const normalized = camera.normalizePixels(pixels);
     return {
-      x: normalized.x * map.getWidthInMeters(),
-      y: normalized.y * map.getHeightInMeters()
+      x: normalized.x * map.widthInMeters,
+      y: normalized.y * map.heightInMeters
     };
   };
 

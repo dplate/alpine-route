@@ -4,8 +4,8 @@ import createMapRenderer from './map/createMapRenderer.js';
 import createRoute from './route/createRoute.js';
 import createRouteRenderer from './route/createRouteRenderer.js';
 import loadMap from './map/loadMap.js';
-import setupControl from './setupControl.js';
 import createNotesRenderer from './notes/createNotesRenderer.js';
+import setupControl from './control/setupControl.js';
 
 export default async (system, level) => {
     const layout = createLayout(system);

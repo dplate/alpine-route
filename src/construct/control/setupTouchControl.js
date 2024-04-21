@@ -7,7 +7,7 @@ const transformTouchToPixels = (touch, canvas) => {
   return { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
 };
 
-export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
+export default (layout, cameras, route, renderer) => {
   const state = {
     touchInterval: null,
     previousTouchOfDrag: null,
@@ -18,7 +18,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     clearInterval(state.touchInterval);
     state.touchInterval = setInterval(() => {
       if (route.activateEdit(createOnGround)) {
-        routeRenderer.render();
+        renderer.route.render();
       }
     }, 20);
   };
@@ -28,8 +28,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     state.previousPinchDistance = null;
     clearInterval(state.touchInterval);
     route.confirmEdit();
-    mapRenderer.render();
-    routeRenderer.render();
+    renderer.renderAll();
     event.preventDefault();
   };
 
@@ -64,8 +63,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
       cameras.map.zoomIn(pinchDistance / state.previousPinchDistance, centerPixels);
 
       state.previousPinchDistance = pinchDistance;
-      mapRenderer.render();
-      routeRenderer.render();
+      renderer.renderAll();
       event.preventDefault();
       return;
     }
@@ -73,7 +71,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     const movementPixels = state.previousTouchOfDrag ? 
       { x: -(touch.clientX - state.previousTouchOfDrag.clientX), y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
       { x: 0, y: 0 };
-    handleMapDrag(cameras, route, mapRenderer, routeRenderer, notesRenderer, pixels, movementPixels, true)
+    handleMapDrag(cameras, route, renderer, pixels, movementPixels, true)
 
     state.previousTouchOfDrag = touch;
   };
@@ -94,7 +92,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
 
   layout.profile.ontouchmove = (event) => {
     const pixels = transformTouchToPixels(event.targetTouches[0], layout.profile);
-    handleProfileDrag(cameras, route, routeRenderer, notesRenderer, pixels, true);
+    handleProfileDrag(cameras, route, renderer, pixels, true);
   };
 
   layout.profile.ontouchend = stopEditing;

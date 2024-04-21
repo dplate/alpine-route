@@ -1,7 +1,7 @@
 import handleMapDrag from './handleMapDrag.js';
 import handleProfileDrag from './handleProfileDrag.js';
 
-export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
+export default (layout, cameras, route, renderer) => {
   const state = {
     touchInterval: null,
   };
@@ -10,7 +10,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     clearInterval(state.touchInterval);
     state.touchInterval = setInterval(() => {
       if (route.activateEdit(createOnGround)) {
-        routeRenderer.render();
+        renderer.route.render();
       }
     }, 20);
   };
@@ -18,8 +18,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   const stopEditing = (event) => {
     clearInterval(state.touchInterval);
     route.confirmEdit();
-    mapRenderer.render();
-    routeRenderer.render();
+    renderer.renderAll();
     event.preventDefault();
   };
 
@@ -27,8 +26,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
     const pixels = { x: event.offsetX, y: event.offsetY };
     const amount = event.deltaY / 90.0;
     amount < 0 ? cameras.map.zoomIn(-amount, pixels) : cameras.map.zoomOut(amount, pixels);
-    mapRenderer.render();
-    routeRenderer.render();
+    renderer.renderAll();
   };
 
   layout.mapContainer.onmousedown = () => startEditing(true);
@@ -36,7 +34,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     const movementPixels = { x: -event.movementX, y: -event.movementY };
-    handleMapDrag(cameras, route, mapRenderer, routeRenderer, notesRenderer, pixels, movementPixels, event.buttons === 1);
+    handleMapDrag(cameras, route, renderer, pixels, movementPixels, event.buttons === 1);
   };
 
   layout.mapContainer.onmouseup = stopEditing;
@@ -45,7 +43,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
 
   layout.profile.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
-    handleProfileDrag(cameras, route, routeRenderer, notesRenderer, pixels, event.buttons === 1);
+    handleProfileDrag(cameras, route, renderer, pixels, event.buttons === 1);
   };
 
   layout.profile.onmouseup = stopEditing;

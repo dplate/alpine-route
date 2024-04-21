@@ -1,7 +1,7 @@
 import handleRouteEditingOnProfile from './handleRouteEditingOnProfile.js';
 import proposeRouteEditPoint from './proposeRouteEditPoint.js';
 
-export default (cameras, route, routeRenderer, notesRenderer, pixels, touched) => {
+export default (cameras, route, renderer, pixels, touched) => {
   cameras.magnifier.setByProfilePixels(pixels);
   if (touched) {
     handleRouteEditingOnProfile(cameras, route, pixels);
@@ -15,6 +15,5 @@ export default (cameras, route, routeRenderer, notesRenderer, pixels, touched) =
     );
   }
 
-  routeRenderer.render();
-  notesRenderer.render();
+  renderer.renderAll();
 };

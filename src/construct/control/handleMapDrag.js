@@ -1,7 +1,7 @@
 import handleRouteEditingOnMap from './handleRouteEditingOnMap.js';
 import proposeRouteEditPoint from './proposeRouteEditPoint.js';
 
-export default (cameras, route, mapRenderer, routeRenderer, notesRenderer, pixels, movementPixels, touched) => {
+export default (cameras, route, renderer, pixels, movementPixels, touched) => {
   cameras.magnifier.setByMapPixels(pixels);
   if (touched && !handleRouteEditingOnMap(cameras, route, pixels)) {
     cameras.map.moveByPixels(movementPixels);
@@ -16,7 +16,5 @@ export default (cameras, route, mapRenderer, routeRenderer, notesRenderer, pixel
     );
   }
 
-  mapRenderer.render();
-  routeRenderer.render();
-  notesRenderer.render();
+  renderer.renderAll();
 };

@@ -1,6 +1,6 @@
 import { COSTS_HIGHLIGHTS, LIMIT_HIGHLIGHTS } from '../cameras/highlightTypes.js';
 
-export default (cameras, routeRenderer, notesRenderer, elements, highlightType) => {
+export default (cameras, renderer, elements, highlightType) => {
   [ elements.label, elements.value, elements.selector ].forEach(element => {
     element.onclick = () => {
       if (cameras.highlights.has(highlightType)) {
@@ -12,8 +12,7 @@ export default (cameras, routeRenderer, notesRenderer, elements, highlightType) 
         }
         cameras.highlights.add(highlightType);
       }
-      routeRenderer.render();
-      notesRenderer.render();
+      renderer.renderAll();
     };
   })
 };

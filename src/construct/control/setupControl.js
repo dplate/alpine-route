@@ -4,15 +4,14 @@ import addHighlightSelectorHandling from './addHighlightSelectorHandling.js';
 import setupMouseControl from './setupMouseControl.js';
 import setupTouchControl from './setupTouchControl.js';
 
-export default (layout, cameras, route, mapRenderer, routeRenderer, notesRenderer) => {
-  setupMouseControl(layout, cameras, route, mapRenderer, routeRenderer, notesRenderer);
-  setupTouchControl(layout, cameras, route, mapRenderer, routeRenderer, notesRenderer);
+export default (layout, cameras, route, renderer) => {
+  setupMouseControl(layout, cameras, route, renderer);
+  setupTouchControl(layout, cameras, route, renderer);
 
   ROUTE_TYPES.forEach(routeType => {
     addHighlightSelectorHandling(
       cameras, 
-      routeRenderer, 
-      notesRenderer,
+      renderer,
       layout.routeTypeCosts[routeType], 
       ROUTE_TYPES_TO_HIGHLIGHTS[routeType]
     );
@@ -20,8 +19,7 @@ export default (layout, cameras, route, mapRenderer, routeRenderer, notesRendere
   LIMIT_TYPES.forEach(limitType => {
     addHighlightSelectorHandling(
       cameras, 
-      routeRenderer, 
-      notesRenderer,
+      renderer,
       layout.limits[limitType], 
       LIMIT_TYPES_TO_HIGHLIGHTS[limitType]
     );

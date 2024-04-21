@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   cursor: pointer;
   margin: 0;
@@ -25,6 +29,7 @@ html, body {
   grid-template-rows: 200px 1fr minmax(150px, 0.5fr);
   gap: 7px;
   background-color: burlywood;
+  padding: 3px;
 }
 
 #magnifierContainer {
@@ -58,7 +63,6 @@ html, body {
 
 #notes {
   grid-area: notes;
-  background-color: rgb(250, 255, 245);
   width: 100%;
   height: 100%;
   font-family: notesFont;
@@ -70,6 +74,7 @@ html, body {
   display: grid;
   margin: 10px;
   grid-template-columns: auto 55% 15px;
+  filter: none;
 }
 
 .value {
@@ -94,7 +99,13 @@ html, body {
 
 #profile {
   grid-area: profile;
-  background-color:rgb(250, 255, 245);
   width: 100%;
   height: 100%;
+}
+
+#notes, #profile, #magnifierContainer, #mapContainer {
+  border: 7px solid black;
+  border-image: url("./torn.webp");
+  border-image-slice: 5.5% fill;
+  border-image-repeat: repeat;
 }

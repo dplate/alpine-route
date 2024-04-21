@@ -63,6 +63,7 @@ export default (layout, mapCamera, profileCamera) => {
     magnifierCamera.map.normalizedCenter.x = normalized.x;
     magnifierCamera.map.normalizedCenter.y = normalized.y;
     magnifierCamera.active = magnifierCamera.map;
+    layout.magnifier.style.opacity = 1;
     magnifierCamera.update();
   };
 
@@ -71,6 +72,7 @@ export default (layout, mapCamera, profileCamera) => {
     magnifierCamera.profile.normalizedCenter.flatMeter = normalized.flatMeter;
     magnifierCamera.profile.normalizedCenter.z = normalized.z;
     magnifierCamera.active = magnifierCamera.profile;
+    layout.magnifier.style.opacity = 0;
   };
 
   return magnifierCamera;

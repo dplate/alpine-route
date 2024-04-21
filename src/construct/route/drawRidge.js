@@ -35,9 +35,6 @@ const drawContourLines = (context, renderCamera, profileCamera) => {
 };
 
 export default (context, route, renderTarget, profileCamera) => {
-  context.fillStyle = 'rgb(250, 255, 245)';
-  context.fillRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
-
   const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ flatMeter: segment.flatMeter, z: segment.mapHeight });
   const startPixels = transformToPixels(route.segments[0]);
   

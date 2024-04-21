@@ -1,3 +1,5 @@
+import maps from './maps.js';
+
 const resolutionInMeters = 2;
 const slopeDistanceInMeters = 5;
 
@@ -68,6 +70,7 @@ export default async (system, level) => {
         maxSlope = Math.max(slope, maxSlope);
       }
       return maxSlope;
-    }
+    },
+    ...maps[level.map]
   };
 }

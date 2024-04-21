@@ -1,5 +1,20 @@
 import createText from './createText.js';
 
+const loadFont = async (window, name, fileName) => {
+  return new Promise((resolve) => {
+    const labelFont = new FontFace(name, `url(assets/${fileName})`);
+    labelFont.load().then((font) => {
+      window.document.fonts.add(font);
+      resolve();
+    });
+  });
+}
+
+const loadFonts = async (window) => {
+  await loadFont(window, 'notesFont', 'CaveatBrush-Regular.ttf');
+  await loadFont(window, 'mapFont', 'UnifrakturCook-Bold.ttf');
+};
+
 export default async (window, language) => {
   const adapter = await window.navigator.gpu?.requestAdapter();
   const gpuDevice = await adapter?.requestDevice();
@@ -7,6 +22,7 @@ export default async (window, language) => {
     console.error('WebGPU not supported');
     return null;;
   }
+  await loadFonts(window);
 
   return {
     window,

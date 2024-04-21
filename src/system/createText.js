@@ -24,8 +24,9 @@ const texts = {
 };
 
 export default (language) => {
+  const currencyFormatter = new Intl.NumberFormat(language, { maximumFractionDigits: 0 });
   return {
     get: (textId) => texts[language][textId] || texts['en'][textId],
-    formatCurrency: (new Intl.NumberFormat(language, { maximumFractionDigits: 0 })).format,
+    formatCurrency: (amount) => `${currencyFormatter.format(amount)} ₣`,
   };
 };

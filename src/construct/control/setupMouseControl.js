@@ -29,7 +29,10 @@ export default (layout, cameras, route, renderer) => {
     renderer.renderAll();
   };
 
-  layout.mapContainer.onmousedown = () => startEditing(true);
+  layout.mapContainer.onmousedown = (event) => {
+    console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
+    startEditing(true);
+  }
 
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };

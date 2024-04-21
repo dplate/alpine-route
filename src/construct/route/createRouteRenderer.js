@@ -60,7 +60,7 @@ const drawEditPoints = (context, route, renderTarget) => {
   });
 };
 
-export default (system, level, layout, cameras, route) => {
+export default (system, level, layout, cameras, route, labelRenderer) => {
   const renderTargets = [
     {
       canvas: layout.mapRoute,
@@ -83,6 +83,8 @@ export default (system, level, layout, cameras, route) => {
   
       if (renderTarget.camera.isProfile()) {
         drawRidge(context, route, renderTarget, cameras.profile);
+      } else {
+        labelRenderer.render(context, renderTarget);
       }
       drawControlPoints(context, route, renderTarget);
       drawEditPoints(context, route, renderTarget);

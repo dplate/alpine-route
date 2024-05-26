@@ -29,6 +29,7 @@ html, body {
   grid-template-rows: 200px 1fr minmax(150px, 0.5fr);
   gap: 7px;
   background-color: burlywood;
+  background-image: url("./wood.webp");
   padding: 3px;
 }
 
@@ -54,7 +55,7 @@ html, body {
 }
 
 #magnifierBorder, #mapBorder {
-  box-shadow: inset 0px 0px 8px 4px #E3E5DB;
+  box-shadow: inset 0px 0px 5px 5px #E3E5DB;
 }
 
 #magnifierRoute, #mapRoute, #magnifierBorder, #mapBorder {

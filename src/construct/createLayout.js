@@ -17,6 +17,10 @@ export default (system) => {
   magnifierRoute.id = 'magnifierRoute';
   magnifierContainer.appendChild(magnifierRoute);
 
+  const magnifierBorder = document.createElement('div');
+  magnifierBorder.id = 'magnifierBorder';
+  magnifierContainer.appendChild(magnifierBorder);
+
   desk.appendChild(magnifierContainer);
 
   const mapContainer = document.createElement('div');
@@ -29,6 +33,10 @@ export default (system) => {
   const mapRoute = document.createElement('canvas');
   mapRoute.id = 'mapRoute';
   mapContainer.appendChild(mapRoute);
+
+  const mapBorder = document.createElement('div');
+  mapBorder.id = 'mapBorder';
+  mapContainer.appendChild(mapBorder);
 
   desk.appendChild(mapContainer);
   

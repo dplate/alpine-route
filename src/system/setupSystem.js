@@ -20,7 +20,7 @@ export default async (window, language) => {
   const gpuDevice = await adapter?.requestDevice();
   if (!gpuDevice) {
     console.error('WebGPU not supported');
-    return null;;
+    return null;
   }
   await loadFonts(window);
 

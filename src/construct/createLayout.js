@@ -5,23 +5,6 @@ import { ROUTE_TYPES } from './route/routeTypes.js';
 export default (system) => {
   const desk = document.createElement('desk');
   desk.id = 'desk';
-  
-  const magnifierContainer = document.createElement('div');
-  magnifierContainer.id = 'magnifierContainer';
-
-  const magnifier = document.createElement('canvas');
-  magnifier.id = 'magnifier';
-  magnifierContainer.appendChild(magnifier);
-
-  const magnifierRoute = document.createElement('canvas');
-  magnifierRoute.id = 'magnifierRoute';
-  magnifierContainer.appendChild(magnifierRoute);
-
-  const magnifierBorder = document.createElement('div');
-  magnifierBorder.id = 'magnifierBorder';
-  magnifierContainer.appendChild(magnifierBorder);
-
-  desk.appendChild(magnifierContainer);
 
   const mapContainer = document.createElement('div');
   mapContainer.id = 'mapContainer';
@@ -103,6 +86,23 @@ export default (system) => {
   desk.appendChild(profile);
 
   system.window.document.body.appendChild(desk);
+
+  const magnifierContainer = document.createElement('div');
+  magnifierContainer.id = 'magnifierContainer';
+
+  const magnifier = document.createElement('canvas');
+  magnifier.id = 'magnifier';
+  magnifierContainer.appendChild(magnifier);
+
+  const magnifierRoute = document.createElement('canvas');
+  magnifierRoute.id = 'magnifierRoute';
+  magnifierContainer.appendChild(magnifierRoute);
+
+  const magnifierBorder = document.createElement('div');
+  magnifierBorder.id = 'magnifierBorder';
+  magnifierContainer.appendChild(magnifierBorder);
+
+  system.window.document.body.appendChild(magnifierContainer);
 
   return {
     desk,

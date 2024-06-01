@@ -17,8 +17,6 @@ html, body {
 }
 
 button {
-  user-select: none;
-  box-sizing: border-box;
   border: 1px solid transparent;
   width: 100%;
   padding: 10px 16px 12px;
@@ -27,7 +25,6 @@ button {
   box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
   cursor: pointer;
   color: #fff;
-  background-color: #8bbabb;
   border-radius: 40px;
   filter: brightness(110%);
 }
@@ -42,30 +39,47 @@ button:hover {
   width: 100%;
   height: 100%;
   grid-template-areas:
-    'magnifier map'
     'notes     map'
     'notes     profile';
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 200px 1fr minmax(150px, 0.5fr);
+  grid-template-rows: 1fr minmax(150px, 0.5fr);
   gap: 7px;
   background-image: url("./wood.webp");
   padding: 5px;
 }
 
 #magnifierContainer {
-  grid-area: magnifier;
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  right: 25px;
+  bottom: 25px;
+  background-color: #e5e7dd;
+}
+
+#magnifierBorder {
+  position: absolute;
+  width: 174%;
+  height: 174%;
+  top: 0;
+  left: -3px;
+  background-image: url('magnifier.svg');
+  background-size: cover;
+  background-position: left top;
+  transform: scaleX(-1);
+}
+
+#magnifierContainer, #magnifier, #magnifierRoute {
+  border-radius: 100%;
 }
 
 #mapContainer {
   grid-area: map;
-  cursor: pointer;
-}
-
-#magnifierContainer, #mapContainer {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  cursor: pointer;
 }
 
 #magnifier, #map {
@@ -74,11 +88,11 @@ button:hover {
   overflow: hidden;
 }
 
-#magnifierBorder, #mapBorder {
+#mapBorder {
   box-shadow: inset 0px 0px 5px 5px #E3E5DB;
 }
 
-#magnifierRoute, #mapRoute, #magnifierBorder, #mapBorder {
+#magnifierRoute, #mapRoute, #mapBorder {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -137,7 +151,7 @@ button:hover {
   height: 100%;
 }
 
-#notes, #profile, #magnifierContainer, #mapContainer {
+#notes, #profile, #mapContainer {
   border: 5px solid black;
   border-image: url("./torn.webp");
   border-image-slice: 5.5% fill;

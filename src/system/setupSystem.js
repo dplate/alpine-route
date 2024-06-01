@@ -13,6 +13,7 @@ const loadFont = async (window, name, fileName) => {
 const loadFonts = async (window) => {
   await loadFont(window, 'notesFont', 'CaveatBrush-Regular.ttf');
   await loadFont(window, 'mapFont', 'UnifrakturCook-Bold.ttf');
+  await loadFont(window, 'buttonFont', 'Smythe-Regular.ttf');
 };
 
 export default async (window, language) => {

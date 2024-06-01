@@ -3,7 +3,7 @@ import levels from './levels.js';
 import setupSystem from './system/setupSystem.js';
 
 async function main() {
-  const system = await setupSystem(window, 'en');
+  const system = await setupSystem(window, 'de');
   if (!system) {
     return;
   }

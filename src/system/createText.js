@@ -8,7 +8,9 @@ const texts = {
     MIN_RADIUS_LIMIT_LABEL: 'Radius',
     MAX_GRADIENT_LIMIT_LABEL: 'Steigung',
     MAX_VARIANCE_LIMIT_LABEL: 'Varianz',
-    MIN_GAP_LIMIT_LABEL: 'Abstand'
+    MIN_GAP_LIMIT_LABEL: 'Abstand',
+    END_BUTTON_FINISH: 'Planung beenden',
+    END_BUTTON_SUSPEND: 'Planung unterbrechen'
   },
   en: {
     BUDGET_LABEL: 'Budget',
@@ -19,7 +21,9 @@ const texts = {
     MIN_RADIUS_LIMIT_LABEL: 'Radius',
     MAX_GRADIENT_LIMIT_LABEL: 'Gradient',
     MAX_VARIANCE_LIMIT_LABEL: 'Variance',
-    MIN_GAP_LIMIT_LABEL: 'Gap'
+    MIN_GAP_LIMIT_LABEL: 'Gap',
+    END_BUTTON_FINISH: 'Finish planning',
+    END_BUTTON_SUSPEND: 'Suspend planning'
   }
 };
 

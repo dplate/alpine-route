@@ -1,6 +1,9 @@
 import { LIMIT_TYPES, LIMIT_TYPES_TO_HIGHLIGHTS, LIMIT_TYPES_TO_LABEL, LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS, LIMIT_TYPE_MIN_GAP } from '../route/limitTypes.js';
 import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES_TO_COSTS_LABEL } from '../route/routeTypes.js';
 
+const successColor = '#5bb798';
+const failColor = '#e66d3d';
+
 export default (system, level, layout, cameras, route) => {
   layout.budget.label.textContent = system.text.get('BUDGET_LABEL');
   ROUTE_TYPES.forEach(routeType => {
@@ -38,13 +41,26 @@ export default (system, level, layout, cameras, route) => {
       layout.routeTypeCosts[routeType].selector.style.opacity = getSelectorOpacity(ROUTE_TYPES_TO_HIGHLIGHTS[routeType]);
     });
     layout.balance.value.textContent = system.text.formatCurrency(level.budget - route.costs.total.sum);
-    layout.balance.value.style.color = level.budget >= route.costs.total.sum ? 'rgba(0, 150, 0, 1.0)' : 'rgba(255, 0, 0, 1.0)';
+    const inBudget = level.budget >= route.costs.total.sum;
+    layout.balance.value.style.color = inBudget ? successColor : failColor;
 
+    let limitsValid = true;
     LIMIT_TYPES.forEach(limitType => {
       layout.limits[limitType].value.textContent = formatLimitValue(limitType);
-      layout.limits[limitType].value.style.color = route.limits[limitType].valid ? 'rgba(0, 150, 0, 1.0)' : 'rgba(255, 0, 0, 1.0)';
+      const valid = route.limits[limitType].valid;
+      layout.limits[limitType].value.style.color = valid ? successColor : failColor;
       layout.limits[limitType].selector.style.opacity = getSelectorOpacity(LIMIT_TYPES_TO_HIGHLIGHTS[limitType]);
+      limitsValid = limitsValid && valid;
     });
+
+    if (inBudget && limitsValid) {
+      layout.endButton.style.backgroundColor = successColor;
+      layout.endButton.textContent = system.text.get('END_BUTTON_FINISH');
+    } else {
+      layout.endButton.style.backgroundColor = failColor;
+      layout.endButton.textContent = system.text.get('END_BUTTON_SUSPEND');
+    }
+    
   };
 
   return {

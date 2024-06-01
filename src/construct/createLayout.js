@@ -39,10 +39,14 @@ export default (system) => {
   mapContainer.appendChild(mapBorder);
 
   desk.appendChild(mapContainer);
+
+  const notesContainer = document.createElement('div');
+  notesContainer.id = 'notesContainer';
+  desk.appendChild(notesContainer);
   
   const notes = document.createElement('div');
   notes.id = 'notes';
-  desk.appendChild(notes);
+  notesContainer.appendChild(notes);
 
   const createNoteElements = (container, type, withSelector = true) => {
     const label = document.createElement('div');
@@ -89,6 +93,10 @@ export default (system) => {
     (limits, limitType) => ({ ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`) }),
     {}
   );
+
+  const endButton = document.createElement('button');
+  endButton.id = 'endButton';
+  notes.appendChild(endButton);
  
   const profile = document.createElement('canvas');
   profile.id = 'profile';
@@ -108,6 +116,7 @@ export default (system) => {
     routeTypeCosts,
     balance,
     limits,
+    endButton,
     profile
   };
 };

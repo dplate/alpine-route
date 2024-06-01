@@ -10,14 +10,15 @@ export default (camera, route, pixels, findNearestEditableControlPoint, findNear
     const nearestControlPixels = camera.transformMetersToPixels(nearestControlPoint);
     if (calculateMapDistance(pixels, nearestControlPixels) < controlPointSnapDistance) {
       route.createEditByControlPoint(nearestControlPoint);
-      return;
+      return nearestControlPixels;
     }
   }
   const nearestSegment = findNearestSegment(point);
   const nearestSegmentPixels = camera.transformMetersToPixels(nearestSegment);
   if (calculateMapDistance(pixels, nearestSegmentPixels) < segmentSnapDistance) {
     route.createEditBySegment(nearestSegment);
-  } else {
-    route.abortEdit();
+    return nearestSegmentPixels;
   }
+  route.abortEdit();
+  return null;  
 };

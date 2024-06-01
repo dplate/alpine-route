@@ -20,7 +20,7 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [X] Make height profile editable by adding, moving and removing control points
 - [X] Add magnified view to make touch usage easier by showing map under the finger bigger
 - [X] Calculate costs of route
-- [ ] Validate route (not breaking steepness, tunnel length, bridge length limits and enough money left)
+- [X] Validate route (not breaking steepness, tunnel length, bridge length limits and enough money left)
 - [ ] Add scalable interface which includes map, profile, magnifier, costs and menu
 - [ ] Level selection (including description and money)
 - [ ] Create levels

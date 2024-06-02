@@ -56,13 +56,21 @@ export default (layout, mapCamera, profileCamera) => {
 
   magnifierCamera.transformMetersToPixels = (point) => magnifierCamera.active.transformMetersToPixels(point);
 
-  magnifierCamera.isProfile = () => magnifierCamera.active.isProfile();
+  magnifierCamera.isProfile = () => magnifierCamera.active?.isProfile();
+
+  magnifierCamera.isDisabled = () => !magnifierCamera.active;
+
+  magnifierCamera.disable = () => {
+    layout.magnifierContainer.style.display = 'none';
+    magnifierCamera.active = null;
+  }
 
   magnifierCamera.setByMapPixels = (pixels) => {
     const normalized = mapCamera.normalizePixels(pixels);
     magnifierCamera.map.normalizedCenter.x = normalized.x;
     magnifierCamera.map.normalizedCenter.y = normalized.y;
     magnifierCamera.active = magnifierCamera.map;
+    layout.magnifierContainer.style.display = 'block';
     layout.magnifier.style.opacity = 1;
     magnifierCamera.update();
   };
@@ -72,6 +80,7 @@ export default (layout, mapCamera, profileCamera) => {
     magnifierCamera.profile.normalizedCenter.flatMeter = normalized.flatMeter;
     magnifierCamera.profile.normalizedCenter.z = normalized.z;
     magnifierCamera.active = magnifierCamera.profile;
+    layout.magnifierContainer.style.display = 'block';
     layout.magnifier.style.opacity = 0;
   };
 

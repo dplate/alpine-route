@@ -66,6 +66,7 @@ export default (layout, map) => {
   };
 
   camera.isProfile = () => false;
+  camera.isDisabled = () => false;
 
   return camera;
 };

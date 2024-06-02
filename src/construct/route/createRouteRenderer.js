@@ -78,6 +78,9 @@ export default (system, level, layout, cameras, route, labelRenderer) => {
 
   const render = () => {
     renderTargets.forEach(renderTarget => {
+      if (renderTarget.camera.isDisabled()) {
+        return;
+      }
       const context = renderTarget.canvas.getContext('2d');
       context.clearRect(0, 0, renderTarget.canvas.width, renderTarget.canvas.height);
   

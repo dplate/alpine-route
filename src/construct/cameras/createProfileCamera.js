@@ -68,6 +68,7 @@ export default (layout, route, mapCamera) => {
   };
 
   camera.isProfile = () => true;
+  camera.isDisabled = () => false;
 
   return camera;
 }

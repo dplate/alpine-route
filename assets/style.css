@@ -52,8 +52,8 @@ button:hover {
   position: fixed;
   width: 200px;
   height: 200px;
-  right: 25px;
-  bottom: 25px;
+  right: 20px;
+  bottom: calc(50vh - 100px);
   background-color: #e5e7dd;
 }
 
@@ -67,6 +67,20 @@ button:hover {
   background-size: cover;
   background-position: left top;
   transform: scaleX(-1);
+}
+
+@media screen and (min-height: 500px) {
+  #magnifierContainer {
+    right: auto;
+    left: 20px;
+    bottom: 20px;
+  }
+  #magnifierBorder {
+    left: auto;
+    right: -3px;
+    background-position: right top;
+    transform: none;
+  }
 }
 
 #magnifierContainer, #magnifier, #magnifierRoute {

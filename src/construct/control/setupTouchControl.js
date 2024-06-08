@@ -27,6 +27,7 @@ export default (layout, cameras, route, renderer) => {
     state.previousTouchOfDrag = null;
     state.previousPinchDistance = null;
     clearInterval(state.touchInterval);
+    cameras.magnifier.disable();
     route.confirmEdit();
     renderer.renderAll();
     event.preventDefault();
@@ -34,13 +35,9 @@ export default (layout, cameras, route, renderer) => {
 
   layout.mapContainer.ontouchstart = (event) => {
     startEditing(true);
-    proposeRouteEditPoint(
-      cameras.map, 
-      route,
-      transformTouchToPixels(event.targetTouches[0], layout.mapContainer),
-      (point) => route.findNearestEditableControlPointByMapMeters(point),
-      (point) => route.findNearestSegmentByMapMeters(point)
-    );
+    const touch = event.targetTouches[0];
+    const pixels = transformTouchToPixels(touch, layout.mapContainer);
+    handleMapDrag(cameras, route, renderer, pixels, { x: 0, y: 0 }, false)
   };
 
   layout.mapContainer.ontouchmove = (event) => {
@@ -81,13 +78,8 @@ export default (layout, cameras, route, renderer) => {
 
   layout.profile.ontouchstart = (event) => {
     startEditing(false);
-    proposeRouteEditPoint(
-      cameras.profile, 
-      route,
-      transformTouchToPixels(event.targetTouches[0], layout.profile),
-      (point) => route.findNearestEditableControlPointByProfileMeters(point),
-      (point) => route.findNearestSegmentByProfileMeters(point)
-    );
+    const pixels = transformTouchToPixels(event.targetTouches[0], layout.profile);
+    handleProfileDrag(cameras, route, renderer, pixels, false);
   }
 
   layout.profile.ontouchmove = (event) => {

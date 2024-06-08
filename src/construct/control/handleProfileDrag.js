@@ -2,8 +2,7 @@ import handleRouteEditingOnProfile from './handleRouteEditingOnProfile.js';
 import proposeRouteEditPoint from './proposeRouteEditPoint.js';
 
 export default (cameras, route, renderer, pixels, touched) => {
-  if (touched) {
-    handleRouteEditingOnProfile(cameras, route, pixels);
+  if (touched && !handleRouteEditingOnProfile(cameras, route, pixels)) {
     cameras.magnifier.disable();
   } else {
     const editPointPixels = proposeRouteEditPoint(

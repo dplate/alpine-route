@@ -174,6 +174,7 @@ export default (level, map) => {
       route.edit.controlPoint.onGround = false;
     }
     route.updateSegments();
+    return route.edit.controlPoint;
   };
 
   route.markEditAsDeletable = (deletable) => {

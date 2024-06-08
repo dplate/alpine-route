@@ -6,6 +6,9 @@ export default (system) => {
   const desk = document.createElement('desk');
   desk.id = 'desk';
 
+  const mapAndProfileContainer = document.createElement('div');
+  mapAndProfileContainer.id = 'mapAndProfileContainer';
+
   const mapContainer = document.createElement('div');
   mapContainer.id = 'mapContainer';
 
@@ -21,7 +24,7 @@ export default (system) => {
   mapBorder.id = 'mapBorder';
   mapContainer.appendChild(mapBorder);
 
-  desk.appendChild(mapContainer);
+  mapAndProfileContainer.appendChild(mapContainer);
 
   const notesContainer = document.createElement('div');
   notesContainer.id = 'notesContainer';
@@ -83,7 +86,9 @@ export default (system) => {
  
   const profile = document.createElement('canvas');
   profile.id = 'profile';
-  desk.appendChild(profile);
+  mapAndProfileContainer.appendChild(profile);
+
+  desk.appendChild(mapAndProfileContainer);
 
   system.window.document.body.appendChild(desk);
 
@@ -104,6 +109,14 @@ export default (system) => {
 
   system.window.document.body.appendChild(magnifierContainer);
 
+  const profileToggle = document.createElement('div'); 
+  profileToggle.id = 'profileToggle';
+  system.window.document.body.appendChild(profileToggle);
+
+  const notesToggle = document.createElement('div'); 
+  notesToggle.id = 'notesToggle';
+  system.window.document.body.appendChild(notesToggle);
+
   return {
     desk,
     magnifierContainer,
@@ -117,6 +130,9 @@ export default (system) => {
     balance,
     limits,
     endButton,
-    profile
+    profile,
+    profileToggle,
+    notesContainer,
+    notesToggle
   };
 };

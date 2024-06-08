@@ -24,4 +24,19 @@ export default (layout, cameras, route, renderer) => {
       LIMIT_TYPES_TO_HIGHLIGHTS[limitType]
     );
   });
+
+  layout.profileToggle.onclick = () => {
+    if (layout.profile.classList.toggle("toggled")) {
+      layout.notesToggle.style.display = 'none';
+    } else {
+      layout.notesToggle.style.removeProperty('display');
+    }
+  };
+  layout.notesToggle.onclick = () => {
+    if (layout.notesContainer.classList.toggle("toggled")) {
+      layout.profileToggle.style.display = 'none';
+    } else {
+      layout.profileToggle.style.removeProperty('display');
+    }
+  };
 };

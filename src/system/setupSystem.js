@@ -34,8 +34,8 @@ export default async (window, language) => {
           const canvas = entry.target;
           const width = entry.contentBoxSize[0].inlineSize;
           const height = entry.contentBoxSize[0].blockSize;
-          canvas.width = Math.max(1, Math.min(width, gpuDevice.limits.maxTextureDimension2D));
-          canvas.height = Math.max(1, Math.min(height, gpuDevice.limits.maxTextureDimension2D));
+          canvas.width = Math.min(width, gpuDevice.limits.maxTextureDimension2D);
+          canvas.height = Math.min(height, gpuDevice.limits.maxTextureDimension2D);
         }
         onResize();
       });

@@ -126,8 +126,10 @@ export default (system, layout, cameras, map) => {
     const encoder = system.gpuDevice.createCommandEncoder({ label: 'map command encoder' });
 
     renderTargets.forEach(renderTarget => {
-      if (renderTarget.camera === cameras.magnifier.map && 
-          (cameras.magnifier.isDisabled() || cameras.magnifier.isProfile())) {
+      if (!renderTarget.canvas.width || !renderTarget.canvas.height || 
+        renderTarget.camera.isDisabled() ||
+        renderTarget.camera.isProfile()
+      ) {
         return;
       }
       copyCameraToGpu(system, renderTarget);

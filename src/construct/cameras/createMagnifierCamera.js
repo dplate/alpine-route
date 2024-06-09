@@ -59,12 +59,14 @@ export default (layout, mapCamera, profileCamera) => {
   magnifierCamera.isProfile = () => magnifierCamera.active?.isProfile();
 
   magnifierCamera.isDisabled = () => !magnifierCamera.active;
+  magnifierCamera.map.isDisabled = magnifierCamera.isDisabled;
+  magnifierCamera.profile.isDisabled = magnifierCamera.isDisabled;
 
   magnifierCamera.disable = () => {
     layout.magnifierContainer.style.display = 'none';
     magnifierCamera.active = null;
   }
-
+  
   magnifierCamera.setByMapPixels = (pixels) => {
     const normalized = mapCamera.normalizePixels(pixels);
     magnifierCamera.map.normalizedCenter.x = normalized.x;

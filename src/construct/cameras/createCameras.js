@@ -4,7 +4,7 @@ import createProfileCamera from './createProfileCamera.js';
 import {LIMIT_HIGHLIGHTS} from './highlightTypes.js';
 
 export default (layout, map, route) => {
-  const mapCamera = createMapCamera(layout, map);
+  const mapCamera = createMapCamera(layout, route, map);
   const profileCamera = createProfileCamera(layout, route, mapCamera);
   const magnifierCamera = createMagnifierCamera(layout, mapCamera, profileCamera);
   

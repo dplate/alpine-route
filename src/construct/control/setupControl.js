@@ -3,6 +3,7 @@ import { ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES } from '../route/routeTypes.js';
 import addHighlightSelectorHandling from './addHighlightSelectorHandling.js';
 import setupMouseControl from './setupMouseControl.js';
 import setupTouchControl from './setupTouchControl.js';
+import handleMapDrag from './handleMapDrag.js';
 
 export default (layout, cameras, route, renderer) => {
   setupMouseControl(layout, cameras, route, renderer);
@@ -39,4 +40,6 @@ export default (layout, cameras, route, renderer) => {
       layout.profileToggle.style.removeProperty('display');
     }
   };
+
+  handleMapDrag(cameras, route, renderer, { x: 0, y: 0 }, { x: 0, y: 0 }, false);
 };

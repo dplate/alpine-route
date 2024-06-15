@@ -31,15 +31,28 @@ const sortPointsByProfileDistance = (points, point) => {
   );
 };
 
-export default (level, map) => {
-  const route = {
+const loadRoute = (system, level) => {
+  const rawControlPoints = system.persistence.loadRoute(level) || [];
+  const editableControlPoints = rawControlPoints.map(([x, y, z]) => createControlPoint({x, y, z}, z === null));
+  return {
     controlPoints: [
       createControlPoint(level.start, true, false),
+      ...editableControlPoints,
       createControlPoint(level.end, true, false)
     ],
     segments: [],
     edit: null,
   };
+};
+
+const saveRoute = (system, level, route) => {
+  const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
+  const rawControlPoints = editableControlPoints.map(({ x, y, z, onGround }) => [x, y, onGround ? null : z]);
+  system.persistence.saveRoute(level, rawControlPoints);
+};
+
+export default (system, level, map) => {
+  const route = loadRoute(system, level);
 
   route.updateSegments = () => {
     route.segments = [];
@@ -48,6 +61,9 @@ export default (level, map) => {
       if (controlPoint.onGround) {
         controlPoint.z = controlPoint.mapHeight;
       }
+      controlPoint.x = Math.round(controlPoint.x * 10) / 10;
+      controlPoint.y = Math.round(controlPoint.y * 10) / 10;
+      controlPoint.z = Math.round(controlPoint.z * 10) / 10;
     });
     const spline = createSpline(route.controlPoints);
     for (let meter = 0; meter <= spline.length; meter += Math.max(0.1, Math.min(segmentDistance, spline.length - meter))) {
@@ -191,6 +207,7 @@ export default (level, map) => {
       route.updateSegments();
     }
     route.edit = null;
+    saveRoute(system, level, route);
   };
 
   route.abortEdit = () => {

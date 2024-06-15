@@ -8,7 +8,7 @@ import createRenderer from './createRenderer.js';
 export default async (system, level) => {
   const layout = createLayout(system);
   const map = await loadMap(system, level);
-  const route = createRoute(level, map);
+  const route = createRoute(system, level, map);
   const cameras = createCameras(layout, map, route);
   const renderer = createRenderer(system, level, layout, cameras, map, route);
   setupControl(layout, cameras, route, renderer);

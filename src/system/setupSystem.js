@@ -1,3 +1,4 @@
+import createPersistence from './createPersistence.js';
 import createText from './createText.js';
 
 const loadFont = async (window, name, fileName) => {
@@ -41,6 +42,7 @@ export default async (window, language) => {
       });
       canvases.forEach(canvas => observer.observe(canvas));
     },
-    text: createText(language)
+    text: createText(language),
+    persistence: createPersistence(window)
   };
 };

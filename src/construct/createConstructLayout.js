@@ -3,6 +3,10 @@ import { ROUTE_TYPES } from './route/routeTypes.js';
 
 
 export default (system) => {
+  const document = system.window.document;
+
+  document.body.innerHTML = '';
+
   const desk = document.createElement('desk');
   desk.id = 'desk';
 
@@ -11,6 +15,7 @@ export default (system) => {
 
   const mapContainer = document.createElement('div');
   mapContainer.id = 'mapContainer';
+  mapContainer.classList.add('paper');
 
   const map = document.createElement('canvas');
   map.id = 'map';
@@ -32,6 +37,7 @@ export default (system) => {
   
   const notes = document.createElement('div');
   notes.id = 'notes';
+  notes.classList.add('paper');
   notesContainer.appendChild(notes);
 
   const createNoteElements = (container, type, withSelector = true) => {
@@ -86,11 +92,12 @@ export default (system) => {
  
   const profile = document.createElement('canvas');
   profile.id = 'profile';
+  profile.classList.add('paper');
   mapAndProfileContainer.appendChild(profile);
 
   desk.appendChild(mapAndProfileContainer);
 
-  system.window.document.body.appendChild(desk);
+  document.body.appendChild(desk);
 
   const magnifierContainer = document.createElement('div');
   magnifierContainer.id = 'magnifierContainer';
@@ -107,15 +114,15 @@ export default (system) => {
   magnifierBorder.id = 'magnifierBorder';
   magnifierContainer.appendChild(magnifierBorder);
 
-  system.window.document.body.appendChild(magnifierContainer);
+  document.body.appendChild(magnifierContainer);
 
   const profileToggle = document.createElement('div'); 
   profileToggle.id = 'profileToggle';
-  system.window.document.body.appendChild(profileToggle);
+  document.body.appendChild(profileToggle);
 
   const notesToggle = document.createElement('div'); 
   notesToggle.id = 'notesToggle';
-  system.window.document.body.appendChild(notesToggle);
+  document.body.appendChild(notesToggle);
 
   return {
     desk,

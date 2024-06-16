@@ -1,0 +1,48 @@
+#levelSelector {
+  height: 100vh;
+  overflow: auto;
+}
+
+#levelSelector>div {
+  position: absolute;
+  padding: 2px 10px;
+  width: 80vw;
+  height: 100vh;
+  font-family: notesFont;
+  font-style: normal;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0px -4px 5px rgba(0, 0, 0, 0.1)
+}
+
+.levelCloseButton {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-image: url("../images/close.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.levelStartButton {
+  margin-top: 20px;
+  width: auto;
+}
+
+#levelSelector>div.levelSelected {
+  z-index: 1000 !important;
+  cursor: inherit;
+}
+
+#levelSelector>div.levelSelected .levelCloseButton {
+  display: block;
+}
+
+#levelSelector>div:last-child .levelCloseButton {
+  display: none;
+}

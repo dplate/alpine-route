@@ -3,7 +3,7 @@ import createText from './createText.js';
 
 const loadFont = async (window, name, fileName) => {
   return new Promise((resolve) => {
-    const labelFont = new FontFace(name, `url(assets/${fileName})`);
+    const labelFont = new FontFace(name, `url(assets/fonts/${fileName})`);
     labelFont.load().then((font) => {
       window.document.fonts.add(font);
       resolve();

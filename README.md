@@ -21,7 +21,7 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [X] Add magnified view to make touch usage easier by showing map under the finger bigger
 - [X] Calculate costs of route
 - [X] Validate route (not breaking steepness, tunnel length, bridge length limits and enough money left)
-- [ ] Add scalable interface which includes map, profile, magnifier, costs and menu
+- [X] Add scalable interface which includes map, profile, magnifier, costs and menu
 - [ ] Level selection (including description and money)
 - [ ] Create levels
 - [ ] Finalize game (start screen, credits...)

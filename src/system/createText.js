@@ -10,7 +10,8 @@ const texts = {
     MAX_VARIANCE_LIMIT_LABEL: 'Varianz',
     MIN_GAP_LIMIT_LABEL: 'Abstand',
     END_BUTTON_FINISH: 'Planung beenden',
-    END_BUTTON_SUSPEND: 'Planung unterbrechen'
+    END_BUTTON_SUSPEND: 'Planung unterbrechen',
+    START_BUTTON: 'Planung starten'
   },
   en: {
     BUDGET_LABEL: 'Budget',
@@ -23,7 +24,8 @@ const texts = {
     MAX_VARIANCE_LIMIT_LABEL: 'Variance',
     MIN_GAP_LIMIT_LABEL: 'Gap',
     END_BUTTON_FINISH: 'Finish planning',
-    END_BUTTON_SUSPEND: 'Suspend planning'
+    END_BUTTON_SUSPEND: 'Suspend planning',
+    START_BUTTON: 'Start planning'
   }
 };
 
@@ -31,6 +33,7 @@ export default (language) => {
   const currencyFormatter = new Intl.NumberFormat(language, { maximumFractionDigits: 0 });
   return {
     get: (textId) => texts[language][textId] || texts['en'][textId],
+    translate: (translations) =>  translations[language] || translations['en'],
     formatCurrency: (amount) => `${currencyFormatter.format(amount)} ₣`,
   };
 };

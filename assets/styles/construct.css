@@ -1,47 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  touch-action: none;
-}
-
-button {
-  border: 1px solid transparent;
-  width: 100%;
-  padding: 10px 16px 12px;
-  font-family: 'buttonFont';
-  font-size: 22px;
-  box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-  color: #fff;
-  border-radius: 40px;
-  filter: brightness(110%);
-}
-
-button:hover {
-  filter: brightness(100%);
-  box-shadow: none
-}
-
-#desk {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background-image: url("./wood.webp");
-  padding: 5px;
-}
-
 #magnifierContainer {
   position: fixed;
   max-width: 200px;
@@ -60,7 +16,7 @@ button:hover {
   height: 174%;
   top: 0;
   right: -3px;
-   background-image: url('magnifier.svg');
+   background-image: url('../images/magnifier.svg');
   background-size: cover;
   background-position: right top;
 }
@@ -139,7 +95,7 @@ button:hover {
 
 .selector {
   margin-left: 3px;
-  background-image: url("./eye.svg");
+  background-image: url("../images/eye.svg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -154,24 +110,16 @@ button:hover {
   border-top: 1px solid black;
 }
 
-#notes, #profile, #mapContainer {
-  border: 5px solid black;
-  border-image: url("./torn.webp");
-  border-image-slice: 5.5% fill;
-  border-image-repeat: repeat;
-  box-shadow: 3px 4px 5px rgba(0, 0, 0, 0.1)
-}
-
 #profileToggle {
   bottom: -15px;
   left: calc(50vw - 25px);
-  background-image: url(profileToggle.svg);
+  background-image: url("../images/profileToggle.svg");
 }
 
 #notesToggle {
   left: -15px;
   top: calc(50vh - 25px);
-  background-image: url(notesToggle.svg);
+  background-image: url("../images/notesToggle.svg");
   background-position: right;
 }
 

@@ -6,12 +6,24 @@ const texts = {
     GROUND_COSTS_LABEL: 'Strecke',
     BALANCE_LABEL: 'Saldo',
     MIN_RADIUS_LIMIT_LABEL: 'Radius',
+    MIN_RADIUS_LIMIT_LONG_LABEL: 'Min. Kurvenradius',
     MAX_GRADIENT_LIMIT_LABEL: 'Steigung',
+    MAX_GRADIENT_LIMIT_LONG_LABEL: 'Max. Steigung',
     MAX_VARIANCE_LIMIT_LABEL: 'Varianz',
+    MAX_VARIANCE_LIMIT_LONG_LABEL: 'Max. Varianz der Steigung',
     MIN_GAP_LIMIT_LABEL: 'Abstand',
+    MIN_GAP_LIMIT_LONG_LABEL: 'Min. Höhenabstand',
     END_BUTTON_FINISH: 'Planung beenden',
     END_BUTTON_SUSPEND: 'Planung unterbrechen',
-    START_BUTTON: 'Planung starten'
+    STATUS_INVALID: 'unfertig',
+    START_BUTTON: 'Planung durchführen',
+    TYPE: 'Art',
+    TYPES: {
+      funicular: 'Standseilbahn',
+      cogRailroad: 'Zahnradbahn'
+    },
+    METERS: 'Meter',
+    PERCENT: 'Prozent'
   },
   en: {
     BUDGET_LABEL: 'Budget',
@@ -20,12 +32,24 @@ const texts = {
     GROUND_COSTS_LABEL: 'Track',
     BALANCE_LABEL: 'Balance',
     MIN_RADIUS_LIMIT_LABEL: 'Radius',
+    MIN_RADIUS_LIMIT_LONG_LABEL: 'Minimum curve radius',
     MAX_GRADIENT_LIMIT_LABEL: 'Gradient',
+    MAX_GRADIENT_LIMIT_LONG_LABEL: 'Maximum gradient',
     MAX_VARIANCE_LIMIT_LABEL: 'Variance',
+    MAX_VARIANCE_LIMIT_LONG_LABEL: 'Maximum variance of gradient',
     MIN_GAP_LIMIT_LABEL: 'Gap',
+    MIN_GAP_LIMIT_LONG_LABEL: 'Minimum height gap',
     END_BUTTON_FINISH: 'Finish planning',
     END_BUTTON_SUSPEND: 'Suspend planning',
-    START_BUTTON: 'Start planning'
+    STATUS_INVALID: 'invalid',
+    START_BUTTON: 'Start planning',
+    TYPE: 'Type',
+    TYPES: {
+      funicular: 'Funicular',
+      cogRailroad: 'Cog railroad'
+    },
+    METERS: 'meters',
+    PERCENT: 'percent'
   }
 };
 

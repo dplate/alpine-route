@@ -1,27 +1,55 @@
 #levelSelector {
-  height: 100vh;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   overflow: auto;
 }
 
 #levelSelector>div {
   position: absolute;
-  padding: 2px 10px;
-  width: 80vw;
-  height: 100vh;
+  padding: 2px 10px 40px;
+  width: 100vw;
+  max-width: 600px;
   font-family: notesFont;
   font-style: normal;
   font-size: 24px;
   cursor: pointer;
-  box-shadow: 0px -4px 5px rgba(0, 0, 0, 0.1)
+  box-shadow: 0px -4px 5px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 30px 1fr max-content 30px;
+  grid-template-rows: max-content max-content max-content max-content;
+  grid-template-areas: 
+    "type  name         status      close"
+    ".     description  description ."
+    "info  info         info        info"
+    "start start start  start";
+  gap: 10px;  
+}
+
+.levelType {
+  grid-area: type;
+  align-self: start;
+  width: auto;
+  height: 30px;
+  background-size: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.levelName {
+  grid-area: name;
+}
+
+.levelStatus {
+  grid-area: status;
 }
 
 .levelCloseButton {
-  display: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 30px;
+  grid-area: close;
+  align-self: start;
+  width: auto;
   height: 30px;
+  display: none;
   background-image: url("../images/close.svg");
   background-size: contain;
   background-repeat: no-repeat;
@@ -29,9 +57,38 @@
   cursor: pointer;
 }
 
+.levelDescription {
+  grid-area: description;
+  font-style: italic;
+  color: rgba(100, 100, 100, 1);
+}
+
+.levelInfo {
+  grid-area: info;
+  justify-self: center;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-template-rows: max-content;
+  gap: 5px 20px; 
+  padding: 20px 0; 
+}
+
+@media screen and (max-width: 500px) {
+  .levelInfo {
+    grid-template-columns: max-content;
+  }
+}
+
+.levelInfo>div:nth-child(2n) {
+  font-style: italic;
+  color: rgba(100, 100, 100, 1);
+}
+
 .levelStartButton {
-  margin-top: 20px;
-  width: auto;
+  grid-area: start;
+  justify-self: center;
+  width: fit-content;
 }
 
 #levelSelector>div.levelSelected {

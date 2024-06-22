@@ -49,6 +49,8 @@ const saveRoute = (system, level, route) => {
   const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
   const rawControlPoints = editableControlPoints.map(({ x, y, z, onGround }) => [x, y, onGround ? null : z]);
   system.persistence.saveRoute(level, rawControlPoints);
+  const valid = Object.values(route.limits).every(limit => limit.valid);
+  system.persistence.saveCosts(level, valid ? Math.round(route.costs.total.sum) : null);
 };
 
 export default (system, level, map) => {

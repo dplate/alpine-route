@@ -17,7 +17,8 @@ const saveState = (window, state) => {
 const getLevelState = (state, level) => {
   if (!state.levels[level.id]) {
     state.levels[level.id] = {
-      route: null
+      route: null,
+      costs: null,
     };
   }
   return state.levels[level.id];
@@ -38,6 +39,15 @@ export default (window) => {
     loadRoute: (level) => {
       const levelState = getLevelState(state, level);
       return levelState.route;
-    }
+    },
+    saveCosts: (level, costs) => {
+      const levelState = getLevelState(state, level);
+      levelState.costs = costs;
+      saveState(window, state);
+    },
+    loadCosts: (level) => {
+      const levelState = getLevelState(state, level);
+      return levelState.costs;
+    },
   };
 };

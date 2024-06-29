@@ -63,7 +63,7 @@ export default (layout, mapCamera, profileCamera) => {
   magnifierCamera.profile.isDisabled = magnifierCamera.isDisabled;
 
   magnifierCamera.disable = () => {
-    layout.magnifierContainer.style.display = 'none';
+    layout.magnifierContainer.style.opacity = 0;
     magnifierCamera.active = null;
   }
   
@@ -72,7 +72,7 @@ export default (layout, mapCamera, profileCamera) => {
     magnifierCamera.map.normalizedCenter.x = normalized.x;
     magnifierCamera.map.normalizedCenter.y = normalized.y;
     magnifierCamera.active = magnifierCamera.map;
-    layout.magnifierContainer.style.display = 'block';
+    layout.magnifierContainer.style.opacity = 1;
     layout.magnifier.style.opacity = 1;
     magnifierCamera.update();
   };
@@ -82,7 +82,7 @@ export default (layout, mapCamera, profileCamera) => {
     magnifierCamera.profile.normalizedCenter.flatMeter = normalized.flatMeter;
     magnifierCamera.profile.normalizedCenter.z = normalized.z;
     magnifierCamera.active = magnifierCamera.profile;
-    layout.magnifierContainer.style.display = 'block';
+    layout.magnifierContainer.style.opacity = 1;
     layout.magnifier.style.opacity = 0;
   };
 

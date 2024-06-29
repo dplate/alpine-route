@@ -8,13 +8,16 @@
   left: 20px;
   bottom: 20px;
   background-color: #e5e7dd;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 #magnifierBorder {
   position: absolute;
   width: 174%;
   height: 174%;
-  top: 0;
+  top: -2px;
   right: -3px;
    background-image: url('../images/magnifier.svg');
   background-size: cover;
@@ -180,5 +183,20 @@
   }
   #notesContainer.toggled {
     display: block;
+  }
+}
+
+@media screen and ((max-width: 700px) and (min-height: 500px)) {
+  #magnifierContainer {
+    right: -10px;
+    left: auto;
+    bottom: 20vh;
+  }
+  
+  #magnifierBorder {
+    left: -3px;
+    right: auto;
+    background-position: left top;
+    transform: scaleX(-1);
   }
 }

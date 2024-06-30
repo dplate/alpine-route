@@ -24,7 +24,7 @@ export default async (system, layout, levels) => {
     const coinContainer = document.createElement('div');
     coinContainer.classList.add('coinContainer');
     coinContainer.onclick = (event) => {
-      if (layout.account.style.width != '100%') {
+      if (layout.account.style.width !== '100%') {
         layout.account.style.width = '100%';
         shuffleCoins(coins);
         event.stopPropagation();

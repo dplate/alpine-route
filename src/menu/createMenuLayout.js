@@ -10,10 +10,15 @@ export default (system) => {
   levelSelector.id = 'levelSelector';
   desk.appendChild(levelSelector);
 
+  const account = document.createElement('account');
+  account.id = 'account';
+  desk.appendChild(account);
+
   document.body.appendChild(desk);
 
   return {
     desk,
-    levelSelector
+    levelSelector,
+    account
   };
 };

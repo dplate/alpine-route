@@ -43,7 +43,7 @@ export default [
       'en': 'Säntisbahn 3: Peak'
     },
     description: {
-      'de': 'Nach dem erfolgreichen Betrieb der Säntisbahn von Wasserauen bis zur Meglisalp, haben die Investoren nun genug Geld zur Verfügung gestellt, um die letzte Etappe auf den Gipfel des Säntis anzugehen. Aufgrund der Länge und der Steigung (insbesondere vor dem Gipfel) kommt hier nur eine Zahnradbahn in Frage. Ebenso werden beim Gipfel wohl längere Tunnelbauten notwendig sein, um das felsige Gelände zur überwinden.',
+      'de': 'Nach dem erfolgreichen Betrieb der Säntisbahn von Wasserauen bis zur Meglisalp, haben die Investoren nun genügend Geld zur Verfügung gestellt, um die letzte Etappe auf den Gipfel des Säntis anzugehen. Aufgrund der Länge und der Steigung (insbesondere vor dem Gipfel) kommt hier nur eine Zahnradbahn in Frage. Ebenso werden beim Gipfel wohl längere Tunnelbauten notwendig sein, um das felsige Gelände zur überwinden.',
       'en': 'Following the successful operation of the Säntisbahn from Wasserauen to Meglisalp, the investors have now made enough money available to tackle the final stage to the summit of the Säntis. Due to the length and the gradient (especially before the summit), only a cog railroad is an option here. Longer tunnels will probably also be necessary at the summit to overcome the rocky terrain.'
     },
     type: 'cogRailroad',

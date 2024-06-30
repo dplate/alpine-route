@@ -104,7 +104,9 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
     onStart();
     event.stopPropagation();
   };
-  startButton.innerText = system.text.get('START_BUTTON');
+  startButton.innerText = system.persistence.loadCosts(level) === null ? 
+    system.text.get('START_BUTTON_INITIAL') : 
+    system.text.get('START_BUTTON_IMPROVE');
   element.appendChild(startButton);
 
   element.dataset.filled = true;
@@ -113,7 +115,6 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
 export default async (system, layout, levels) => {
   return new Promise((resolve) => {
     const availableLevels = levels;
-    var selectedLevel = null;
     var selectedElement = null;
 
     const selectLastLevel = () => {
@@ -127,7 +128,6 @@ export default async (system, layout, levels) => {
         selectedElement.classList.remove('levelSelected');
       }
       element.classList.add('levelSelected');
-      selectedLevel = level;
       selectedElement = element;
       if (!selectedElement.dataset.filled) {
         fillLevelElement(system, level, element, selectLastLevel, () => resolve(level));

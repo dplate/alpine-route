@@ -16,7 +16,8 @@ const texts = {
     END_BUTTON_FINISH: 'Planung beenden',
     END_BUTTON_SUSPEND: 'Planung unterbrechen',
     STATUS_INVALID: 'unfertig',
-    START_BUTTON: 'Planung durchführen',
+    START_BUTTON_INITIAL: 'Strecke planen',
+    START_BUTTON_IMPROVE: 'Strecke verbessern',
     TYPE: 'Art',
     TYPES: {
       funicular: 'Standseilbahn',
@@ -42,7 +43,8 @@ const texts = {
     END_BUTTON_FINISH: 'Finish planning',
     END_BUTTON_SUSPEND: 'Suspend planning',
     STATUS_INVALID: 'invalid',
-    START_BUTTON: 'Start planning',
+    START_BUTTON_INITIAL: 'Plan route',
+    START_BUTTON_IMPROVE: 'Improve route',
     TYPE: 'Type',
     TYPES: {
       funicular: 'Funicular',

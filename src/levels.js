@@ -7,8 +7,8 @@ export default [
       'en': 'Säntisbahn 2: Meglisalp'
     },
     description: {
-      'de': '',
-      'en': ''
+      'de': 'Nachdem wir endlich die Hochebene des malerischen Seealpsees erreicht haben, steht nun die Umsetzung des steilsten Abschnitts der Säntisbahn bevor: von der Seealp durch die Felswände hindurch bis zur Siedlung Meglisalp. Dies bedeutet eine Überwindung von 400 Höhenmetern auf kurzer Strecke, wofür wir den Bau einer Standseilbahn in Erwägung ziehen.',
+      'en': 'Having at last reached the plateau of the picturesque Seealpsee, we now face the implementation of the steepest section of the Säntis Railway: from Seealp through the rock walls to the settlement of Meglisalp. This entails an ascent of 400 meters over a short distance, for which we have considered the construction of a funicular railway.'
     },
     type: 'funicular',
     start: {
@@ -19,7 +19,7 @@ export default [
       x: 4537,
       y: 5307
     },
-    budget: 700000,
+    budget: 220000,
     costs: {
       tunnelMeter: 7,
       tunnelDepthFactor: 1,
@@ -29,8 +29,8 @@ export default [
       groundSlopeFactor: 20
     },
     limits: {
-      minRadius: 50,
-      maxGradient: 40,
+      minRadius: 400,
+      maxGradient: 60,
       maxVariance: 15,
       minGap: 10
     }
@@ -43,8 +43,8 @@ export default [
       'en': 'Säntisbahn 3: Peak'
     },
     description: {
-      'de': 'Nach dem erfolgreichen Betrieb der Säntisbahn von Wasserauen bis zur Meglisalp, haben die Investoren nun genügend Geld zur Verfügung gestellt, um die letzte Etappe auf den Gipfel des Säntis anzugehen. Aufgrund der Länge und der Steigung (insbesondere vor dem Gipfel) kommt hier nur eine Zahnradbahn in Frage. Ebenso werden beim Gipfel wohl längere Tunnelbauten notwendig sein, um das felsige Gelände zur überwinden.',
-      'en': 'Following the successful operation of the Säntisbahn from Wasserauen to Meglisalp, the investors have now made enough money available to tackle the final stage to the summit of the Säntis. Due to the length and the gradient (especially before the summit), only a cog railroad is an option here. Longer tunnels will probably also be necessary at the summit to overcome the rocky terrain.'
+      'de': 'Nach dem erfolgreichen Betrieb der Säntisbahn von Wasserauen bis zur Meglisalp haben die ehrenwerten Investoren nunmehr genügend Geldmittel bereitgestellt, um die letzte Etappe auf den Gipfel des Säntis in Angriff zu nehmen. Angesichts der beträchtlichen Länge der Strecke sowie der mehr als tausend Höhenmeter, ist hier die Errichtung einer durchgängigen Zahnradbahn unumgänglich. Ferner wird es am Gipfel notwendig sein, längere Tunnelbauten zu errichten, um das felsige Gelände zu überwinden.',
+      'en': 'Following the successful operation of the Säntisbahn from Wasserauen to Meglisalp, the honorable investors have now provided sufficient funds to undertake the final stage to the summit of Säntis. In view of the considerable length of the route and the elevation gain of over one thousand meters, the construction of a continuous cog railway is indispensable. Furthermore, it will be necessary to construct longer tunnels at the summit to overcome the rocky terrain.'
     },
     type: 'cogRailroad',
     start: {

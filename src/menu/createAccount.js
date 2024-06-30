@@ -18,7 +18,7 @@ export default async (system, layout, levels) => {
     const costs = system.persistence.loadCosts(level);
     return costs ? money + (level.budget - costs) : money
   }, 0);
-  const coinCount = Math.floor(money / 1000);
+  const coinCount = Math.floor(money / 10000);
   const coins = [];
   for (let i = 0; i < coinCount; i++) {
     const coinContainer = document.createElement('div');

@@ -63,6 +63,7 @@
   grid-area: description;
   font-style: italic;
   color: rgba(100, 100, 100, 1);
+  hyphens: auto;
 }
 
 .levelImage {

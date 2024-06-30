@@ -4,7 +4,9 @@ import setupSystem from './system/setupSystem.js';
 import levels from './levels.js';
 
 async function main() {
-  const system = await setupSystem(window, 'de');
+  const language = 'de';
+  window.document.documentElement.lang = language;
+  const system = await setupSystem(window, language);
   if (!system) {
     return;
   }

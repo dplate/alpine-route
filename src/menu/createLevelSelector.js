@@ -48,7 +48,17 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
 
   const description = document.createElement('div');
   description.classList.add('levelDescription');
-  description.innerText = system.text.translate(level.description);
+
+  const image = document.createElement('img');
+  image.classList.add('levelImage');
+  image.src = `assets/levels/${level.id}.webp`;
+  image.style.transform = `rotate(${-0.005 + Math.random() * 0.01}turn)`;
+  description.appendChild(image);
+
+  const text = document.createElement('span');
+  text.innerText = system.text.translate(level.description);
+
+  description.appendChild(text);
   element.appendChild(description);
 
   const info = document.createElement('div');

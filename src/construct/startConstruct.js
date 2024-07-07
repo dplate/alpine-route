@@ -11,5 +11,6 @@ export default async (system, level) => {
   const route = createRoute(system, level, map);
   const cameras = createCameras(layout, map, route);
   const renderer = createRenderer(system, level, layout, cameras, map, route);
+  layout.desk.classList.remove('loading');
   await setupConstructControl(layout, cameras, route, renderer);
 };

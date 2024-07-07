@@ -8,6 +8,7 @@ export default (system, level) => {
   document.body.innerHTML = '';
 
   const desk = document.createElement('desk');
+  desk.classList.add('loading');
   desk.id = 'desk';
 
   const mapAndProfileContainer = document.createElement('div');

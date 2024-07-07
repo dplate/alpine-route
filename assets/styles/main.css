@@ -50,3 +50,12 @@ button:hover {
   background-image: url("../images/wood.webp");
   padding: 5px;
 }
+
+#desk > * {
+  opacity: 1;
+  transition: opacity 1s;
+}
+
+#desk.loading > * {
+  opacity: 0;
+}

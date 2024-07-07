@@ -10,9 +10,10 @@ async function main() {
   if (!system) {
     return;
   }
+  var currentLevel = null;
   while(1) {
-    const level = await startMenu(system, levels);
-    await startConstruct(system, level);
+    currentLevel = await startMenu(system, levels, currentLevel);
+    await startConstruct(system, currentLevel);
   }
 }
 main();

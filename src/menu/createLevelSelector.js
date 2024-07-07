@@ -1,4 +1,4 @@
-const createAvailableLevels = (system, layout, availableLevels, onSelect) => {
+const createAvailableLevels = (system, layout, availableLevels, preselectedLevel, onSelect) => {
   const document = system.window.document;
   availableLevels.forEach((level, index) => {
     const element = document.createElement('div');
@@ -33,6 +33,10 @@ const createAvailableLevels = (system, layout, availableLevels, onSelect) => {
 
     element.onclick = () => onSelect(level, element);
     layout.levelSelector.appendChild(element);
+    
+    if (level === preselectedLevel) {
+      element.onclick();
+    }
   });
 }
 
@@ -124,7 +128,7 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
   element.dataset.filled = true;
 };
 
-export default async (system, layout, levels) => {
+export default async (system, layout, levels, preselectedLevel) => {
   return new Promise((resolve) => {
     const availableLevels = levels;
     var selectedElement = null;
@@ -146,8 +150,6 @@ export default async (system, layout, levels) => {
       }
     };
     
-    createAvailableLevels(system, layout, availableLevels, selectLevel);
-    selectLastLevel();
-
+    createAvailableLevels(system, layout, availableLevels, preselectedLevel, selectLevel);
   });
 };

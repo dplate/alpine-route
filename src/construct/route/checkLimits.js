@@ -3,8 +3,8 @@ import { LIMIT_TYPE_MAX_GRADIENT, LIMIT_TYPE_MAX_VARIANCE, LIMIT_TYPE_MIN_RADIUS
 
 export default (route, level) => {
   const varianceValue = Math.max(
-    Math.abs(route.gradient.mean - route.gradient.absMin), 
-    Math.abs(route.gradient.mean - route.gradient.absMax)
+    Math.abs(route.gradient.mean - route.gradient.min), 
+    Math.abs(route.gradient.mean - route.gradient.max)
   );
   route.limits = {
     [LIMIT_TYPE_MIN_RADIUS]: {
@@ -17,7 +17,7 @@ export default (route, level) => {
     },
     [LIMIT_TYPE_MAX_VARIANCE]: {
       value: varianceValue,
-      valid: varianceValue <= level.limits[LIMIT_TYPE_MAX_VARIANCE]
+      valid: level.limits[LIMIT_TYPE_MAX_VARIANCE] !== null ? varianceValue <= level.limits[LIMIT_TYPE_MAX_VARIANCE] : true
     },
     [LIMIT_TYPE_MIN_GAP]: {
       value: Number.MAX_VALUE,
@@ -28,7 +28,7 @@ export default (route, level) => {
     segment.limits = {
       [LIMIT_TYPE_MIN_RADIUS]: segment.radius >= level.limits[LIMIT_TYPE_MIN_RADIUS],
       [LIMIT_TYPE_MAX_GRADIENT]: Math.abs(segment.gradient) <= level.limits[LIMIT_TYPE_MAX_GRADIENT],
-      [LIMIT_TYPE_MAX_VARIANCE]: calculateVariance(route, segment) <= level.limits[LIMIT_TYPE_MAX_VARIANCE],
+      [LIMIT_TYPE_MAX_VARIANCE]: level.limits[LIMIT_TYPE_MAX_VARIANCE] !== null ? calculateVariance(route, segment) <= level.limits[LIMIT_TYPE_MAX_VARIANCE] : true,
       [LIMIT_TYPE_MIN_GAP]: segment.gap >= level.limits[LIMIT_TYPE_MIN_GAP],
     };
     

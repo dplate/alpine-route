@@ -12,7 +12,9 @@ export default (system, level, layout, cameras, route) => {
   layout.balance.label.textContent = system.text.get('BALANCE_LABEL');
 
   LIMIT_TYPES.forEach(limitType => {
-    layout.limits[limitType].label.textContent = system.text.get(LIMIT_TYPES_TO_LABEL[limitType]);
+    if (level.limits[limitType] !== null) {
+      layout.limits[limitType].label.textContent = system.text.get(LIMIT_TYPES_TO_LABEL[limitType]);
+    }
   });
 
   const formatLimitValue = (limitType) => {
@@ -46,11 +48,13 @@ export default (system, level, layout, cameras, route) => {
 
     let limitsValid = true;
     LIMIT_TYPES.forEach(limitType => {
-      layout.limits[limitType].value.textContent = formatLimitValue(limitType);
-      const valid = route.limits[limitType].valid;
-      layout.limits[limitType].value.style.color = valid ? successColor : failColor;
-      layout.limits[limitType].selector.style.opacity = getSelectorOpacity(LIMIT_TYPES_TO_HIGHLIGHTS[limitType]);
-      limitsValid = limitsValid && valid;
+      if (level.limits[limitType] !== null) {
+        layout.limits[limitType].value.textContent = formatLimitValue(limitType);
+        const valid = route.limits[limitType].valid;
+        layout.limits[limitType].value.style.color = valid ? successColor : failColor;
+        layout.limits[limitType].selector.style.opacity = getSelectorOpacity(LIMIT_TYPES_TO_HIGHLIGHTS[limitType]);
+        limitsValid = limitsValid && valid;
+      }
     });
 
     if (inBudget && limitsValid) {

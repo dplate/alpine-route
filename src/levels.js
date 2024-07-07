@@ -30,8 +30,8 @@ export default [
     },
     limits: {
       minRadius: 50,
-      maxGradient: 30,
-      maxVariance: 15,
+      maxGradient: 15,
+      maxVariance: null,
       minGap: 10
     }
   },

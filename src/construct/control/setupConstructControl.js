@@ -19,12 +19,14 @@ export default (layout, cameras, route, renderer) => {
       );
     });
     LIMIT_TYPES.forEach(limitType => {
-      addHighlightSelectorHandling(
-        cameras, 
-        renderer,
-        layout.limits[limitType], 
-        LIMIT_TYPES_TO_HIGHLIGHTS[limitType]
-      );
+      if (layout.limits[limitType]) {
+        addHighlightSelectorHandling(
+          cameras, 
+          renderer,
+          layout.limits[limitType], 
+          LIMIT_TYPES_TO_HIGHLIGHTS[limitType]
+        );
+      }
     });
 
     layout.profileToggle.onclick = () => {

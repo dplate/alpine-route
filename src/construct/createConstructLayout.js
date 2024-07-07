@@ -2,7 +2,7 @@ import { LIMIT_TYPES } from './route/limitTypes.js';
 import { ROUTE_TYPES } from './route/routeTypes.js';
 
 
-export default (system) => {
+export default (system, level) => {
   const document = system.window.document;
 
   document.body.innerHTML = '';
@@ -82,7 +82,12 @@ export default (system) => {
   notes.appendChild(limitsContainer);
 
   const limits = LIMIT_TYPES.reduce(
-    (limits, limitType) => ({ ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`) }),
+    (limits, limitType) => {
+      if (level.limits[limitType] === null) {
+        return limits;
+      }
+      return { ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`) };
+    },
     {}
   );
 

@@ -27,7 +27,9 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [ ] Finalize game (start screen, credits...)
 - [ ] Create Android app
 
-## Evaluation of height data
+## Evaluation 
+
+### height data
 
 Source for height data:
 
@@ -41,6 +43,10 @@ Thoughts:
 - Storing height map as 16 bit gray scale png, 24bit split r/g/b or custom binary data
 - Fits the whole height map as texture into memory or is some kind of mip mapping needed and async loading needed?
 - 2m grid resolution should be good enough, with a texture size of 4096x4096px this would allow a 8km x 8km area
+
+### Old photo effect
+
+https://funny.pho.to/de/old-photo-effect/
 
 ## Credits
 

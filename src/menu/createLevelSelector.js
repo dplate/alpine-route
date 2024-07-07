@@ -99,12 +99,14 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
   infoGradientValue.innerText = level.limits.maxGradient + ' ' + system.text.get('PERCENT');
   info.appendChild(infoGradientValue);
 
-  const infoVarianceLabel = document.createElement('div');
-  infoVarianceLabel.innerText = system.text.get('MAX_VARIANCE_LIMIT_LONG_LABEL');
-  info.appendChild(infoVarianceLabel);
-  const infoVarianceValue = document.createElement('div');
-  infoVarianceValue.innerText = level.limits.maxVariance + ' ' + system.text.get('PERCENT');
-  info.appendChild(infoVarianceValue);
+  if (level.limits.maxVariance !== null) {
+    const infoVarianceLabel = document.createElement('div');
+    infoVarianceLabel.innerText = system.text.get('MAX_VARIANCE_LIMIT_LONG_LABEL');
+    info.appendChild(infoVarianceLabel);
+    const infoVarianceValue = document.createElement('div');
+    infoVarianceValue.innerText = level.limits.maxVariance + ' ' + system.text.get('PERCENT');
+    info.appendChild(infoVarianceValue);
+  }
 
   element.appendChild(info);
 

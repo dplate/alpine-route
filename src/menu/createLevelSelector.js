@@ -82,12 +82,14 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
   infoBudgetValue.innerText = system.text.formatCurrency(level.budget);
   info.appendChild(infoBudgetValue);
 
-  const infoRadiusLabel = document.createElement('div');
-  infoRadiusLabel.innerText = system.text.get('MIN_RADIUS_LIMIT_LONG_LABEL');
-  info.appendChild(infoRadiusLabel);
-  const infoRadiusValue = document.createElement('div');
-  infoRadiusValue.innerText = level.limits.minRadius + ' ' + system.text.get('METERS');
-  info.appendChild(infoRadiusValue);
+  if (level.limits.minRadius !== null) {
+    const infoRadiusLabel = document.createElement('div');
+    infoRadiusLabel.innerText = system.text.get('MIN_RADIUS_LIMIT_LONG_LABEL');
+    info.appendChild(infoRadiusLabel);
+    const infoRadiusValue = document.createElement('div');
+    infoRadiusValue.innerText = level.limits.minRadius + ' ' + system.text.get('METERS');
+    info.appendChild(infoRadiusValue);
+  }
 
   const infoGapLabel = document.createElement('div');
   infoGapLabel.innerText = system.text.get('MIN_GAP_LIMIT_LONG_LABEL');

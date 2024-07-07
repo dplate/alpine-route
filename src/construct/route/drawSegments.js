@@ -33,13 +33,16 @@ const getNormalizedForLimit = (level, route, segment, highlightType) => {
   if (!segment.limits[limitType]) {
     return 1.1;
   }
+  if (level.limits[limitType] === null) {
+    return null;
+  }
   switch (limitType) {
     case LIMIT_TYPE_MIN_RADIUS:
       return 1.0 - ((segment.radius - level.limits[limitType]) / (1000.0 - level.limits[limitType]));
     case LIMIT_TYPE_MAX_GRADIENT:
       return (Math.abs(segment.gradient) - 0.5 * level.limits[limitType]) / (0.5 * level.limits[limitType]);
     case LIMIT_TYPE_MAX_VARIANCE:
-      return level.limits[limitType] !== null ? calculateVariance(route, segment) / level.limits[limitType] : null;
+      return calculateVariance(route, segment) / level.limits[limitType];
     case LIMIT_TYPE_MIN_GAP:
       return 1.0 - ((segment.gap - level.limits[limitType]) / (100.0 - level.limits[limitType]));
     default: 

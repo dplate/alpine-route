@@ -20,6 +20,7 @@ const texts = {
     START_BUTTON_IMPROVE: 'Strecke verbessern',
     TYPE: 'Art',
     TYPES: {
+      muleTrack: 'Saumpfad',
       funicular: 'Standseilbahn',
       cogRailroad: 'Zahnradbahn'
     },

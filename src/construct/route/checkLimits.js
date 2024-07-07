@@ -26,7 +26,7 @@ export default (route, level) => {
   };
   route.segments.forEach((segment) => {
     segment.limits = {
-      [LIMIT_TYPE_MIN_RADIUS]: segment.radius >= level.limits[LIMIT_TYPE_MIN_RADIUS],
+      [LIMIT_TYPE_MIN_RADIUS]: level.limits[LIMIT_TYPE_MIN_RADIUS] !== null ? segment.radius >= level.limits[LIMIT_TYPE_MIN_RADIUS] : true,
       [LIMIT_TYPE_MAX_GRADIENT]: Math.abs(segment.gradient) <= level.limits[LIMIT_TYPE_MAX_GRADIENT],
       [LIMIT_TYPE_MAX_VARIANCE]: level.limits[LIMIT_TYPE_MAX_VARIANCE] !== null ? calculateVariance(route, segment) <= level.limits[LIMIT_TYPE_MAX_VARIANCE] : true,
       [LIMIT_TYPE_MIN_GAP]: segment.gap >= level.limits[LIMIT_TYPE_MIN_GAP],

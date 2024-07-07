@@ -101,11 +101,18 @@
   grid-area: start;
   justify-self: center;
   width: fit-content;
+  pointer-events: none;
+  filter: grayscale(1);
 }
 
 #levelSelector>div.levelSelected {
   z-index: 1000 !important;
   cursor: inherit;
+  filter: inherit;
+}
+
+#levelSelector>div.levelSelected .levelStartButton {
+  pointer-events: inherit;
   filter: inherit;
 }
 

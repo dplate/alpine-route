@@ -5,11 +5,23 @@ const getWeightedRandom = () => {
 }
 
 const shuffleCoins = (coins) => {
-  coins.forEach(coin => {
-    const xFactor = getWeightedRandom();
-    const yFactor = getWeightedRandom();
-    coin.style.top = `calc(${xFactor * 100}% - ${xFactor * 75}px)`;
-    coin.style.left =`calc(${yFactor * 100}% - ${yFactor * 75}px)`;
+  const needNewPositionCoins = [ ...coins ];
+  coins.forEach(() => { 
+    const x = getWeightedRandom();
+    const y = getWeightedRandom();
+    const coin = needNewPositionCoins.sort((coin1, coin2) => {
+      const oldPosition1 = { x: Number(coin1.dataset.x), y: Number(coin1.dataset.y) };
+      const oldPosition2 = { x: Number(coin2.dataset.x), y: Number(coin2.dataset.y) };
+      const distance1 = Math.sqrt((oldPosition1.x - x) ** 2 + (oldPosition1.y - y) ** 2);
+      const distance2 = Math.sqrt((oldPosition2.x - x) ** 2 + (oldPosition2.y - y) ** 2);
+      return distance1 - distance2;
+    })[0];
+    needNewPositionCoins.shift();
+    coin.dataset.x = x;
+    coin.dataset.y = y;
+    coin.style.top = `calc(${x * 100}% - ${x * 75}px)`;
+    coin.style.left =`calc(${y * 100}% - ${y * 75}px)`;
+    coin.children[0].style.transform = `rotate(${Math.random()}turn)`;
   });
 }
 
@@ -22,6 +34,8 @@ export default async (system, layout, levels) => {
   const coins = [];
   for (let i = 0; i < coinCount; i++) {
     const coinContainer = document.createElement('div');
+    coinContainer.dataset.x = 0;
+    coinContainer.dataset.y = 0;
     coinContainer.classList.add('coinContainer');
     coinContainer.onclick = (event) => {
       if (layout.account.style.width !== '100%') {
@@ -33,7 +47,6 @@ export default async (system, layout, levels) => {
 
     const coin = document.createElement('div');
     coin.classList.add('coin');
-    coin.style.transform = `rotate(${Math.random()}turn)`;
     coinContainer.appendChild(coin);
 
     layout.account.appendChild(coinContainer);

@@ -98,25 +98,26 @@ const createSplineEvaluator = (points) => {
   }
 };
 
-const measureSegment = (evaluateSpline, min, max) => {
-  const detailPoints = [];
-  for (let t = min; t < max; t += 0.001) {
-    detailPoints.push(evaluateSpline(t));
+const measureSegment = (evaluateSpline, tStart, pointStart, tEnd, pointEnd, length) => {
+  const tCenter = (tEnd + tStart) / 2.0;
+  const pointCenter = evaluateSpline(tCenter);
+  const firstSubSegmentLength = Math.sqrt((pointStart.x - pointCenter.x)**2 + (pointStart.y - pointCenter.y)**2 + (pointStart.z - pointCenter.z)**2);
+  const secondSubSegmentLength = Math.sqrt((pointEnd.x - pointCenter.x)**2 + (pointEnd.y - pointCenter.y)**2 + (pointEnd.z - pointCenter.z)**2);
+  const detailLength = firstSubSegmentLength + secondSubSegmentLength;
+  if (length === undefined || Math.abs(detailLength - length) > 0.1) {
+    const firstSubSegmentMeasurement = measureSegment(evaluateSpline, tStart, pointStart, tCenter, pointCenter, firstSubSegmentLength);
+    const secondSubSegmentMeasurement = measureSegment(evaluateSpline, tCenter, pointCenter, tEnd, pointEnd, secondSubSegmentLength);
+    return {
+      length: firstSubSegmentMeasurement.length + secondSubSegmentMeasurement.length,
+      flatLength: firstSubSegmentMeasurement.flatLength + secondSubSegmentMeasurement.flatLength
+    };
   }
-
-  const measurement = {
-    length: 0,
-    flatLength: 0
+  return {
+    length: detailLength,
+    flatLength: Math.sqrt((pointStart.x - pointCenter.x)**2 + (pointStart.y - pointCenter.y)**2) +
+                Math.sqrt((pointEnd.x - pointCenter.x)**2 + (pointEnd.y - pointCenter.y)**2)
   };
-  let lastPoint = detailPoints[0];
-  for (let i = 1; i < detailPoints.length; i++){
-    const currentPoint = detailPoints[i];
-    measurement.length += Math.sqrt((currentPoint.x - lastPoint.x)**2 + (currentPoint.y - lastPoint.y)**2 + (currentPoint.z - lastPoint.z)**2);
-    measurement.flatLength += Math.sqrt((currentPoint.x - lastPoint.x)**2 + (currentPoint.y - lastPoint.y)**2);
-    lastPoint = currentPoint;
-  }
-  return measurement;
-};
+}
 
 export default (points) => {
   const evaluateSpline = createSplineEvaluator(points);
@@ -126,7 +127,11 @@ export default (points) => {
     flatLength: 0
   }];
   for (let i = 0; i < points.length - 1; i++) {
-    segmentMeasurements.push(measureSegment(evaluateSpline, i, i + 1));
+    const measurement = measureSegment(
+      evaluateSpline, i, evaluateSpline(i), 
+      i + 1, evaluateSpline(i + 1)
+    );
+    segmentMeasurements.push(measurement);
   }
   const measurement = segmentMeasurements.reduce((measurement, segmentMeasurement) => ({
     length: measurement.length + segmentMeasurement.length,

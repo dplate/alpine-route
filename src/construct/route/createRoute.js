@@ -19,6 +19,11 @@ const createControlPoint = (point, onGround, editable = true) => ({
   onGround
 });
 
+const limitPointToMap = (point, map) => {
+  point.x = Math.max(50, Math.min(point.x, map.widthInMeters - 50));
+  point.y = Math.max(50, Math.min(point.y, map.heightInMeters - 50));
+};
+
 const sortPointsByMapDistance = (points, point) => {
   return [...points].sort((point1, point2) =>
     calculateMapDistance(point, point1) - calculateMapDistance(point, point2)
@@ -68,11 +73,20 @@ const smoothControlPointHeights = (controlPoints) => {
   }
 };
 
-const updateSegments = (map, route) => {
+const recalculateSpline = (controlPoints) => {
+  const spline = createSpline(controlPoints);
+  controlPoints.forEach((controlPoint, index) => {
+    controlPoint.meter = spline.getLengthAtPointIndex(index);
+    controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
+  });
+  return spline;
+};
+
+const updateSegments = (map, route, spline) => {
   route.segments = [];
-  const spline = createSpline(route.controlPoints);
   for (let meter = 0; meter <= spline.length; meter += Math.max(0.1, Math.min(segmentDistance, spline.length - meter))) {
     const point = spline.getAtMeter(meter);
+    limitPointToMap(point, map);
     const mapHeight = map.getHeightAtPoint(point);
     const lastPoint = route.segments[route.segments.length - 1];
     const flatMeter = lastPoint ? lastPoint.flatMeter + Math.sqrt((point.x - lastPoint.x)**2 + (point.y - lastPoint.y)**2) : 0;
@@ -86,10 +100,6 @@ const updateSegments = (map, route) => {
       costs: null
     });
   }
-  route.controlPoints.forEach((controlPoint, index) => {
-    controlPoint.meter = spline.getLengthAtPointIndex(index);
-    controlPoint.flatMeter = spline.getFlatLengthAtPointIndex(index);
-  });
 };
 
 export default (system, level, map) => {
@@ -97,6 +107,7 @@ export default (system, level, map) => {
 
   route.calculateRoute = () => {
     route.controlPoints.forEach((controlPoint) => {
+      limitPointToMap(controlPoint, map);
       controlPoint.mapHeight = map.getHeightAtPoint(controlPoint);
       if (controlPoint.onGround) {
         controlPoint.z = controlPoint.mapHeight;
@@ -106,9 +117,11 @@ export default (system, level, map) => {
       controlPoint.x = Math.round(controlPoint.x * 10) / 10;
       controlPoint.y = Math.round(controlPoint.y * 10) / 10;
     });
-    updateSegments(map, route);
+    recalculateSpline(route.controlPoints);
     smoothControlPointHeights(route.controlPoints);
-    updateSegments(map, route);
+   
+    const spline = recalculateSpline(route.controlPoints);
+    updateSegments(map, route, spline);
     
     determineTypes(route);
     calculateAttributes(route);

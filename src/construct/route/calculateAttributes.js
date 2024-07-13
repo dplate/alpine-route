@@ -57,8 +57,8 @@ export default (route) => {
     segment.gap = Number.MAX_VALUE;
     for (let previousIndex = 0; previousIndex < index; previousIndex++) {
       const otherSegment = route.segments[previousIndex];
-      if (Math.abs(segment.flatMeter - otherSegment.flatMeter) > minOverlappingDistance * 5 && 
-        calculateMapDistance(segment, otherSegment) < minOverlappingDistance) {
+      if (calculateMapDistance(segment, otherSegment) < minOverlappingDistance &&
+        Math.abs(segment.flatMeter - otherSegment.flatMeter) > minOverlappingDistance * 5) {
         const gap = Math.abs(segment.z - otherSegment.z);
         otherSegment.gap = Math.min(otherSegment.gap, gap);
         segment.gap = Math.min(segment.gap, gap);

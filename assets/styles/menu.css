@@ -4,6 +4,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-width: 600px;
+  z-index: 2;
 }
 
 #levelSelector>div {
@@ -164,4 +165,41 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.stain {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-image: url("../images/stain.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#ruler {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background-image: url("../images/ruler.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#bridge {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background-image: url("../images/bridge.webp");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+@media screen and (max-width: 700px) {
+  .stain, #ruler, #bridge {
+    display: none;
+  }
 }

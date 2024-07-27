@@ -3,18 +3,22 @@ export default (system) => {
 
   document.body.innerHTML = '';
 
-  const desk = document.createElement('desk');
+  const desk = document.createElement('div');
   desk.id = 'desk';
 
-  const levelSelector = document.createElement('levelSelector');
+  const levelSelector = document.createElement('div');
   levelSelector.id = 'levelSelector';
   desk.appendChild(levelSelector);
 
-  const account = document.createElement('account');
+  const account = document.createElement('div');
   account.id = 'account';
   desk.appendChild(account);
 
   document.body.appendChild(desk);
+
+  const shadow = document.createElement('div');
+  shadow.id = 'shadow';
+  document.body.appendChild(shadow);
 
   return {
     desk,

@@ -130,6 +130,10 @@ export default (system, level) => {
   notesToggle.id = 'notesToggle';
   document.body.appendChild(notesToggle);
 
+  const shadow = document.createElement('div');
+  shadow.id = 'shadow';
+  document.body.appendChild(shadow);
+
   return {
     desk,
     magnifierContainer,

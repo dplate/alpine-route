@@ -72,6 +72,12 @@ export default {
         y: 4332,
         name: 'Bogartenlücke',
         type: 'place'
+      },
+      {
+        x: 3841, 
+        y: 7730,
+        name: 'Zwinglipass',
+        type: 'place'
       }
 
     ]

@@ -72,6 +72,6 @@ button:hover {
   background-size: 100% 100%;
   pointer-events: none;
   z-index: 10000;
-  opacity: 0.15;
+  opacity: 0.4;
 
 }

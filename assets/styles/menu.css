@@ -161,7 +161,7 @@
   height: 100%;
   transition: transform 0.5s;
   transition-timing-function: ease-out;
-  background-image: url("../images/coin.svg");
+  background-image: url("../images/coin.webp");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

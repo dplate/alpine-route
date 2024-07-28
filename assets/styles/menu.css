@@ -187,7 +187,7 @@
   background-position: center;
 }
 
-#bridge, #road {
+#bridge, #road, #mule, #train, #mapDrawing {
   position: absolute;
   background-size: contain;
   background-repeat: no-repeat;
@@ -207,8 +207,26 @@
   background-image: url("../images/road.webp");
 }
 
-@media screen and (max-width: 700px) {
-  .stain, #ruler, #bridge {
+#mule {
+  width: 350px;
+  height: 350px;
+  background-image: url("../images/mule.webp");
+}
+
+#train {
+  width: 370px;
+  height: 370px;
+  background-image: url("../images/train.webp");
+}
+
+#mapDrawing {
+  width: 450px;
+  height: 450px;
+  background-image: url("../images/mapDrawing.webp");
+}
+
+@media screen and (max-width: 800px) {
+  .stain, #ruler, #bridge, #road, #mule, #train, #mapDrawing {
     display: none;
   }
 }

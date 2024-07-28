@@ -24,12 +24,33 @@ export default (system) => {
     desk.appendChild(stain);
   }
 
+  const train = document.createElement('div');
+  train.id = 'train';
+  train.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
+  train.style.bottom = `${-10 + Math.random() * 50}vh`;
+  train.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
+  desk.appendChild(train);
+
+  const mule = document.createElement('div');
+  mule.id = 'mule';
+  mule.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
+  mule.style.bottom = `${-10 + Math.random() * 50}vh`;
+  mule.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
+  desk.appendChild(mule);
+
   const road = document.createElement('div');
   road.id = 'road';
   road.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
   road.style.bottom = `${-10 + Math.random() * 50}vh`;
   road.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
   desk.appendChild(road);
+
+  const mapDrawing = document.createElement('mapDrawing');
+  mapDrawing.id = 'mapDrawing';
+  mapDrawing.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
+  mapDrawing.style.bottom = `${-10 + Math.random() * 50}vh`;
+  mapDrawing.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
+  desk.appendChild(mapDrawing);
 
   const bridge = document.createElement('div');
   bridge.id = 'bridge';

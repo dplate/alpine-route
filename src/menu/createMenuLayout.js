@@ -24,6 +24,13 @@ export default (system) => {
     desk.appendChild(stain);
   }
 
+  const road = document.createElement('div');
+  road.id = 'road';
+  road.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
+  road.style.bottom = `${-10 + Math.random() * 50}vh`;
+  road.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
+  desk.appendChild(road);
+
   const bridge = document.createElement('div');
   bridge.id = 'bridge';
   bridge.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;

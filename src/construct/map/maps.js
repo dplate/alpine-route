@@ -1,4 +1,80 @@
 export default {
+  albula: {
+    labels: [
+      {
+        x: 701,
+        y: 439,
+        name: 'Bergün',
+        type: 'place'
+      },
+      {
+        x: 2837, 
+        y: 4544,
+        name: 'Preda',
+        type: 'place'
+      },
+      {
+        x: 7887, 
+        y: 5375,
+        name: 'Albulapass',
+        type: 'place'
+      },
+      {
+        x: 7914, 
+        y: 7706,
+        name: 'Spinas',
+        type: 'place'
+      },
+      {
+        x: 4332, 
+        y: 2214,
+        name: 'Alp da Tisch',
+        type: 'place'
+      },
+      {
+        x: 4979, 
+        y: 5557,
+        name: 'Crap Alv',
+        type: 'place'
+      },
+      {
+        x: 7564, 
+        y: 6490,
+        name: 'Piz da las Blais',
+        type: 'peak'
+      },
+      {
+        x: 7710, 
+        y: 3816,
+        name: 'Piz Üertsch',
+        type: 'peak'
+      },
+      {
+        x: 3478, 
+        y: 3348,
+        name: 'Piz Muot',
+        type: 'peak'
+      },
+      {
+        x: 4517, 
+        y: 978,
+        name: 'Piz Darlux',
+        type: 'peak'
+      },
+      {
+        x: 6027, 
+        y: 1620,
+        name: 'Tschimas da Tisch',
+        type: 'peak'
+      },
+      {
+        x: 2712, 
+        y: 7784,
+        name: 'La Piramida',
+        type: 'peak'
+      }
+    ]
+  },
   saentis: {
     labels: [
       {

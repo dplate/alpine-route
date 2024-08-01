@@ -5,7 +5,7 @@ import { finished } from 'stream/promises';
 import extract from 'extract-zip';
 import { PNG } from 'pngjs';
 
-const mapName = 'saentis';
+const mapName = 'albula';
 const textureWidth = 4096;
 const textureHeight = 4096;
 const resolutionInMeter = 2;

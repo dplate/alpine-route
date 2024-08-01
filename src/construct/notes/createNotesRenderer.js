@@ -4,6 +4,13 @@ import { ROUTE_TYPES, ROUTE_TYPES_TO_HIGHLIGHTS, ROUTE_TYPES_TO_COSTS_LABEL } fr
 const successColor = '#5bb798';
 const failColor = '#e66d3d';
 
+const formatPercent = (value) => {
+  if (value < 10) {
+    return `${Math.round(value * 10)}‰`; 
+  }
+  return `${Math.round(value)}%`;
+};
+
 export default (system, level, layout, cameras, route) => {
   layout.budget.label.textContent = system.text.get('BUDGET_LABEL');
   ROUTE_TYPES.forEach(routeType => {
@@ -22,9 +29,9 @@ export default (system, level, layout, cameras, route) => {
       case LIMIT_TYPE_MIN_RADIUS:
         return `${route.limits[limitType].value < 1000 ? Math.round(route.limits[limitType].value) + 'm' : '∞'} > ${level.limits[limitType]}m`;
       case LIMIT_TYPE_MAX_VARIANCE:
-        return `Δ${Math.round(route.limits[limitType].value)}% < ${level.limits[limitType]}%`;
+        return `Δ${formatPercent(route.limits[limitType].value)} < ${formatPercent(level.limits[limitType])}`;
       case LIMIT_TYPE_MAX_GRADIENT:
-        return `${Math.round(route.limits[limitType].value)}% < ${level.limits[limitType]}%`;
+        return `${formatPercent(route.limits[limitType].value)} < ${formatPercent(level.limits[limitType])}`;
       case LIMIT_TYPE_MIN_GAP:
         return `${route.limits[limitType].value < 100 ? Math.round(route.limits[limitType].value) + 'm' : '∞'} > ${level.limits[limitType]}m`;
       default:

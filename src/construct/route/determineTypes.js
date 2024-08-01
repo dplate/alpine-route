@@ -15,18 +15,7 @@ const determineType = (segment) => {
 };
 
 export default (route) => {
-  route.segments.forEach((segment, index) => {
+  route.segments.forEach((segment) => {
     segment.type = determineType(segment);
-    if (segment.type !== ROUTE_TYPE_GROUND) {
-      return;
-    }
-
-    const previousType = determineType(route.segments[index - 1]);
-    const nextType = determineType(route.segments[index]);
-    if (previousType === ROUTE_TYPE_BRIDGE || nextType === ROUTE_TYPE_BRIDGE) {
-      segment.type = ROUTE_TYPE_BRIDGE;
-    } else if (previousType === ROUTE_TYPE_TUNNEL || nextType === ROUTE_TYPE_TUNNEL) {
-      segment.type = ROUTE_TYPE_TUNNEL;
-    }
   });
 };

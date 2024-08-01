@@ -47,23 +47,52 @@ export default (layout, route, mapCamera) => {
   camera.update = () => {
     const minMapMeters = mapCamera.transformPixelsToMeters({ x: 0, y: 0 });
     const maxMapMeters = mapCamera.transformPixelsToMeters({ x: layout.map.width, y: layout.map.height });
+    const centerMapMeters = {
+      x: 0.5 * (minMapMeters.x + maxMapMeters.x),
+      y: 0.5 * (minMapMeters.y + maxMapMeters.y)
+    }; 
+    const calculateDistanceToCenter = (segment) => Math.sqrt(
+      (centerMapMeters.x - segment.x) ** 2 + 
+      (centerMapMeters.y - segment.y) ** 2
+    );
     const isVisible = (segment) => segment.x >= minMapMeters.x && segment.x < maxMapMeters.x && 
       segment.y >= minMapMeters.y && segment.y < maxMapMeters.y;
 
-    const firstVisibleSegmentIndex = Math.max(0, route.segments.findIndex(isVisible));
-    camera.minFlatMeter = route.segments[firstVisibleSegmentIndex].flatMeter;
+    const visibleParts = [];
+    let currentPart = null;
+    route.segments.forEach((segment, index) => {
+      if (isVisible(segment)) {
+        if (!currentPart) {
+          currentPart = {
+            minIndex: index,
+            minFlatMeter: segment.flatMeter,
+            minDistanceToCenter: calculateDistanceToCenter(segment)
+          };
+          visibleParts.push(currentPart);
+        }
+        currentPart.maxIndex = index;
+        currentPart.maxFlatMeter = segment.flatMeter;
+        currentPart.minDistanceToCenter = Math.min(currentPart.minDistanceToCenter, calculateDistanceToCenter(segment));
+      } else {
+        currentPart = null;
+      }
+    });
+    visibleParts.sort((part1, part2) => part1.minDistanceToCenter - part2.minDistanceToCenter);
 
-    let lastVisibleSegmentIndex = route.segments.findLastIndex(isVisible);
-    if (lastVisibleSegmentIndex < 0) {
-      lastVisibleSegmentIndex = route.segments.length - 1
-    }
-    camera.maxFlatMeter = route.segments[lastVisibleSegmentIndex].flatMeter;
+    const mainVisiblePart = visibleParts[0] || {
+      minIndex: 0,
+      minFlatMeter: route.segments[0].flatMeter,
+      maxIndex: route.segments.length - 1,
+      maxFlatMeter: route.segments[route.segments.length - 1].flatMeter
+    };
 
+    camera.minFlatMeter = mainVisiblePart.minFlatMeter;
+    camera.maxFlatMeter = mainVisiblePart.maxFlatMeter;
     camera.minHeight = Number.MAX_VALUE;
     camera.maxHeight = 0;
-    for (let segmentIndex = firstVisibleSegmentIndex; segmentIndex <= lastVisibleSegmentIndex; segmentIndex++) {
-      camera.minHeight = Math.min(camera.minHeight, route.segments[segmentIndex].mapHeight, route.segments[segmentIndex].z);
-      camera.maxHeight = Math.max(camera.maxHeight, route.segments[segmentIndex].mapHeight, route.segments[segmentIndex].z);
+    for (let segmentIndex = mainVisiblePart.minIndex; segmentIndex <= mainVisiblePart.maxIndex; segmentIndex++) {
+      camera.minHeight = Math.min(camera.minHeight, route.segments[segmentIndex].z);
+      camera.maxHeight = Math.max(camera.maxHeight, route.segments[segmentIndex].z);
     }
   };
 

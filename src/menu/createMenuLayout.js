@@ -24,7 +24,7 @@ export default (system) => {
     desk.appendChild(stain);
   }
 
-  ['train', 'mule', 'road', 'mapDrawing', 'bridge'].forEach(drawingId => {
+  ['train', 'mule', 'road', 'mapDrawing', 'bridge'].sort(() => 0.5 - Math.random()).forEach(drawingId => {
     const drawing = document.createElement('div');
     drawing.id = drawingId;
     drawing.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;

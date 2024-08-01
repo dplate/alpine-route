@@ -35,7 +35,10 @@ const drawContourLines = (context, renderCamera, profileCamera) => {
 };
 
 export default (context, route, renderTarget, profileCamera) => {
-  const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ flatMeter: segment.flatMeter, z: segment.mapHeight });
+  const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ 
+    flatMeter: segment.flatMeter, 
+    z: Math.abs(segment.mapHeight - segment.z) < 5 ? segment.z : segment.mapHeight
+  });
   const startPixels = transformToPixels(route.segments[0]);
   
   context.save();

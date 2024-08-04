@@ -22,7 +22,8 @@ const texts = {
     TYPES: {
       muleTrack: 'Saumpfad',
       funicular: 'Standseilbahn',
-      cogRailroad: 'Zahnradbahn'
+      cogRailroad: 'Zahnradbahn',
+      narrowGaugeRailroad: 'Schmalspurbahn'
     },
     METERS: 'Meter',
     PERCENT: 'Prozent'
@@ -49,7 +50,8 @@ const texts = {
     TYPE: 'Type',
     TYPES: {
       funicular: 'Funicular',
-      cogRailroad: 'Cog railroad'
+      cogRailroad: 'Cog railroad',
+      narrowGaugeRailroad: 'Narrow-gauge railroad'
     },
     METERS: 'meters',
     PERCENT: 'percent'

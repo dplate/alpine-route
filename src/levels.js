@@ -36,6 +36,78 @@ export default [
     }
   },
   {
+    id: 'berguen-alp-da-tisch',
+    map: 'albula',
+    name: {
+      'de': 'Zugang zur Alp da Tisch',
+      'en': 'Access to Alp da Tisch'
+    },
+    description: {
+      'de': 'Um von Bergün aus die Alp im Val Tisch angemessen versorgen zu können, bedarf es eines Pfades, der sowohl für Kühe als auch für Lasttiere begehbar ist. Der Bau dieses Weges sollte jedoch nicht allzu kostspielig ausfallen, da lediglich bescheidene Mittel zur Verfügung stehen.',
+      'en': 'To adequately supply the Alp in Val Tisch from Bergün, a path that is passable for both cattle and pack animals is required. However, the construction of this path should not be overly expensive, as only modest funds are available.'
+    },
+    type: 'muleTrack',
+    start: {
+      x: 711, 
+      y: 437
+    },
+    end: {
+      x: 4328, 
+      y: 2213
+    },
+    budget: 20000,
+    costs: {
+      tunnelMeter: 7,
+      tunnelDepthFactor: 1,
+      bridgeMeter: 5,
+      bridgeHeightFactor: 5,
+      groundMeter: 0.1,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: null,
+      maxGradient: 25,
+      maxVariance: null,
+      minGap: 2
+    }
+  },
+  {
+    id: 'berguen-albula',
+    map: 'albula',
+    name: {
+      'de': 'Albula - Passstraße',
+      'en': 'Albula - pass road'
+    },
+    description: {
+      'de': 'Über den Albulapass soll eine Postkutschen-Linie von Davos nach St. Moritz eingerichtet werden, wofür ein für Gespanne befahrbarer Weg von Bergün auf den Pass vonnöten ist. Die geplante gepflasterte Straße darf dabei eine maximale Steigung von 12 Prozent nicht überschreiten. Es ist zu erwarten, dass durch eine wohlbedachte Streckenführung auf den Bau hoher Brücken und langer Tunnel verzichtet werden kann, wodurch die Kosten erheblich reduziert würden.',
+      'en': 'A stagecoach line is to be established over the Albula Pass, connecting Davos to St. Moritz, necessitating a road passable for teams of horses from Bergün to the pass. The planned paved road must not exceed a maximum gradient of 12 percent. It is anticipated that, through a well-considered route, the construction of high bridges and long tunnels can likely be avoided, thereby significantly reducing costs.'
+    },
+    type: 'road',
+    start: {
+      x: 711, 
+      y: 437
+    },
+    end: {
+      x: 7849, 
+      y: 5410
+    },
+    budget: 1300000,
+    costs: {
+      tunnelMeter: 10,
+      tunnelDepthFactor: 1,
+      bridgeMeter: 7,
+      bridgeHeightFactor: 5,
+      groundMeter: 2,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: 8,
+      maxGradient: 12,
+      maxVariance: null,
+      minGap: 5
+    }
+  },
+  {
     id: 'saentisbahn-wasserauen-seealp',
     map: 'saentis',
     name: {
@@ -199,10 +271,82 @@ export default [
       x: 1656,
       y: 2833
     },
-    budget: 1800000,
+    budget: 1500000,
     costs: {
       tunnelMeter: 7,
-      tunnelDepthFactor: 1,
+      tunnelDepthFactor: 0.75,
+      bridgeMeter: 5,
+      bridgeHeightFactor: 5,
+      groundMeter: 2,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: 100,
+      maxGradient: 3.5,
+      maxVariance: null,
+      minGap: 10
+    }
+  },
+  {
+    id: 'albulabahn-muet-preda',
+    map: 'albula',
+    name: {
+      'de': 'Albulabahn 2: Muet - Preda',
+      'en': 'Albulabahn 2: Muet - Preda'
+    },
+    description: {
+      'de': 'Nachdem die ersten zweihundert Höhenmeter von Bergün nach Muet mit einer wahrhaft einfallsreichen Streckenführung überwunden worden sind, so erachten wir es als durchaus möglich, auch die nächsten zweihundert Höhenmeter nach Preda auf ähnliche Weise zu bewältigen. Da die Distanz, die hierbei zurückzulegen ist, wiederum als äußerst gering erscheint und ebenfalls nur eine Steigung von fünfunddreißig Promille gestattet ist, wird es notwendig sein, auch für diesen Abschnitt eine ebenso originelle und sorgfältig durchdachte Streckenführung zu ersinnen.',
+      'en': 'After the first two hundred meters of elevation from Bergün to Muet were surmounted with a truly ingenious route, we deem it entirely possible to overcome the next two hundred meters of elevation to Preda in a similar manner. Given that the distance to be covered is again quite short and only a gradient of thirty-five per mille is permitted, it will be necessary to devise an equally original and carefully considered route for this section as well.'
+    },
+    type: 'narrowGaugeRailroad',
+    start: {
+      x: 1656,
+      y: 2833
+    },
+    end: {
+      x: 2813,
+      y: 4554
+    },
+    budget: 3000000,
+    costs: {
+      tunnelMeter: 7,
+      tunnelDepthFactor: 0.75,
+      bridgeMeter: 5,
+      bridgeHeightFactor: 5,
+      groundMeter: 2,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: 100,
+      maxGradient: 3.5,
+      maxVariance: null,
+      minGap: 10
+    }
+  },
+  {
+    id: 'albulabahn-preda-spinas',
+    map: 'albula',
+    name: {
+      'de': 'Albulabahn 3: Preda - Spinas',
+      'en': 'Albulabahn 3: Preda - Spinas'
+    },
+    description: {
+      'de': 'Die aufwändig gestaltete Strecke nach Preda ist nun vollendet. Es erscheint indes wenig sinnvoll, weitere fünfhundert Höhenmeter hinauf auf den Albulapass zu erklimmen, da die Bahn auch während der Wintermonate in Betrieb sein soll, um die Reisenden sicher nach St. Moritz zu geleiten. Aus diesem Grunde wird nun eine beträchtliche Summe bereitgestellt, um den Bau eines langen Tunnels in das benachbarte Tal nach Spina zu verwirklichen. Nach den mühseligen zwei Etappen sollte dieser Abschnitt durch den Tunnel einfacher zu planen sein. Dennoch wird man darauf bedacht sein, die Tunnelstrecke so kurz wie möglich zu halten, um übermäßige Kosten zu vermeiden und die Bauzeit gering zu bemessen.',
+      'en': 'The elaborate route to Preda is now complete. However, it seems unwise to ascend an additional five hundred meters to the Albula Pass, as the railway is intended to operate even during the winter months, bringing guests safely to St. Moritz. Therefore, a considerable sum of money is now being allocated to construct a long tunnel into the neighboring valley of Spina. After the challenging two stages, this section through the tunnel is expected to be easier to plan. Nevertheless, efforts will be made to keep the tunnel route as short as possible, in order to avoid excessive costs and minimize construction time.'
+    },
+    type: 'narrowGaugeRailroad',
+    start: {
+      x: 2813,
+      y: 4554
+    },
+    end: {
+      x: 7901,
+      y: 7733
+    },
+    budget: 37000000,
+    costs: {
+      tunnelMeter: 7,
+      tunnelDepthFactor: 0.75,
       bridgeMeter: 5,
       bridgeHeightFactor: 5,
       groundMeter: 2,

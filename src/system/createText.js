@@ -23,7 +23,8 @@ const texts = {
       muleTrack: 'Saumpfad',
       funicular: 'Standseilbahn',
       cogRailroad: 'Zahnradbahn',
-      narrowGaugeRailroad: 'Schmalspurbahn'
+      narrowGaugeRailroad: 'Schmalspurbahn',
+      road: 'Straße',
     },
     METERS: 'Meter',
     PERCENT: 'Prozent'

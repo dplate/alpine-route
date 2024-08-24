@@ -22,8 +22,8 @@ const makeContinuousTangent = (previous, current, next) => {
     y: (factorToNext * factorToNext * distanceToPrevious.y - factorToPrevious * factorToPrevious * distanceToNext.y),
     z: (factorToNext * factorToNext * distanceToPrevious.z - factorToPrevious * factorToPrevious * distanceToNext.z)
   }
-  const previousNormalizer = 3 * factorToNext * (factorToPrevious + factorToNext);
-  const nextNormalizer = 3 * factorToPrevious * (factorToPrevious + factorToNext);
+  const previousNormalizer = 2.75 * factorToNext * (factorToPrevious + factorToNext);
+  const nextNormalizer = 2.75 * factorToPrevious * (factorToPrevious + factorToNext);
   return {
     previous: {
       x: current.x + (previousNormalizer && factor.x / previousNormalizer),

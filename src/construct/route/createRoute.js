@@ -59,7 +59,7 @@ const saveRoute = (system, level, route) => {
 };
 
 const smoothControlPointHeights = (controlPoints) => {
-  for (let run = 0; run < 5; run++) {
+  for (let run = 0; run < 3; run++) {
     controlPoints.forEach((point, index) => {
       if (point.onGround && index >= 1 && index <= controlPoints.length - 2) {
         const previousPoint = controlPoints[index - 1];

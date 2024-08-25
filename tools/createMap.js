@@ -5,7 +5,8 @@ import { finished } from 'stream/promises';
 import extract from 'extract-zip';
 import { PNG } from 'pngjs';
 
-const mapName = 'albula';
+// 81 segmentUrls needed, select 9x9km segments, start at bottom-left (south-west), 8x8km are really used
+const mapName = 'furka';
 const textureWidth = 4096;
 const textureHeight = 4096;
 const resolutionInMeter = 2;

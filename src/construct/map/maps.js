@@ -75,6 +75,82 @@ export default {
       }
     ]
   },
+  furka: {
+    labels: [
+      {
+        x: 2922, 
+        y: 7094,
+        name: 'Oberwald',
+        type: 'place'
+      },
+      {
+        x: 3704, 
+        y: 4110,
+        name: 'Gletsch',
+        type: 'place'
+      },
+      {
+        x: 1943, 
+        y: 4072,
+        name: 'Grimselpass',
+        type: 'place'
+      },
+      {
+        x: 7838, 
+        y: 2815,
+        name: 'Furkapass',
+        type: 'place'
+      },
+      {
+        x: 3860, 
+        y: 661,
+        name: 'Vorder Gärstenhorn',
+        type: 'peak'
+      },
+      {
+        x: 6824, 
+        y: 5134,
+        name: 'Tällistock',
+        type: 'peak'
+      },
+      {
+        x: 7158, 
+        y: 1355,
+        name: 'Chli Furkahorn',
+        type: 'peak'
+      },
+      {
+        x: 3337, 
+        y: 1424,
+        name: 'Hohhoren',
+        type: 'peak'
+      },
+      {
+        x: 7443, 
+        y: 6970,
+        name: 'Vorder Berg',
+        type: 'peak'
+      },
+      {
+        x: 5704, 
+        y: 1141,
+        name: 'Rhonegletscher',
+        type: 'place'
+      },
+      {
+        x: 724, 
+        y: 699,
+        name: 'Älpersulz',
+        type: 'place'
+      },
+      {
+        x: 5719, 
+        y: 7656,
+        name: 'Schärlichwang',
+        type: 'place'
+      }
+    ]
+  },
   saentis: {
     labels: [
       {

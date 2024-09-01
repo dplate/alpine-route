@@ -111,8 +111,8 @@ export default [
     id: 'saentisbahn-wasserauen-seealp',
     map: 'saentis',
     name: {
-      'de': 'Säntisbahn 1: Seealp',
-      'en': 'Säntisbahn 1: Seealp'
+      'de': 'Säntisbahn I: Seealp',
+      'en': 'Säntisbahn I: Seealp'
     },
     description: {
       'de': 'Um den Tourismus im Alpstein zu beleben, ist der Bau einer Eisenbahn von dem auf 870 Metern gelegenen Wasserauen hinauf zum 2500 Meter hohen Säntis vorgesehen. Es wäre bereits eine bedeutende Leistung, wenn diese erste Etappe bis zum Seealpsee mit den begrenzten Mitteln verwirklicht werden könnte. Auf dieser Strecke soll eine Schmalspurbahn eingesetzt werden, die teilweise durch Zahnradunterstützung ergänzt wird.',
@@ -147,8 +147,8 @@ export default [
     id: 'saentisbahn-seealp-meglisalp',
     map: 'saentis',
     name: {
-      'de': 'Säntisbahn 2: Meglisalp',
-      'en': 'Säntisbahn 2: Meglisalp'
+      'de': 'Säntisbahn II: Meglisalp',
+      'en': 'Säntisbahn II: Meglisalp'
     },
     description: {
       'de': 'Nachdem wir endlich die Hochebene des malerischen Seealpsees erreicht haben, steht nun die Umsetzung des steilsten Abschnitts der Säntisbahn bevor: von der Seealp durch die Felswände hindurch bis zur Siedlung Meglisalp. Dies bedeutet eine Überwindung von 400 Höhenmetern auf kurzer Strecke, wofür wir den Bau einer Standseilbahn in Erwägung ziehen.',
@@ -183,8 +183,8 @@ export default [
     id: 'saentisbahn-meglisalp-saentis',
     map: 'saentis',
     name: {
-      'de': 'Säntisbahn 3: Gipfel',
-      'en': 'Säntisbahn 3: Peak'
+      'de': 'Säntisbahn III: Gipfel',
+      'en': 'Säntisbahn III: Peak'
     },
     description: {
       'de': 'Nach dem erfolgreichen Betrieb der Säntisbahn von Wasserauen bis zur Meglisalp haben die ehrenwerten Investoren nunmehr genügend Geldmittel bereitgestellt, um die letzte Etappe auf den Gipfel des Säntis in Angriff zu nehmen. Angesichts der beträchtlichen Länge der Strecke sowie der mehr als tausend Höhenmeter, ist hier die Errichtung einer durchgängigen Zahnradbahn unumgänglich. Ferner wird es am Gipfel notwendig sein, längere Tunnelbauten zu errichten, um das felsige Gelände zu überwinden.',
@@ -255,8 +255,8 @@ export default [
     id: 'albulabahn-berguen-muet',
     map: 'albula',
     name: {
-      'de': 'Albulabahn 1: Bergün - Muet',
-      'en': 'Albulabahn 1: Bergün - Muet'
+      'de': 'Albulabahn I: Bergün - Muet',
+      'en': 'Albulabahn I: Bergün - Muet'
     },
     description: {
       'de': 'Über den Albula soll der Kurort St. Moritz von Norden her mit einer Bahn erschlossen werden. Da auch schwere Güterzüge zum Einsatz kommen sollen, darf die Schmalspurstrecke nur eine geringe Steigung von 35 Promille aufweisen. Um dieses schwierige Unterfangen zu vollbringen, haben wir das Vorhaben in drei Bauvorhaben gegliedert. Zuerst stehen die etwa 200 Höhenmeter vom Orte Bergün nach Muet an. Aufgrund der kurzen Entfernung werden wohl aufwändige Serpentinen erforderlich sein, welche auch einiges an Kosten verursachen dürften.',
@@ -291,8 +291,8 @@ export default [
     id: 'albulabahn-muet-preda',
     map: 'albula',
     name: {
-      'de': 'Albulabahn 2: Muet - Preda',
-      'en': 'Albulabahn 2: Muet - Preda'
+      'de': 'Albulabahn II: Muet - Preda',
+      'en': 'Albulabahn II: Muet - Preda'
     },
     description: {
       'de': 'Nachdem die ersten zweihundert Höhenmeter von Bergün nach Muet mit einer wahrhaft einfallsreichen Streckenführung überwunden worden sind, so erachten wir es als durchaus möglich, auch die nächsten zweihundert Höhenmeter nach Preda auf ähnliche Weise zu bewältigen. Da die Distanz, die hierbei zurückzulegen ist, wiederum als äußerst gering erscheint und ebenfalls nur eine Steigung von fünfunddreißig Promille gestattet ist, wird es notwendig sein, auch für diesen Abschnitt eine ebenso originelle und sorgfältig durchdachte Streckenführung zu ersinnen.',
@@ -327,8 +327,8 @@ export default [
     id: 'albulabahn-preda-spinas',
     map: 'albula',
     name: {
-      'de': 'Albulabahn 3: Preda - Spinas',
-      'en': 'Albulabahn 3: Preda - Spinas'
+      'de': 'Albulabahn III: Preda - Spinas',
+      'en': 'Albulabahn III: Preda - Spinas'
     },
     description: {
       'de': 'Die aufwändig gestaltete Strecke nach Preda ist nun vollendet. Es erscheint indes wenig sinnvoll, weitere fünfhundert Höhenmeter hinauf auf den Albulapass zu erklimmen, da die Bahn auch während der Wintermonate in Betrieb sein soll, um die Reisenden sicher nach St. Moritz zu geleiten. Aus diesem Grunde wird nun eine beträchtliche Summe bereitgestellt, um den Bau eines langen Tunnels in das benachbarte Tal nach Spina zu verwirklichen. Nach den mühseligen zwei Etappen sollte dieser Abschnitt durch den Tunnel einfacher zu planen sein. Dennoch wird man darauf bedacht sein, die Tunnelstrecke so kurz wie möglich zu halten, um übermäßige Kosten zu vermeiden und die Bauzeit gering zu bemessen.',
@@ -363,8 +363,8 @@ export default [
     id: 'furkastrasse-oberwald-gletsch',
     map: 'furka',
     name: {
-      'de': 'Furkastraße 1: Oberwald - Gletsch',
-      'en': 'Furka road 1: Oberwald - Gletsch'
+      'de': 'Furkastraße I: Oberwald - Gletsch',
+      'en': 'Furka road I: Oberwald - Gletsch'
     },
     description: {
       'de': 'Es soll endlich gelingen, den Furkapass von Westen her durch eine Straße zu erschließen. Der erste zu planende Abschnitt wird von Oberwald aus 400 Meter hinauf zur Zunge des Rhonegletschers führen. Da für die schweren Postkutschen ein Anstieg von maximal 12 Prozent möglich ist, werden Serpentinen unvermeidlich sein. So soll die Trasse geschickt durch das steile Gelände geleitet werden, um den Aufstieg zu erleichtern und dieses ehrgeizige Vorhaben zu verwirklichen.',
@@ -380,6 +380,78 @@ export default [
       y: 4058
     },
     budget: 500000,
+    costs: {
+      tunnelMeter: 10,
+      tunnelDepthFactor: 1,
+      bridgeMeter: 7,
+      bridgeHeightFactor: 5,
+      groundMeter: 2,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: 8,
+      maxGradient: 12,
+      maxVariance: null,
+      minGap: 5
+    }
+  },
+  {
+    id: 'furkastrasse-gletsch-furkapass',
+    map: 'furka',
+    name: {
+      'de': 'Furkastraße II: Gletsch - Furkapass',
+      'en': 'Furka road II: Gletsch - Furkapass'
+    },
+    description: {
+      'de': 'Nachdem Gletsch erreicht ist, stehen uns nunmehr die letzten 650 Höhenmeter bis zum Furkapass bevor. Hinsichtlich der Streckenführung bieten sich verschiedene Optionen dar. Wir vertrauen jedoch auf Ihre geschätzte Erfahrung, dass Sie nicht nur die Kosten im Auge behalten, sondern auch eine Route wählen werden, welche vermögende Reisende in unsere Region zu ziehen vermag. Gleichwohl darf eine Steigung von 12 Prozent keinesfalls überschritten werden.',
+      'en': 'Having reached Gletsch, the remaining 650 meters of elevation to the Furka Pass now lie ahead. Several routes are available for the ascent, but we are confident that your esteemed expertise will not only consider the costs but also select a path that attracts affluent tourists to our region. Nevertheless, a gradient of 12 percent must not be exceeded under any circumstances.'
+    },
+    type: 'road',
+    start: {
+      x: 3694, 
+      y: 4058
+    },
+    end: {
+      x: 7821, 
+      y: 2845
+    },
+    budget: 1000000,
+    costs: {
+      tunnelMeter: 10,
+      tunnelDepthFactor: 1,
+      bridgeMeter: 7,
+      bridgeHeightFactor: 5,
+      groundMeter: 2,
+      groundSlopeFactor: 20
+    },
+    limits: {
+      minRadius: 8,
+      maxGradient: 12,
+      maxVariance: null,
+      minGap: 5
+    }
+  },
+  {
+    id: 'grimselstrasse-gletsch-grimselpass',
+    map: 'furka',
+    name: {
+      'de': 'Grimselstraße: Südaufstieg',
+      'en': 'Grimsel road: South ascent'
+    },
+    description: {
+      'de': 'Die Straße, welche von Norden zum Hospiz auf dem Grimselpass führt, hat sich bereits als großer Erfolg erwiesen. Doch sowohl Waren als auch Reisende müssen dort auf Maultiere umsatteln, um den steilen Abstieg ins Wallis zu bewältigen. Es ist nunmehr Ihre Aufgabe, diese Lücke zu schließen und eine Straße von Gletsch zum Grimselpass zu entwerfen. Auf kürzester Strecke sind dort 400 Höhenmeter zu überwinden; ohne zahlreiche Serpentinen wird es unmöglich sein, die maximal erlaubte Steigung von 12 Prozent einzuhalten.',
+      'en': 'The road leading from the north to the hospice on the Grimsel Pass has already proven to be a great success. However, both goods and travelers must transfer to mules there to navigate the steep descent into the Valais. It is now your task to close this gap and design a road from Gletsch to the Grimsel Pass. On the shortest route, 400 meters of elevation must be overcome; without numerous switchbacks, it will be impossible to maintain the maximum allowable gradient of 12 percent.'
+    },
+    type: 'road',
+    start: {
+      x: 3694, 
+      y: 4058
+    },
+    end: {
+      x: 1965, 
+      y: 4045
+    },
+    budget: 650000,
     costs: {
       tunnelMeter: 10,
       tunnelDepthFactor: 1,

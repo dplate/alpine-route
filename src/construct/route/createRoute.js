@@ -59,11 +59,13 @@ const saveRoute = (system, level, route) => {
 };
 
 const smoothControlPointHeights = (controlPoints) => {
-  for (let run = 0; run < 3; run++) {
-    controlPoints.forEach((point, index) => {
+  const reversedControlPoints = controlPoints.toReversed()
+  for (let run = 0; run < 4; run++) {
+    const points = run % 2 ? controlPoints : reversedControlPoints;
+    points.forEach((point, index) => {
       if (point.onGround && index >= 1 && index <= controlPoints.length - 2) {
-        const previousPoint = controlPoints[index - 1];
-        const nextPoint = controlPoints[index + 1];
+        const previousPoint = points[index - 1];
+        const nextPoint = points[index + 1];
         const flatMeterFactor = (point.flatMeter - previousPoint.flatMeter) / (nextPoint.flatMeter - previousPoint.flatMeter) 
         const optimalHeight = previousPoint.z * (1.0 - flatMeterFactor) + nextPoint.z * flatMeterFactor;
         const newHeight = Math.max(point.mapHeight - 2.0, Math.min(optimalHeight, point.mapHeight + 2.0));

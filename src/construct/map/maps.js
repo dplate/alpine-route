@@ -148,6 +148,12 @@ export default {
         y: 7656,
         name: 'Schärlichwang',
         type: 'place'
+      },
+      {
+        x: 7092, 
+        y: 3442,
+        name: 'Muttbach-Belvédère',
+        type: 'place'
       }
     ]
   },

@@ -5,6 +5,7 @@ import berguenAlbula from './levels/berguenAlbula.js';
 import berguenAlpDaTisch from './levels/berguenAlpDaTisch.js';
 import bollenweesZwinglipass from './levels/bollenweesZwinglipass.js';
 import ebenalpSchaefler from './levels/ebenalpSchaefler.js';
+import furkaBergstrecke from './levels/furkaBergstrecke.js';
 import furkastrasseGletschFurkapass from './levels/furkastrasseGletschFurkapass.js';
 import furkastrasseOberwaldGletsch from './levels/furkastrasseOberwaldGletsch.js';
 import grimselstrasseAelplersulzGrimselpass from './levels/grimselstrasseAelplersulzGrimselpass.js';
@@ -30,4 +31,5 @@ export default [
   furkastrasseGletschFurkapass,
   grimselstrasseGletschGrimselpass,
   grimselstrasseAelplersulzGrimselpass,
+  furkaBergstrecke
 ];

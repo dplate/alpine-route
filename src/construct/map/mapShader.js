@@ -215,7 +215,7 @@ fn addForest(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32
   let upperSlopeMask = 1.0 - smoothstep(0.35, 0.7, slope);
   let slopeMask = lowerSlopeMask * upperSlopeMask;
 
-  let heightMask = smoothstep(2300, 1700, height);
+  let heightMask = 1.0 - smoothstep(1700, 2300, height);
 
   let probability = heightMask * slopeMask;
   let noise = simplexNoise(textureCoordinate, vec2f(10));

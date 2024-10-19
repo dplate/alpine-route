@@ -149,16 +149,21 @@ export default (points) => {
     },
     getAtMeter: (meter) => {
       let totalSegmentLength = 0;
+      let totalSegmentFlatLength = 0;
       let segmentIndex = 0;
       while (meter > totalSegmentLength + segmentMeasurements[segmentIndex + 1].length) {
         segmentIndex++;
         totalSegmentLength += segmentMeasurements[segmentIndex].length;
+        totalSegmentFlatLength += segmentMeasurements[segmentIndex].flatLength;
       }
   
       const segmentLength = segmentMeasurements[segmentIndex + 1].length;
       const remainingLength = meter - totalSegmentLength;
       const fraction = remainingLength / segmentLength;
-      return evaluateSpline(segmentIndex + fraction);
+      return {
+        ...evaluateSpline(segmentIndex + fraction),
+        flatMeter: totalSegmentFlatLength + fraction * segmentMeasurements[segmentIndex + 1].flatLength
+      };
     }
   };
 };

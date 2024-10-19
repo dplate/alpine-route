@@ -90,14 +90,11 @@ const updateSegments = (map, route, spline) => {
     const point = spline.getAtMeter(meter);
     limitPointToMap(point, map);
     const mapHeight = map.getHeightAtPoint(point);
-    const lastPoint = route.segments[route.segments.length - 1];
-    const flatMeter = lastPoint ? lastPoint.flatMeter + Math.sqrt((point.x - lastPoint.x)**2 + (point.y - lastPoint.y)**2) : 0;
     
     route.segments.push({
       ...point,
       mapHeight,
       meter,
-      flatMeter,
       type: null,
       costs: null
     });

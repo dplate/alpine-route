@@ -43,10 +43,10 @@ export default (route) => {
   route.segments.forEach((segment, index) => {
     if (index <= 1) {
       segment.radius = Number.MAX_VALUE;
-      segment.gradient = calculateGradient(segment, route.segments[index + 1]);
+      segment.gradient = calculateGradient(segment, route.segments[index + 2]);
     } else if (index >= route.segments.length - 2) {
       segment.radius = Number.MAX_VALUE;
-      segment.gradient = calculateGradient(route.segments[index - 1], segment);
+      segment.gradient = calculateGradient(route.segments[index - 2], segment);
     } else {
       segment.radius = calculateRadius(segment, route.segments[index - 2], route.segments[index + 2]);
       segment.gradient = calculateGradient(route.segments[index - 2], route.segments[index + 2]);

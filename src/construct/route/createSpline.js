@@ -9,21 +9,18 @@ const makeContinuousTangent = (previous, current, next) => {
     y: next.y - current.y,
     z: next.z - current.z
   };
-  const factorToPrevious = Math.pow(
-    distanceToPrevious.x * distanceToPrevious.x + distanceToPrevious.y * distanceToPrevious.y + distanceToPrevious.z * distanceToPrevious.z, 
-    0.5
-  );
-  const factorToNext = Math.pow(
-    distanceToNext.x * distanceToNext.x + distanceToNext.y * distanceToNext.y + distanceToNext.z * distanceToNext.z, 
-    0.5
-  );
+
+  const factorToPrevious = Math.sqrt(distanceToPrevious.x ** 2 + distanceToPrevious.y ** 2 + distanceToPrevious.z ** 2);
+  const factorToNext = Math.sqrt(distanceToNext.x ** 2 + distanceToNext.y ** 2 + distanceToNext.z ** 2);
   const factor = {
-    x: (factorToNext * factorToNext * distanceToPrevious.x - factorToPrevious * factorToPrevious * distanceToNext.x),
-    y: (factorToNext * factorToNext * distanceToPrevious.y - factorToPrevious * factorToPrevious * distanceToNext.y),
-    z: (factorToNext * factorToNext * distanceToPrevious.z - factorToPrevious * factorToPrevious * distanceToNext.z)
+    x: (factorToNext * factorToNext * distanceToPrevious.x - factorToPrevious * factorToPrevious * distanceToNext.x) / 2.75,
+    y: (factorToNext * factorToNext * distanceToPrevious.y - factorToPrevious * factorToPrevious * distanceToNext.y) / 2.75,
+    z: (factorToNext * factorToNext * distanceToPrevious.z - factorToPrevious * factorToPrevious * distanceToNext.z) / 3.0
   }
-  const previousNormalizer = 2.75 * factorToNext * (factorToPrevious + factorToNext);
-  const nextNormalizer = 2.75 * factorToPrevious * (factorToPrevious + factorToNext);
+
+  const previousNormalizer = factorToNext * (factorToPrevious + factorToNext);
+  const nextNormalizer = factorToPrevious * (factorToPrevious + factorToNext);
+
   return {
     previous: {
       x: current.x + (previousNormalizer && factor.x / previousNormalizer),
@@ -47,39 +44,40 @@ const createSplineEvaluator = (points) => {
     });
   }
   const tangents = [];
-  for (let i = 1; i < points.length - 1; i++) {
-      tangents.push(makeContinuousTangent(points[i - 1], points[i], points[i + 1]));
+  for (let i = 0; i < points.length; i++) {
+    const previousPoint = points[i - 1] || {
+      x: points[i].x - (points[i + 1].x - points[i].x),
+      y: points[i].y - (points[i + 1].y - points[i].y),
+      z: points[i].z - (points[i + 1].z - points[i].z)
+    };
+    const currentPoint = points[i];
+    const nextPoint = points[i + 1] || {
+      x: points[i].x - (points[i - 1].x - points[i].x),
+      y: points[i].y - (points[i - 1].y - points[i].y),
+      z: points[i].z - (points[i - 1].z - points[i].z)
+    };
+    tangents[i] = makeContinuousTangent(previousPoint, currentPoint, nextPoint);
   }
 
   return (t) => {
     const correctedT = Math.max(0, Math.min(points.length - 1, t));
+
     const previousIndex = Math.min(Math.floor(correctedT), points.length - 2);
+    const nextIndex = previousIndex + 1;
+
     const remainder = correctedT - previousIndex;
     const inverseRemainder = 1 - remainder;
 
     const previousPoint = points[previousIndex];
-    const currentPoint = points[previousIndex + 1];
+    const nextPoint = points[nextIndex];
 
-    if (previousIndex === 0 || previousIndex === points.length - 2) {
-      const tangentPoint = previousIndex === 0 ? tangents[previousIndex].previous : tangents[previousIndex - 1].next;
-      const previousPointWeight = inverseRemainder * inverseRemainder;
-      const tangentWeight = 2 * inverseRemainder * remainder;
-      const currentPointWeight = remainder * remainder;
-      return {
-        x: previousPointWeight * previousPoint.x + tangentWeight * tangentPoint.x + currentPointWeight * currentPoint.x,
-        y: previousPointWeight * previousPoint.y + tangentWeight * tangentPoint.y + currentPointWeight * currentPoint.y,
-        z: previousPointWeight * previousPoint.z + tangentWeight * tangentPoint.z + currentPointWeight * currentPoint.z
-      };
-    } 
+    const previousTangentPoint = tangents[previousIndex].next;
+    const nextTangentPoint = tangents[nextIndex].previous;
 
-    const previousTangentPoint = tangents[previousIndex - 1].next;
-    const nextTangentPoint = tangents[previousIndex].previous;
-    const nextPoint = points[previousIndex + 1];
-
-    const previousPointWeight = inverseRemainder * inverseRemainder * inverseRemainder;
-    const previousTangentWeight = 3 * inverseRemainder * inverseRemainder * remainder;
-    const nextTangentWeight = 3 * inverseRemainder * remainder * remainder;
-    const nextPointWeight = remainder * remainder * remainder;
+    const previousPointWeight = inverseRemainder**3;
+    const previousTangentWeight = 3 * inverseRemainder**2 * remainder;
+    const nextTangentWeight = 3 * inverseRemainder * remainder**2;
+    const nextPointWeight = remainder**3;
 
     return {
       x: previousPointWeight * previousPoint.x + 

@@ -75,6 +75,11 @@ const getNormalizedForCosts = (route, segment, highlights) => {
     min: Number.MAX_VALUE,
     max: 0
   });
+
+  if (highlightCosts.max === highlightCosts.min) {
+    return 1.0;
+  }
+  
   return (segment.costs - highlightCosts.min) / (highlightCosts.max - highlightCosts.min);
 }
 

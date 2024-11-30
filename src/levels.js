@@ -11,6 +11,7 @@ import furkastrasseOberwaldGletsch from './levels/furkastrasseOberwaldGletsch.js
 import grimselstrasseAelplersulzGrimselpass from './levels/grimselstrasseAelplersulzGrimselpass.js';
 import grimselstrasseGletschGrimselpass from './levels/grimselstrasseGletschGrimselpass.js';
 import oberwaldSchaerlichwang from './levels/oberwaldSchaerlichwang.js';
+import oberwaldGrimselpass from './levels/oberwaldGrimselpass.js';
 import saentisbahnMeglisalpSaentis from './levels/saentisbahnMeglisalpSaentis.js';
 import saentisbahnSeealpMeglisalp from './levels/saentisbahnSeealpMeglisalp.js';
 import saentisbahnWasserauenSeealp from './levels/saentisbahnWasserauenSeealp.js';
@@ -19,6 +20,7 @@ export default [
   ebenalpSchaefler,
   berguenAlpDaTisch,
   oberwaldSchaerlichwang,
+  oberwaldGrimselpass,
   berguenAlbula,
   saentisbahnWasserauenSeealp,
   saentisbahnSeealpMeglisalp,
@@ -29,7 +31,7 @@ export default [
   albulabahnPredaSpinas,
   furkastrasseOberwaldGletsch,
   furkastrasseGletschFurkapass,
-  grimselstrasseGletschGrimselpass,
   grimselstrasseAelplersulzGrimselpass,
+  grimselstrasseGletschGrimselpass,
   furkaBergstrecke
 ];

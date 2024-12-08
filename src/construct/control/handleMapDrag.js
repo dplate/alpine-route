@@ -16,6 +16,7 @@ export default (cameras, route, renderer, pixels, movementPixels, touched) => {
     );
     if (editPointPixels) {
       cameras.magnifier.setByMapPixels(editPointPixels);
+      cameras.profile.update();
     } else {
       cameras.magnifier.disable();
     }

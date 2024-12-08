@@ -66,18 +66,22 @@ export default (layout, route, mapCamera) => {
           currentPart = {
             minIndex: index,
             minFlatMeter: segment.flatMeter,
-            minDistanceToCenter: calculateDistanceToCenter(segment)
+            minDistanceToCenter: calculateDistanceToCenter(segment),
+            editing: false
           };
           visibleParts.push(currentPart);
         }
         currentPart.maxIndex = index;
         currentPart.maxFlatMeter = segment.flatMeter;
         currentPart.minDistanceToCenter = Math.min(currentPart.minDistanceToCenter, calculateDistanceToCenter(segment));
+        currentPart.editing = currentPart.editing || route.isEditingSegment(segment);
       } else {
         currentPart = null;
       }
     });
-    visibleParts.sort((part1, part2) => part1.minDistanceToCenter - part2.minDistanceToCenter);
+    visibleParts.sort((part1, part2) => 
+      (part1.editing ? 0 : part1.minDistanceToCenter) - (part2.editing ? 0 : part2.minDistanceToCenter)
+  );
 
     const mainVisiblePart = visibleParts[0] || {
       minIndex: 0,

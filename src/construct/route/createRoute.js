@@ -251,5 +251,12 @@ export default (system, level, map) => {
     route.edit = null;
   };
 
+  route.isEditingSegment = (segment) => {
+    if (route.edit?.controlPoint) {
+      return calculateMapDistance(route.edit.controlPoint, segment) <= segmentDistance;
+    }
+    return route.edit?.segment === segment;
+  }
+
   return route;
 };

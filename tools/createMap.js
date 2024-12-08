@@ -6,7 +6,7 @@ import extract from 'extract-zip';
 import { PNG } from 'pngjs';
 
 // 81 segmentUrls needed, select 9x9km segments, start at bottom-left (south-west), 8x8km are really used
-const mapName = 'furka';
+const mapName = 'jungfrau';
 const textureWidth = 4096;
 const textureHeight = 4096;
 const resolutionInMeter = 2;

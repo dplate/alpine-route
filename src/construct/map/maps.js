@@ -239,5 +239,123 @@ export default {
       }
 
     ]
+  },
+  jungfrau: {
+    labels: [
+      {
+        x: 348, 
+        y: 2268,
+        name: 'Lauterbrunnen',
+        type: 'place'
+      },
+      {
+        x: 1075, 
+        y: 434,
+        name: 'Wengen',
+        type: 'place'
+      },
+      {
+        x: 4029, 
+        y: 2752,
+        name: 'Kleine Scheidegg',
+        type: 'place'
+      },
+      {
+        x: 5444, 
+        y: 6956,
+        name: 'Jungfraujoch',
+        type: 'place'
+      },
+      {
+        x: 4192, 
+        y: 8119,
+        name: 'Jungfrau',
+        type: 'peak'
+      },
+      {
+        x: 6834, 
+        y: 5683,
+        name: 'Mönch',
+        type: 'peak'
+      },
+      {
+        x: 7434, 
+        y: 3557,
+        name: 'Eiger',
+        type: 'peak'
+      },
+      {
+        x: 3027, 
+        y: 1951,
+        name: 'Lauberhorn',
+        type: 'peak'
+      },
+      {
+        x: 3145, 
+        y: 1070,
+        name: 'Tschuggen',
+        type: 'peak'
+      },
+      {
+        x: 2165, 
+        y: 3778,
+        name: 'Wengneralp',
+        type: 'place'
+      },
+      {
+        x: 7567, 
+        y: 6104,
+        name: 'Mönchsjoch',
+        type: 'place'
+      },
+      {
+        x: 7208, 
+        y: 1004,
+        name: 'Alpligen',
+        type: 'place'
+      },
+      {
+        x: 5789, 
+        y: 3587,
+        name: 'Rotstock',
+        type: 'peak'
+      },
+      {
+        x: 1249, 
+        y: 6368,
+        name: 'Schwarzmönch',
+        type: 'peak'
+      },
+      {
+        x: 3144, 
+        y: 7541,
+        name: 'Silberhorn',
+        type: 'peak'
+      },
+      {
+        x: 4122, 
+        y: 6725,
+        name: 'Schneehoren',
+        type: 'peak'
+      },
+      { 
+        x: 5476, 
+        y: 5388,
+        name: 'Mönchplateau',
+        type: 'peak'
+      },
+      {
+        x: 285, 
+        y: 4408,
+        name: 'Trümmelbach',
+        type: 'place'
+      },
+      {
+        x: 5925, 
+        y: 6911,
+        name: 'Sphinx',
+        type: 'peak'
+      }
+    ]
   }
 };

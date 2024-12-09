@@ -1,9 +1,9 @@
 export default {
-  id: 'jungfraujoch-jungfrau',
+  id: 'jungfraubahn-jungfraujoch-jungfrau',
   map: 'jungfrau',
   name: {
-    'de': 'Jungfraubahn IV: Jungfrau',
-    'en': 'Jungfraubahn IV: Jungfrau'
+    'de': 'Jungfraubahn V: Jungfrau',
+    'en': 'Jungfraubahn V: Jungfrau'
   },
   description: {
     'de': 'Die Bahn hinauf zum Jungfraujoch erfreut sich bereits größter Anerkennung und Beliebtheit bei Besuchern aus aller Welt, ein wahrhaft bemerkenswerter Erfolg. Es wird Ihnen nunmehr anvertraut, die letzte Etappe zu konzipieren, welche die verbleibenden 600 Höhenmeter zum Gipfel der ehrwürdigen Jungfrau, die in stolzer Höhe von 4100 Metern thront, zu überwinden hat. Dank der jüngst verbesserten Zahnradtechnik, welche nun Steigungen von bis zu 30 Prozent ermöglicht, steht Ihnen ein bedeutendes Hilfsmittel zur Verfügung, um den Streckenverlauf zu gestalten.',

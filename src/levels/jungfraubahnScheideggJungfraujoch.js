@@ -1,9 +1,9 @@
 export default {
-  id: 'scheidegg-jungfraujoch',
+  id: 'jungfraubahn-scheidegg-jungfraujoch',
   map: 'jungfrau',
   name: {
-    'de': 'Jungfraubahn III: Jungfraujoch',
-    'en': 'Jungfraubahn III: Jungfraujoch'
+    'de': 'Jungfraubahn IV: Jungfraujoch',
+    'en': 'Jungfraubahn IV: Jungfraujoch'
   },
   description: {
     'de': 'Von der kleinen Scheidegg auf 2000 Metern soll der anspruchsvollste Abschnitt beginnen: ein Weg durch die Eiger-Nordwand hinauf zum 3500 Meter hohen Jungfraujoch. Angesichts des extremen Geländes sind lange Tunnel unvermeidlich. Um das Budget zu wahren, sollen regelmäßige Tunnelöffnungen eingeplant werden, die der Materialentsorgung dienen.',

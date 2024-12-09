@@ -15,8 +15,11 @@ import oberwaldGrimselpass from './levels/oberwaldGrimselpass.js';
 import saentisbahnMeglisalpSaentis from './levels/saentisbahnMeglisalpSaentis.js';
 import saentisbahnSeealpMeglisalp from './levels/saentisbahnSeealpMeglisalp.js';
 import saentisbahnWasserauenSeealp from './levels/saentisbahnWasserauenSeealp.js';
-import scheideggJungfraujoch from './levels/scheideggJungfraujoch.js';
-import jungfraujochJungfrau from './levels/jungfraujochJungfrau.js';
+import jungfraubahnScheideggJungfraujoch from './levels/jungfraubahnScheideggJungfraujoch.js';
+import jungfraubahnJungfraujochJungfrau from './levels/jungfraubahnJungfraujochJungfrau.js';
+import jungfraubahnWengenScheidegg from './levels/jungfraubahnWengenScheidegg.js';
+import jungfraubahnLauterbrunnenWengen from './levels/jungfraubahnLauterbrunnenWengen.js';
+import jungfraubahnAlpiglenScheidegg from './levels/jungfraubahnAlpiglenScheidegg.js';
 
 export default [
   ebenalpSchaefler,
@@ -36,6 +39,9 @@ export default [
   grimselstrasseAelplersulzGrimselpass,
   grimselstrasseGletschGrimselpass,
   furkaBergstrecke,
-  scheideggJungfraujoch,
-  jungfraujochJungfrau
+  jungfraubahnLauterbrunnenWengen,
+  jungfraubahnWengenScheidegg,
+  jungfraubahnAlpiglenScheidegg,
+  jungfraubahnScheideggJungfraujoch,
+  jungfraubahnJungfraujochJungfrau
 ];

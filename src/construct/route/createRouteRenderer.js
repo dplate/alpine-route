@@ -1,5 +1,7 @@
+import drawRadiusLimits from './drawRadiusLimits.js';
 import drawRidge from './drawRidge.js';
 import drawSegments from './drawSegments.js';
+import {HIGHLIGHT_MIN_RADIUS_LIMIT} from '../cameras/highlightTypes.js';
 
 const pointVariants = {
   fixPoint: {
@@ -89,8 +91,14 @@ export default (system, level, layout, cameras, route, labelRenderer) => {
       } else {
         labelRenderer.render(context, renderTarget);
       }
+
       drawControlPoints(context, route, renderTarget);
       drawEditPoints(context, route, renderTarget);
+
+      if (!renderTarget.camera.isProfile() && cameras.highlights.has(HIGHLIGHT_MIN_RADIUS_LIMIT)) {
+        drawRadiusLimits(context, level, route, renderTarget);
+      }
+
       drawSegments(context, level, route, renderTarget, cameras.highlights);
     });
     

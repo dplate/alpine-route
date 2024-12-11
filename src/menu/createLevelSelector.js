@@ -91,12 +91,14 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
     info.appendChild(infoRadiusValue);
   }
 
-  const infoGapLabel = document.createElement('div');
-  infoGapLabel.innerText = system.text.get('MIN_GAP_LIMIT_LONG_LABEL');
-  info.appendChild(infoGapLabel);
-  const infoGapValue = document.createElement('div');
-  infoGapValue.innerText = level.limits.minGap + ' ' + system.text.get('METERS');
-  info.appendChild(infoGapValue);
+  if (level.limits.minGap !== null) {
+    const infoGapLabel = document.createElement('div');
+    infoGapLabel.innerText = system.text.get('MIN_GAP_LIMIT_LONG_LABEL');
+    info.appendChild(infoGapLabel);
+    const infoGapValue = document.createElement('div');
+    infoGapValue.innerText = level.limits.minGap + ' ' + system.text.get('METERS');
+    info.appendChild(infoGapValue);
+  }
 
   const infoGradientLabel = document.createElement('div');
   infoGradientLabel.innerText = system.text.get('MAX_GRADIENT_LIMIT_LONG_LABEL');

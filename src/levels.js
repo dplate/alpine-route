@@ -20,6 +20,7 @@ import jungfraubahnJungfraujochJungfrau from './levels/jungfraubahnJungfraujochJ
 import jungfraubahnWengenScheidegg from './levels/jungfraubahnWengenScheidegg.js';
 import jungfraubahnLauterbrunnenWengen from './levels/jungfraubahnLauterbrunnenWengen.js';
 import jungfraubahnAlpiglenScheidegg from './levels/jungfraubahnAlpiglenScheidegg.js';
+import scheideggLauberhorn from './levels/scheideggLauberhorn.js';
 
 export default [
   ebenalpSchaefler,
@@ -43,5 +44,6 @@ export default [
   jungfraubahnWengenScheidegg,
   jungfraubahnAlpiglenScheidegg,
   jungfraubahnScheideggJungfraujoch,
-  jungfraubahnJungfraujochJungfrau
+  jungfraubahnJungfraujochJungfrau,
+  scheideggLauberhorn
 ];

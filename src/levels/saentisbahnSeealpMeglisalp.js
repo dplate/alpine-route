@@ -31,6 +31,6 @@ export default {
     minRadius: 400,
     maxGradient: 60,
     maxVariance: 15,
-    minGap: 10
+    minGap: null
   }
 };

@@ -299,7 +299,7 @@ export default {
       {
         x: 2165, 
         y: 3778,
-        name: 'Wengneralp',
+        name: 'Wengernalp',
         type: 'place'
       },
       {

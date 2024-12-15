@@ -95,7 +95,7 @@ export default (system, level, layout, cameras, route, labelRenderer) => {
       drawControlPoints(context, route, renderTarget);
       drawEditPoints(context, route, renderTarget);
 
-      if (!renderTarget.camera.isProfile() && cameras.highlights.has(HIGHLIGHT_MIN_RADIUS_LIMIT)) {
+      if (!renderTarget.camera.isProfile()) {
         drawRadiusLimits(context, level, route, renderTarget);
       }
 

@@ -30,7 +30,7 @@ export default (context, level, route, renderTarget) => {
     return;
   }
 
-  context.lineWidth = 1;
+  context.lineWidth = 3;
   context.strokeStyle = 'rgba(150, 0, 255, 0.5)';
   context.setLineDash([]);
   context.beginPath();

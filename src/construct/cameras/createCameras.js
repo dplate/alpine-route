@@ -1,7 +1,7 @@
 import createMagnifierCamera from './createMagnifierCamera.js';
 import createMapCamera from './createMapCamera.js';
 import createProfileCamera from './createProfileCamera.js';
-import {LIMIT_HIGHLIGHTS} from './highlightTypes.js';
+import {HIGHLIGHT_MAX_GRADIENT_LIMIT, HIGHLIGHT_MAX_VARIANCE_LIMIT, HIGHLIGHT_MIN_GAP_LIMIT} from './highlightTypes.js';
 
 export default (layout, map, route) => {
   const mapCamera = createMapCamera(layout, route, map);
@@ -21,6 +21,6 @@ export default (layout, map, route) => {
     magnifier: magnifierCamera,
     profile: profileCamera,
     update,
-    highlights: new Set(LIMIT_HIGHLIGHTS)
+    highlights: new Set([ HIGHLIGHT_MAX_GRADIENT_LIMIT, HIGHLIGHT_MAX_VARIANCE_LIMIT, HIGHLIGHT_MIN_GAP_LIMIT ])
   };
 };

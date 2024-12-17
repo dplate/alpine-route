@@ -1,3 +1,27 @@
+#messageContainer {
+  display: none;
+  position: absolute;
+  z-index: 3000;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+}
+
+#message {
+  position: relative;
+  margin: 10px auto;
+  padding: 2px 10px 40px;
+  width: calc(100% - 10px);
+  max-width: 600px;
+  font-family: notesFont;
+  font-style: normal;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 #levelSelector {
   position: relative;
   width: 100%;
@@ -43,6 +67,12 @@
   grid-area: name;
 }
 
+#message .levelName {
+  text-align: center;
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
 .levelStatus {
   grid-area: status;
 }
@@ -76,6 +106,14 @@
   filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.7))
 }
 
+#message .levelImage {
+  display: block;
+  margin: 0 auto 10px;
+  float: none;
+  width: auto;
+  max-height: 300px;
+}
+
 .levelInfo {
   grid-area: info;
   justify-self: center;
@@ -106,13 +144,18 @@
   filter: grayscale(1);
 }
 
+#message .levelStartButton {
+  display: block;
+  margin: auto;
+}
+
 #levelSelector>div.levelSelected {
   z-index: 1000 !important;
   cursor: inherit;
   filter: inherit;
 }
 
-#levelSelector>div.levelSelected .levelStartButton {
+#levelSelector>div.levelSelected .levelStartButton, #message .levelStartButton {
   pointer-events: inherit;
   filter: inherit;
 }
@@ -230,4 +273,9 @@
   .stain, #ruler, #bridge, #road, #mule, #train, #mapDrawing {
     display: none;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+    to { opacity: 1; }
 }

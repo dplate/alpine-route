@@ -10,6 +10,16 @@ export default (system) => {
   levelSelector.id = 'levelSelector';
   desk.appendChild(levelSelector);
 
+  const messageContainer = document.createElement('div');
+  messageContainer.id = 'messageContainer';
+
+  const message = document.createElement('div');
+  message.id = 'message';
+  message.className = 'paper';
+  messageContainer.appendChild(message);
+
+  desk.appendChild(messageContainer);
+
   const account = document.createElement('div');
   account.id = 'account';
   desk.appendChild(account);
@@ -49,6 +59,8 @@ export default (system) => {
   return {
     desk,
     levelSelector,
+    messageContainer,
+    message,
     account
   };
 };

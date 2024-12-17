@@ -17,8 +17,9 @@ const saveState = (window, state) => {
 const getLevelState = (state, level) => {
   if (!state.levels[level.id]) {
     state.levels[level.id] = {
+      available: false,
       route: null,
-      costs: null,
+      costs: null
     };
   }
   return state.levels[level.id];
@@ -31,6 +32,15 @@ export default (window) => {
   };
 
   return {
+    markAsAvailable: (level) => {
+      const levelState = getLevelState(state, level);
+      levelState.available = true;
+      saveState(window, state);
+    },
+    isAvailable: (level) => {
+      const levelState = getLevelState(state, level);
+      return levelState.available;
+    },
     saveRoute: (level, data) => {
       const levelState = getLevelState(state, level);
       levelState.route = data;

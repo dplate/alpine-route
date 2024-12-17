@@ -1,3 +1,5 @@
+import calculateCurrentMoney from './calculateCurrentMoney.js';
+
 const getWeightedRandom = () => {
   const randomValue = Math.random();
   const weightedRandom =  Math.sqrt(Math.sin(Math.PI * randomValue)) * 0.5;
@@ -26,10 +28,7 @@ const shuffleCoins = (coins) => {
 }
 
 export default async (system, layout, levels) => {
-  const money = levels.reduce((money, level) => {
-    const costs = system.persistence.loadCosts(level);
-    return costs ? money + (level.budget - costs) : money
-  }, 0);
+  const money = calculateCurrentMoney(system, levels);
   const coinCount = Math.floor(money / 100000);
   const coins = [];
   for (let i = 0; i < coinCount; i++) {

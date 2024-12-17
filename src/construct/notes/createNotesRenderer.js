@@ -64,7 +64,7 @@ export default (system, level, layout, cameras, route) => {
       }
     });
 
-    if (inBudget && limitsValid) {
+    if (limitsValid) {
       layout.endButton.style.backgroundColor = successColor;
       layout.endButton.textContent = system.text.get('END_BUTTON_FINISH');
     } else {

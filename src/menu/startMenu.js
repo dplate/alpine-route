@@ -4,7 +4,7 @@ import createAccount from './createAccount.js';
 
 export default async (system, levels, preselectedLevel) => {
   const layout = createMenuLayout(system);
-  const levelPromise = createLevelSelector(system, layout, levels, preselectedLevel || levels[levels.length - 1]);
+  const levelPromise = createLevelSelector(system, layout, levels, preselectedLevel);
   createAccount(system, layout, levels);
   return await levelPromise;
 };

@@ -69,7 +69,7 @@ button:hover {
   height: 100vh;
   mix-blend-mode: multiply;
   background-image: url("../images/shadow.webp");
-  background-size: 100% 100%;
+  background-size: calc(max(600px, 100%)) 100%;
   pointer-events: none;
   z-index: 10000;
   opacity: 0.4;

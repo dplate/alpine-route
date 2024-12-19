@@ -154,17 +154,6 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
   element.dataset.filled = true;
 };
 
-const findNewLevel = (system, availableLevels, levels) => {
-  const money = calculateCurrentMoney(system, availableLevels);
-  const allValid = availableLevels.every(system.persistence.loadCosts);
-  if (money >= 0 && allValid) {
-    const newLevel = levels.find(level => !availableLevels.includes(level));
-    //TODO if null, end of game reached
-    return newLevel;
-  }
-  return null;
-};
-
 const showNewLevel = (system, layout, level, onStart) => {
   layout.message.appendChild(createLevelName(system, level));
   layout.message.appendChild(createImage(system, level));
@@ -174,17 +163,46 @@ const showNewLevel = (system, layout, level, onStart) => {
   layout.messageContainer.style = 'display: block; animation: fadeIn 0.5s;';
 };
 
+const showFinish = (system, layout, levels) => {
+  const image = system.window.document.createElement('img');
+  image.classList.add('levelImage');
+  image.src = `assets/images/success.webp`;
+  layout.message.appendChild(image);
+
+  const text = system.window.document.createElement('span');
+  text.classList.add('levelDescriptionText');
+  text.innerText = system.text.get('SUCCESS').replace(
+    '{{MONEY}}', 
+    system.text.formatCurrency(calculateCurrentMoney(system, levels))
+  );
+  layout.message.appendChild(text);
+
+  layout.messageContainer.style = 'display: block; animation: fadeIn 0.5s;';
+  layout.message.onclick = () => {
+    layout.messageContainer.style = 'display: none;';
+  };
+};
+
+const handleNewLevel = (system, layout, availableLevels, levels, resolve) => {
+  const money = calculateCurrentMoney(system, availableLevels);
+  const allValid = availableLevels.every(system.persistence.loadCosts);
+  if (money >= 0 && allValid) {
+    const newLevel = levels.find(level => !availableLevels.includes(level));
+    if (newLevel) {
+      showNewLevel(system, layout, newLevel, () => resolve(newLevel));
+      system.persistence.markAsAvailable(newLevel);
+    } else if (!system.persistence.hasFinished()) {
+      showFinish(system, layout, levels);
+      system.persistence.markAsFinished();
+    }
+  }
+};
+
 export default async (system, layout, levels, preselectedLevel) => {
   return new Promise((resolve) => {
     const availableLevels = levels.filter(system.persistence.isAvailable);
 
-    const newLevelTimeoutHandler = system.window.setTimeout(() => {
-      const newLevel = findNewLevel(system, availableLevels, levels);
-      if (newLevel) {
-        system.persistence.markAsAvailable(newLevel);
-        showNewLevel(system, layout, newLevel, () => resolve(newLevel));
-      }
-    }, 1000);
+    handleNewLevel(system, layout, availableLevels, levels, resolve);
 
     var selectedElement = null;
     
@@ -201,10 +219,7 @@ export default async (system, layout, levels, preselectedLevel) => {
       element.classList.add('levelSelected');
       selectedElement = element;
       if (!selectedElement.dataset.filled) {
-        fillLevelElement(system, level, element, selectLastLevel, () => {
-          system.window.clearTimeout(newLevelTimeoutHandler);
-          resolve(level)
-        });
+        fillLevelElement(system, level, element, selectLastLevel, () => resolve(level));
       }
     };
     

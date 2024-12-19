@@ -8,7 +8,10 @@ const loadState = (window) => {
   }
 };
 
-const createState = () => ({ levels: {} });
+const createState = () => ({ 
+  levels: {},
+  finished: false
+});
 
 const saveState = (window, state) => {
   window.localStorage.setItem(stateId, JSON.stringify(state));
@@ -59,5 +62,12 @@ export default (window) => {
       const levelState = getLevelState(state, level);
       return levelState.costs;
     },
+    markAsFinished: () => {
+      state.finished = true;
+      saveState(window, state);
+    },
+    hasFinished: () => {
+      return state.finished;
+    }
   };
 };

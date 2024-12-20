@@ -22,12 +22,13 @@ export default (layout, cameras, route, renderer) => {
     event.preventDefault();
   };
 
-  layout.mapContainer.onwheel = (event) => {
+  layout.mapContainer.addEventListener('wheel', (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     const amount = event.deltaY / 90.0;
     amount < 0 ? cameras.map.zoomIn(-amount, pixels) : cameras.map.zoomOut(amount, pixels);
     renderer.renderAll();
-  };
+    event.stopPropagation();
+  }, { passive: false });
 
   layout.mapContainer.onmousedown = (event) => {
     console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));

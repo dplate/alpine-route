@@ -1,6 +1,5 @@
 import handleMapDrag from './handleMapDrag.js';
 import handleProfileDrag from './handleProfileDrag.js';
-import proposeRouteEditPoint from './proposeRouteEditPoint.js';
 
 const transformTouchToPixels = (touch, canvas) => {
   const boundingRect = canvas.getBoundingClientRect();

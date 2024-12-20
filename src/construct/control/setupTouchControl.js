@@ -33,13 +33,17 @@ export default (layout, cameras, route, renderer) => {
   };
 
   layout.mapContainer.ontouchstart = (event) => {
+    console.log('touchstart event', event.targetTouches[0]);
+    
     startEditing(true);
     const touch = event.targetTouches[0];
     const pixels = transformTouchToPixels(touch, layout.mapContainer);
     handleMapDrag(cameras, route, renderer, pixels, { x: 0, y: 0 }, false)
   };
 
-  layout.mapContainer.ontouchmove = (event) => {
+  layout.mapContainer.addEventListener('touchmove', (event) => {
+    console.log('touchmove event', event.targetTouches[0], event.targetTouches[1]);
+
     const touch = event.targetTouches[0];
     const pixels = transformTouchToPixels(touch, layout.mapContainer);
 
@@ -60,6 +64,8 @@ export default (layout, cameras, route, renderer) => {
 
       state.previousPinchDistance = pinchDistance;
       renderer.renderAll();
+
+      event.stopPropagation();
       event.preventDefault();
       return;
     }
@@ -70,7 +76,10 @@ export default (layout, cameras, route, renderer) => {
     handleMapDrag(cameras, route, renderer, pixels, movementPixels, true)
 
     state.previousTouchOfDrag = touch;
-  };
+
+    event.stopPropagation();
+    event.preventDefault();
+  }, { passive: false });
 
   layout.mapContainer.ontouchend = stopEditing;
   layout.mapContainer.ontouchcancel = stopEditing;

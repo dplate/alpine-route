@@ -8,7 +8,7 @@ import handleMapDrag from './handleMapDrag.js';
 export default (layout, cameras, route, renderer) => {
   return new Promise(resolve => {
     setupMouseControl(layout, cameras, route, renderer);
-    //setupTouchControl(layout, cameras, route, renderer);
+    setupTouchControl(layout, cameras, route, renderer);
 
     ROUTE_TYPES.forEach(routeType => {
       addHighlightSelectorHandling(

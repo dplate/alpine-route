@@ -102,7 +102,7 @@ const createAvailableLevels = (system, layout, availableLevels, preselectedLevel
 
     const type = document.createElement('div');
     type.classList.add('levelType');
-    type.style.backgroundImage = `url("../assets/images/types/${level.type}.svg")`;
+    type.style.backgroundImage = `url("assets/images/types/${level.type}.svg")`;
     element.appendChild(type);
 
     element.appendChild(createLevelName(system, level));

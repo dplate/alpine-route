@@ -10,6 +10,7 @@ const loadState = (window) => {
 
 const createState = () => ({ 
   levels: {},
+  helps: {},
   finished: false
 });
 
@@ -68,6 +69,15 @@ export default (window) => {
     },
     hasFinished: () => {
       return state.finished;
+    },
+    markHelpAsSeen: (help) => {
+      state.helps[help.id] = {
+        seen: true
+      };
+      saveState(window, state);
+    },
+    hasHelpSeen: (help) => {
+      return state.helps[help.id]?.seen;
     }
   };
 };

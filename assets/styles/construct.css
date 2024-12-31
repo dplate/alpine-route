@@ -113,6 +113,24 @@
   border-top: 1px solid black;
 }
 
+#profileToggle, #notesToggle, #helpToggle {
+  display: none;
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  border: 1px solid #9b9c93;
+  background-color: #eef0e6;
+  box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+#profileToggle:hover, #notesToggle:hover, #helpToggle:hover {
+  box-shadow: none;
+  background-color: #dee0d6;
+}
+
 #profileToggle {
   bottom: -15px;
   left: calc(50vw - 25px);
@@ -126,15 +144,19 @@
   background-position: right;
 }
 
-#profileToggle, #notesToggle {
-  display: none;
-  position: fixed;
-  width: 50px;
-  height: 50px;
-  border-radius: 100%;
-  border: 1px solid #9b9c93;
-  background-color: #eef0e6;
-  opacity: 0.7;
+#helpToggle {
+  top: 10px;
+  right: 10px;
+  background-image: url("../images/helpToggle.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 1.0;
+}
+
+#helpCloseButton {
+  display: block;
+  margin: 20px auto 0px;
+  max-width: 200px;
 }
 
 @media screen and (max-height: 500px) {
@@ -199,4 +221,14 @@
     background-position: left top;
     transform: scaleX(-1);
   }
+}
+
+@keyframes displayAndShake {
+  0% { opacity: 0 }
+  89.9% { opacity: 0 }
+  90% { opacity: 1.0; transform: rotate(0);}
+  92.5% { transform: rotate(10deg); }
+  95% { transform: rotate(-10deg); }
+  97.5% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
 }

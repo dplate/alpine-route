@@ -130,9 +130,36 @@ export default (system, level) => {
   notesToggle.id = 'notesToggle';
   document.body.appendChild(notesToggle);
 
+  const helpToggle = document.createElement('div'); 
+  helpToggle.id = 'helpToggle';
+  document.body.appendChild(helpToggle);
+
+  const messageContainer = document.createElement('div');
+  messageContainer.id = 'messageContainer';
+
+  const message = document.createElement('div');
+  message.id = 'message';
+  message.className = 'paper';
+  messageContainer.appendChild(message);
+
+  const helpText = document.createElement('div');
+  helpText.id = 'helpText';
+  message.appendChild(helpText);
+
+  const helpCloseButton = document.createElement('button');
+  helpCloseButton.id = 'helpCloseButton';
+  message.appendChild(helpCloseButton);
+
+  document.body.appendChild(messageContainer);
+  
   const shadow = document.createElement('div');
   shadow.id = 'shadow';
   document.body.appendChild(shadow);
+
+  system.window.addEventListener('resize', () => {
+    profileToggle.style.removeProperty('display');
+    notesToggle.style.removeProperty('display');
+  });
 
   return {
     desk,
@@ -150,6 +177,10 @@ export default (system, level) => {
     profile,
     profileToggle,
     notesContainer,
-    notesToggle
+    notesToggle,
+    messageContainer,
+    helpText,
+    helpCloseButton,
+    helpToggle,
   };
 };

@@ -35,6 +35,29 @@ button:hover {
   box-shadow: none
 }
 
+#messageContainer {
+  display: none;
+  position: absolute;
+  z-index: 3000;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+}
+
+#message {
+  position: relative;
+  margin: 10px auto;
+  padding: 10px;
+  width: calc(100% - 10px);
+  max-width: 600px;
+  font-family: notesFont;
+  font-style: normal;
+  font-size: 24px;
+}
+
 .paper {
   border: 5px solid black;
   border-image: url("../images/torn.webp");
@@ -73,5 +96,4 @@ button:hover {
   pointer-events: none;
   z-index: 10000;
   opacity: 0.4;
-
 }

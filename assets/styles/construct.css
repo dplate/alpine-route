@@ -150,7 +150,7 @@
   background-image: url("../images/helpToggle.svg");
   background-position: center center;
   background-repeat: no-repeat;
-  opacity: 1.0;
+  opacity: 0;
 }
 
 #helpCloseButton {
@@ -223,12 +223,9 @@
   }
 }
 
-@keyframes displayAndShake {
-  0% { opacity: 0 }
-  89.9% { opacity: 0 }
-  90% { opacity: 1.0; transform: rotate(0);}
-  92.5% { transform: rotate(10deg); }
-  95% { transform: rotate(-10deg); }
-  97.5% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
+@keyframes shake {
+  0% { opacity: 0.9999; transform: rotate(0);}
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+  100% { opacity: 1; transform: rotate(0deg); }
 }

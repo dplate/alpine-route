@@ -28,7 +28,7 @@ export default (system, level, layout) => {
       layout.helpText.innerText = system.text.translate(help.text);
       layout.helpToggle.offsetWidth; // needed to restart the animation!
       layout.helpToggle.style.display = 'block';
-      layout.helpToggle.style.animation = 'displayAndShake 7s';
+      layout.helpToggle.style.animation = '0.6s linear 6s 5 normal forwards running shake';
       helper.help = help;
     }  
   };

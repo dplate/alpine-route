@@ -53,9 +53,11 @@ const texts = {
     START_BUTTON_IMPROVE: 'Improve route',
     TYPE: 'Type',
     TYPES: {
+      muleTrack: 'Mule track',
       funicular: 'Funicular',
-      coRailway: 'Cog railway',
-      narrowGaugeRailway: 'Narrow-gauge railway'
+      cogRailway: 'Cog railway',
+      narrowGaugeRailway: 'Narrow-gauge railway',
+      road: 'Road',
     },
     METERS: 'meters',
     PERCENT: 'percent',

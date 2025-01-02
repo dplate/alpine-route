@@ -142,6 +142,7 @@
   top: calc(50vh - 25px);
   background-image: url("../images/notesToggle.svg");
   background-position: right;
+  border-width: 5px;
 }
 
 #helpToggle {

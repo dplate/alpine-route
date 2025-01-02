@@ -65,9 +65,11 @@ export default (system, level, layout, cameras, route) => {
     });
 
     if (limitsValid) {
+      layout.notesToggle.style.borderColor = successColor;
       layout.endButton.style.backgroundColor = successColor;
       layout.endButton.textContent = system.text.get('END_BUTTON_FINISH');
     } else {
+      layout.notesToggle.style.borderColor = failColor;
       layout.endButton.style.backgroundColor = failColor;
       layout.endButton.textContent = system.text.get('END_BUTTON_SUSPEND');
     }

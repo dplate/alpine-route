@@ -32,6 +32,11 @@ export default async (window) => {
     
     introContainer.appendChild(languageSelection);
 
+    const credits = document.createElement('div');
+    credits.id = 'credits';
+    credits.innerText = '✷   A game by Dirk Plate   ✷   Elevation data provided by Federal Office of Topography swisstopo   ✷   Thank you for playing   ✷';
+    introContainer.appendChild(credits);
+
     document.body.appendChild(introContainer)
   });
 };

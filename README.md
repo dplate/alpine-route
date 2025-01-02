@@ -4,7 +4,7 @@ A game about planing mountain routes.
 
 On a high resolution map (displayed in 2D) a route between two points must be planned. Goal is to find the route which can be built with minimal costs. Costs are determined by the length of the route, the length of tunnels and the length of bridges. There are also hard limitations: how steep a route can be (e.g. not too steep for a train) or how tight bends can be (e.g. not too tight for motor ways).
 
-The current development version can by "played" here: https://dplate.github.io/alpine-route/
+The current development version can be played here: https://dplate.github.io/alpine-route/
 
 ## Todo
 
@@ -23,9 +23,10 @@ The current development version can by "played" here: https://dplate.github.io/a
 - [X] Validate route (not breaking steepness, tunnel length, bridge length limits and enough money left)
 - [X] Add scalable interface which includes map, profile, magnifier, costs and menu
 - [X] Level selection (including description and money)
-- [ ] Create levels
-- [ ] Finalize game (start screen, credits...)
+- [X] Create levels
+- [X] Finalize game (start screen, credits...)
 - [ ] Create Android app
+- [ ] Fix pinch to Zoom on Apple devices
 
 ## Evaluation 
 
@@ -35,13 +36,10 @@ Source for height data:
 
 https://www.swisstopo.admin.ch/en/geodata/height/alti3d.html
 
-Thoughts:
-- GeoTiff are viewable with QGIS
-- Processing GeoTiff with JS: https://github.com/geotiffjs/geotiff.js/
-- Maybe easier to use and process plain text XYZ files 
+- easier to use and process plain text XYZ files 
 - Heights are available in centimeters, but decimeter resolution is good enough, which fit into 16bit (max height difference of 6500m)
-- Storing height map as 16 bit gray scale png, 24bit split r/g/b or custom binary data
-- Fits the whole height map as texture into memory or is some kind of mip mapping needed and async loading needed?
+- Storing height map as 24bit split r/g/b
+- Fits the whole height map as texture into memory
 - 2m grid resolution should be good enough, with a texture size of 4096x4096px this would allow a 8km x 8km area
 
 ### Old photo effect

@@ -22,22 +22,25 @@ export default (map) => {
     context.lineWidth = '2';
     context.font = `normal normal 700 ${Math.min(renderTarget.canvas.height / 15, 25)}px mapFont`;
     context.textAlign = 'center';
-    map.labels.forEach(label => {
+    map.labels.forEach((label) => {
       const pixels = renderTarget.camera.transformMetersToPixels(label);
-      switch(label.type) {
-        case 'peak': 
+      switch (label.type) {
+        case 'peak':
           drawPeakSymbol(context, pixels);
           break;
         default:
           drawPlaceSymbol(context, pixels);
       }
       context.fillText(label.name, pixels.x, pixels.y - 8);
-      context.fillText(Math.round(map.getHeightAtPoint(label)), pixels.x, pixels.y + 25);
-      
+      context.fillText(
+        Math.round(map.getHeightAtPoint(label)),
+        pixels.x,
+        pixels.y + 25,
+      );
     });
   };
 
   return {
-    render
+    render,
   };
 };

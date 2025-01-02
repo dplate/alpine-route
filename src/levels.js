@@ -50,6 +50,6 @@ export default [
   furkaBergstrecke,
   jungfraubahnScheideggJungfraujoch,
   albulabahnPredaSpinas,
-  jungfraujochMoenchsjochhuette, 
+  jungfraujochMoenchsjochhuette,
   jungfraubahnJungfraujochJungfrau,
 ];

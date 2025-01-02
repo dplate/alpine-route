@@ -3,14 +3,17 @@ import handleProfileDrag from './handleProfileDrag.js';
 
 const transformTouchToPixels = (touch, canvas) => {
   const boundingRect = canvas.getBoundingClientRect();
-  return { x: touch.clientX - boundingRect.x, y: touch.clientY - boundingRect.y };
+  return {
+    x: touch.clientX - boundingRect.x,
+    y: touch.clientY - boundingRect.y,
+  };
 };
 
 export default (layout, cameras, route, renderer) => {
   const state = {
     touchInterval: null,
     previousTouchOfDrag: null,
-    previousPinchDistance: null
+    previousPinchDistance: null,
   };
 
   const startEditing = (createOnGround) => {
@@ -34,64 +37,86 @@ export default (layout, cameras, route, renderer) => {
 
   layout.mapContainer.ontouchstart = (event) => {
     console.log('touchstart event', event.targetTouches[0]);
-    
+
     startEditing(true);
     const touch = event.targetTouches[0];
     const pixels = transformTouchToPixels(touch, layout.mapContainer);
-    handleMapDrag(cameras, route, renderer, pixels, { x: 0, y: 0 }, false)
+    handleMapDrag(cameras, route, renderer, pixels, { x: 0, y: 0 }, false);
   };
 
-  layout.mapContainer.addEventListener('touchmove', (event) => {
-    console.log('touchmove event', event.targetTouches[0], event.targetTouches[1]);
-
-    const touch = event.targetTouches[0];
-    const pixels = transformTouchToPixels(touch, layout.mapContainer);
-
-    if (event.targetTouches[1]) {
-      const pixels2 = transformTouchToPixels(event.targetTouches[1], layout.mapContainer);
-      const pinchDistance = Math.sqrt(
-        (pixels.x - pixels2.x) ** 2 +
-        (pixels.y - pixels2.y) ** 2
+  layout.mapContainer.addEventListener(
+    'touchmove',
+    (event) => {
+      console.log(
+        'touchmove event',
+        event.targetTouches[0],
+        event.targetTouches[1],
       );
-      const centerPixels = {
-        x: (pixels.x + pixels2.x) / 2.0,
-        y: (pixels.y + pixels2.y) / 2.0
-      };
-      if (!state.previousPinchDistance) {
-        state.previousPinchDistance = pinchDistance;
-      }
-      cameras.map.zoomIn(pinchDistance / state.previousPinchDistance, centerPixels);
 
-      state.previousPinchDistance = pinchDistance;
-      renderer.renderAll();
+      const touch = event.targetTouches[0];
+      const pixels = transformTouchToPixels(touch, layout.mapContainer);
+
+      if (event.targetTouches[1]) {
+        const pixels2 = transformTouchToPixels(
+          event.targetTouches[1],
+          layout.mapContainer,
+        );
+        const pinchDistance = Math.sqrt(
+          (pixels.x - pixels2.x) ** 2 + (pixels.y - pixels2.y) ** 2,
+        );
+        const centerPixels = {
+          x: (pixels.x + pixels2.x) / 2.0,
+          y: (pixels.y + pixels2.y) / 2.0,
+        };
+        if (!state.previousPinchDistance) {
+          state.previousPinchDistance = pinchDistance;
+        }
+        cameras.map.zoomIn(
+          pinchDistance / state.previousPinchDistance,
+          centerPixels,
+        );
+
+        state.previousPinchDistance = pinchDistance;
+        renderer.renderAll();
+
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
+
+      const movementPixels = state.previousTouchOfDrag
+        ? {
+            x: -(touch.clientX - state.previousTouchOfDrag.clientX),
+            y: -(touch.clientY - state.previousTouchOfDrag.clientY),
+          }
+        : { x: 0, y: 0 };
+      handleMapDrag(cameras, route, renderer, pixels, movementPixels, true);
+
+      state.previousTouchOfDrag = touch;
 
       event.stopPropagation();
       event.preventDefault();
-      return;
-    }
-        
-    const movementPixels = state.previousTouchOfDrag ? 
-      { x: -(touch.clientX - state.previousTouchOfDrag.clientX), y: -(touch.clientY - state.previousTouchOfDrag.clientY) } :
-      { x: 0, y: 0 };
-    handleMapDrag(cameras, route, renderer, pixels, movementPixels, true)
-
-    state.previousTouchOfDrag = touch;
-
-    event.stopPropagation();
-    event.preventDefault();
-  }, { passive: false });
+    },
+    { passive: false },
+  );
 
   layout.mapContainer.ontouchend = stopEditing;
   layout.mapContainer.ontouchcancel = stopEditing;
 
   layout.profile.ontouchstart = (event) => {
     startEditing(false);
-    const pixels = transformTouchToPixels(event.targetTouches[0], layout.profile);
+    const pixels = transformTouchToPixels(
+      event.targetTouches[0],
+      layout.profile,
+    );
     handleProfileDrag(cameras, route, renderer, pixels, false);
-  }
+  };
 
   layout.profile.ontouchmove = (event) => {
-    const pixels = transformTouchToPixels(event.targetTouches[0], layout.profile);
+    const pixels = transformTouchToPixels(
+      event.targetTouches[0],
+      layout.profile,
+    );
     handleProfileDrag(cameras, route, renderer, pixels, true);
   };
 

@@ -29,8 +29,8 @@ export default (system) => {
     stain.className = 'stain';
     stain.style.right = `${30 + Math.random() * 15}px`;
     stain.style.top = `${30 + Math.random() * 15}px`;
-    stain.style.opacity = 1 - Math.random() / 5 * (2 - i);
-    stain.style.transform = `rotate(${Math.random()}turn) scale(${-1 + i%2 * 2})`;
+    stain.style.opacity = 1 - (Math.random() / 5) * (2 - i);
+    stain.style.transform = `rotate(${Math.random()}turn) scale(${-1 + (i % 2) * 2})`;
     desk.appendChild(stain);
   }
 
@@ -52,6 +52,6 @@ export default (system) => {
     levelSelector,
     messageContainer,
     message,
-    account
+    account,
   };
 };

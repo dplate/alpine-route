@@ -1,7 +1,6 @@
 import { LIMIT_TYPES } from './route/limitTypes.js';
 import { ROUTE_TYPES } from './route/routeTypes.js';
 
-
 export default (system, level) => {
   const document = system.window.document;
 
@@ -35,7 +34,7 @@ export default (system, level) => {
   const notesContainer = document.createElement('div');
   notesContainer.id = 'notesContainer';
   desk.appendChild(notesContainer);
-  
+
   const notes = document.createElement('div');
   notes.id = 'notes';
   notes.classList.add('paper');
@@ -45,24 +44,23 @@ export default (system, level) => {
     const label = document.createElement('div');
     label.id = `${type}Label`;
     container.appendChild(label);
-  
+
     const value = document.createElement('div');
     value.id = `${type}Value`;
     value.className = 'value';
     container.appendChild(value);
-  
+
     const selector = document.createElement('div');
     if (withSelector) {
       selector.id = `${type}Selector`;
       selector.className = 'selector';
-      
     }
     container.appendChild(selector);
 
     return {
       label,
       value,
-      selector
+      selector,
     };
   };
 
@@ -73,8 +71,11 @@ export default (system, level) => {
   const budget = createNoteElements(costsContainer, 'budget', false);
 
   const routeTypeCosts = ROUTE_TYPES.reduce(
-    (routeTypeCosts, routeType) => ({ ...routeTypeCosts, [routeType]: createNoteElements(costsContainer, `${routeType}Costs`) }),
-    {}
+    (routeTypeCosts, routeType) => ({
+      ...routeTypeCosts,
+      [routeType]: createNoteElements(costsContainer, `${routeType}Costs`),
+    }),
+    {},
   );
   const balance = createNoteElements(costsContainer, 'balance', false);
 
@@ -82,20 +83,20 @@ export default (system, level) => {
   limitsContainer.id = 'limitsContainer';
   notes.appendChild(limitsContainer);
 
-  const limits = LIMIT_TYPES.reduce(
-    (limits, limitType) => {
-      if (level.limits[limitType] === null) {
-        return limits;
-      }
-      return { ...limits, [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`) };
-    },
-    {}
-  );
+  const limits = LIMIT_TYPES.reduce((limits, limitType) => {
+    if (level.limits[limitType] === null) {
+      return limits;
+    }
+    return {
+      ...limits,
+      [limitType]: createNoteElements(limitsContainer, `${limitType}Limit`),
+    };
+  }, {});
 
   const endButton = document.createElement('button');
   endButton.id = 'endButton';
   notes.appendChild(endButton);
- 
+
   const profile = document.createElement('canvas');
   profile.id = 'profile';
   profile.classList.add('paper');
@@ -122,15 +123,15 @@ export default (system, level) => {
 
   document.body.appendChild(magnifierContainer);
 
-  const profileToggle = document.createElement('div'); 
+  const profileToggle = document.createElement('div');
   profileToggle.id = 'profileToggle';
   document.body.appendChild(profileToggle);
 
-  const notesToggle = document.createElement('div'); 
+  const notesToggle = document.createElement('div');
   notesToggle.id = 'notesToggle';
   document.body.appendChild(notesToggle);
 
-  const helpToggle = document.createElement('div'); 
+  const helpToggle = document.createElement('div');
   helpToggle.id = 'helpToggle';
   document.body.appendChild(helpToggle);
 
@@ -151,7 +152,7 @@ export default (system, level) => {
   message.appendChild(helpCloseButton);
 
   document.body.appendChild(messageContainer);
-  
+
   const shadow = document.createElement('div');
   shadow.id = 'shadow';
   document.body.appendChild(shadow);

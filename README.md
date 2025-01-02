@@ -28,6 +28,10 @@ The current development version can be played here: https://dplate.github.io/alp
 - [ ] Create Android app
 - [ ] Fix pinch to Zoom on Apple devices
 
+## Run prettier
+
+`npx prettier -w ./**/*.js`
+
 ## Evaluation 
 
 ### height data

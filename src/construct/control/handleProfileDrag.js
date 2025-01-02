@@ -6,11 +6,11 @@ export default (cameras, route, renderer, pixels, touched) => {
     cameras.magnifier.disable();
   } else {
     const editPointPixels = proposeRouteEditPoint(
-      cameras.profile, 
+      cameras.profile,
       route,
       pixels,
       (point) => route.findNearestEditableControlPointByProfileMeters(point),
-      (point) => route.findNearestSegmentByProfileMeters(point)
+      (point) => route.findNearestSegmentByProfileMeters(point),
     );
     if (editPointPixels) {
       cameras.magnifier.setByProfilePixels(editPointPixels);

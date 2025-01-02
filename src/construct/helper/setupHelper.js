@@ -6,7 +6,7 @@ export default (system, level, layout) => {
   };
 
   const setNextHelp = () => {
-    const help = helps.find(help => {
+    const help = helps.find((help) => {
       if (system.persistence.hasHelpSeen(help)) {
         return false;
       }
@@ -28,9 +28,10 @@ export default (system, level, layout) => {
       layout.helpText.innerText = system.text.translate(help.text);
       layout.helpToggle.offsetWidth; // needed to restart the animation!
       layout.helpToggle.style.display = 'block';
-      layout.helpToggle.style.animation = '0.6s linear 6s 5 normal forwards running shake';
+      layout.helpToggle.style.animation =
+        '0.6s linear 6s 5 normal forwards running shake';
       helper.help = help;
-    }  
+    }
   };
 
   layout.helpToggle.onclick = () => {
@@ -44,7 +45,7 @@ export default (system, level, layout) => {
   layout.helpCloseButton.innerText = system.text.get('HELP_CLOSE_BUTTON');
 
   helper.markHelpAsUnnecessary = (helpId) => {
-    const help = helps.find(help => help.id === helpId);
+    const help = helps.find((help) => help.id === helpId);
     if (help && !system.persistence.hasHelpSeen(help)) {
       system.persistence.markHelpAsSeen(help);
       setNextHelp();

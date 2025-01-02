@@ -1,4 +1,8 @@
-import {ROUTE_TYPE_TUNNEL, ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND} from './routeTypes.js';
+import {
+  ROUTE_TYPE_TUNNEL,
+  ROUTE_TYPE_BRIDGE,
+  ROUTE_TYPE_GROUND,
+} from './routeTypes.js';
 
 const determineType = (segment) => {
   if (!segment) {

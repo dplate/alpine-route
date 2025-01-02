@@ -11,9 +11,9 @@ async function main() {
   if (!system) {
     return;
   }
-  
+
   var currentLevel = null;
-  while(1) {
+  while (1) {
     currentLevel = await startMenu(system, levels, currentLevel);
     await startConstruct(system, currentLevel);
   }

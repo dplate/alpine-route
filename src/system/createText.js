@@ -29,7 +29,8 @@ const texts = {
     },
     METERS: 'Meter',
     PERCENT: 'Prozent',
-    SUCCESS: 'Es erfüllt mich mit größter Freude, Ihnen zu verkünden, dass sämtliche gestellten Aufgaben mit Sorgfalt gelöst und wohlüberlegte Strecken geplant wurden. Besonders hervorzuheben ist die kluge Berücksichtigung kostengünstiger Lösungen, wodurch ein Überschuss von {{MONEY}} erwirtschaftet werden konnte. Dieser Ertrag ermöglicht es nun, den wohlverdienten Ruhestand in vollen Zügen zu genießen. Alternativ besteht die Gelegenheit, die Strecken weiter zu optimieren und sich dadurch ein zusätzliches Einkommen zu sichern.'
+    SUCCESS:
+      'Es erfüllt mich mit größter Freude, Ihnen zu verkünden, dass sämtliche gestellten Aufgaben mit Sorgfalt gelöst und wohlüberlegte Strecken geplant wurden. Besonders hervorzuheben ist die kluge Berücksichtigung kostengünstiger Lösungen, wodurch ein Überschuss von {{MONEY}} erwirtschaftet werden konnte. Dieser Ertrag ermöglicht es nun, den wohlverdienten Ruhestand in vollen Zügen zu genießen. Alternativ besteht die Gelegenheit, die Strecken weiter zu optimieren und sich dadurch ein zusätzliches Einkommen zu sichern.',
   },
   en: {
     BUDGET_LABEL: 'Budget',
@@ -61,15 +62,18 @@ const texts = {
     },
     METERS: 'meters',
     PERCENT: 'percent',
-    SUCCESS: 'It brings me the utmost joy to announce that all assigned tasks have been executed with care, and well-considered routes have been devised. Particularly commendable is the prudent attention to cost-effective solutions, resulting in a surplus of {{MONEY}}. This surplus now offers the opportunity to enjoy a well-deserved retirement to the fullest. Alternatively, there is the prospect of further refining the routes and thereby earning additional income.'
-  }
+    SUCCESS:
+      'It brings me the utmost joy to announce that all assigned tasks have been executed with care, and well-considered routes have been devised. Particularly commendable is the prudent attention to cost-effective solutions, resulting in a surplus of {{MONEY}}. This surplus now offers the opportunity to enjoy a well-deserved retirement to the fullest. Alternatively, there is the prospect of further refining the routes and thereby earning additional income.',
+  },
 };
 
 export default (language) => {
-  const currencyFormatter = new Intl.NumberFormat(language, { maximumFractionDigits: 0 });
+  const currencyFormatter = new Intl.NumberFormat(language, {
+    maximumFractionDigits: 0,
+  });
   return {
     get: (textId) => texts[language][textId] || texts['en'][textId],
-    translate: (translations) =>  translations[language] || translations['en'],
+    translate: (translations) => translations[language] || translations['en'],
     formatCurrency: (amount) => `${currencyFormatter.format(amount)} ₣`,
   };
 };

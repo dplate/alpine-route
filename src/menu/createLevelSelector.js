@@ -45,7 +45,8 @@ const createInfo = (system, level) => {
     infoRadiusLabel.innerText = system.text.get('MIN_RADIUS_LIMIT_LONG_LABEL');
     info.appendChild(infoRadiusLabel);
     const infoRadiusValue = system.window.document.createElement('div');
-    infoRadiusValue.innerText = level.limits.minRadius + ' ' + system.text.get('METERS');
+    infoRadiusValue.innerText =
+      level.limits.minRadius + ' ' + system.text.get('METERS');
     info.appendChild(infoRadiusValue);
   }
 
@@ -54,23 +55,30 @@ const createInfo = (system, level) => {
     infoGapLabel.innerText = system.text.get('MIN_GAP_LIMIT_LONG_LABEL');
     info.appendChild(infoGapLabel);
     const infoGapValue = system.window.document.createElement('div');
-    infoGapValue.innerText = level.limits.minGap + ' ' + system.text.get('METERS');
+    infoGapValue.innerText =
+      level.limits.minGap + ' ' + system.text.get('METERS');
     info.appendChild(infoGapValue);
   }
 
   const infoGradientLabel = system.window.document.createElement('div');
-  infoGradientLabel.innerText = system.text.get('MAX_GRADIENT_LIMIT_LONG_LABEL');
+  infoGradientLabel.innerText = system.text.get(
+    'MAX_GRADIENT_LIMIT_LONG_LABEL',
+  );
   info.appendChild(infoGradientLabel);
   const infoGradientValue = system.window.document.createElement('div');
-  infoGradientValue.innerText = level.limits.maxGradient + ' ' + system.text.get('PERCENT');
+  infoGradientValue.innerText =
+    level.limits.maxGradient + ' ' + system.text.get('PERCENT');
   info.appendChild(infoGradientValue);
 
   if (level.limits.maxVariance !== null) {
     const infoVarianceLabel = system.window.document.createElement('div');
-    infoVarianceLabel.innerText = system.text.get('MAX_VARIANCE_LIMIT_LONG_LABEL');
+    infoVarianceLabel.innerText = system.text.get(
+      'MAX_VARIANCE_LIMIT_LONG_LABEL',
+    );
     info.appendChild(infoVarianceLabel);
     const infoVarianceValue = system.window.document.createElement('div');
-    infoVarianceValue.innerText = level.limits.maxVariance + ' ' + system.text.get('PERCENT');
+    infoVarianceValue.innerText =
+      level.limits.maxVariance + ' ' + system.text.get('PERCENT');
     info.appendChild(infoVarianceValue);
   }
 
@@ -84,14 +92,21 @@ const createStartButton = (system, level, onStart) => {
     onStart();
     event.stopPropagation();
   };
-  startButton.innerText = system.persistence.loadCosts(level) === null ? 
-    system.text.get('START_BUTTON_INITIAL') : 
-    system.text.get('START_BUTTON_IMPROVE');
+  startButton.innerText =
+    system.persistence.loadCosts(level) === null
+      ? system.text.get('START_BUTTON_INITIAL')
+      : system.text.get('START_BUTTON_IMPROVE');
 
   return startButton;
 };
 
-const createAvailableLevels = (system, layout, availableLevels, preselectedLevel, onSelect) => {
+const createAvailableLevels = (
+  system,
+  layout,
+  availableLevels,
+  preselectedLevel,
+  onSelect,
+) => {
   const document = system.window.document;
   availableLevels.forEach((level, index) => {
     const element = document.createElement('div');
@@ -118,17 +133,20 @@ const createAvailableLevels = (system, layout, availableLevels, preselectedLevel
       status.innerText = system.text.get('STATUS_INVALID');
       status.style.color = 'rgba(150, 150, 150, 1.0)';
     }
-    
+
     element.appendChild(status);
 
     element.onclick = () => onSelect(level, element);
     layout.levelSelector.appendChild(element);
-    
-    if (level === preselectedLevel || (!preselectedLevel && index === availableLevels.length - 1)) {
+
+    if (
+      level === preselectedLevel ||
+      (!preselectedLevel && index === availableLevels.length - 1)
+    ) {
       element.onclick();
     }
   });
-}
+};
 
 const fillLevelElement = (system, level, element, onClose, onStart) => {
   const document = system.window.document;
@@ -137,7 +155,7 @@ const fillLevelElement = (system, level, element, onClose, onStart) => {
   closeButton.onclick = (event) => {
     onClose();
     event.stopPropagation();
-  }
+  };
   element.appendChild(closeButton);
 
   const description = document.createElement('div');
@@ -171,10 +189,12 @@ const showFinish = (system, layout, levels) => {
 
   const text = system.window.document.createElement('span');
   text.classList.add('levelDescriptionText');
-  text.innerText = system.text.get('SUCCESS').replace(
-    '{{MONEY}}', 
-    system.text.formatCurrency(calculateCurrentMoney(system, levels))
-  );
+  text.innerText = system.text
+    .get('SUCCESS')
+    .replace(
+      '{{MONEY}}',
+      system.text.formatCurrency(calculateCurrentMoney(system, levels)),
+    );
   layout.message.appendChild(text);
 
   layout.messageContainer.style = 'display: block; animation: fadeIn 0.5s;';
@@ -187,7 +207,7 @@ const handleNewLevel = (system, layout, availableLevels, levels, resolve) => {
   const money = calculateCurrentMoney(system, availableLevels);
   const allValid = availableLevels.every(system.persistence.loadCosts);
   if (money >= 0 && allValid) {
-    const newLevel = levels.find(level => !availableLevels.includes(level));
+    const newLevel = levels.find((level) => !availableLevels.includes(level));
     if (newLevel) {
       showNewLevel(system, layout, newLevel, () => resolve(newLevel));
       system.persistence.markAsAvailable(newLevel);
@@ -205,12 +225,13 @@ export default async (system, layout, levels, preselectedLevel) => {
     handleNewLevel(system, layout, availableLevels, levels, resolve);
 
     var selectedElement = null;
-    
+
     const selectLastLevel = () => {
       const level = availableLevels[availableLevels.length - 1];
-      const element = layout.levelSelector.children[layout.levelSelector.children.length - 1];
-      selectLevel(level, element)
-    }
+      const element =
+        layout.levelSelector.children[layout.levelSelector.children.length - 1];
+      selectLevel(level, element);
+    };
 
     const selectLevel = (level, element) => {
       if (selectedElement !== null) {
@@ -219,10 +240,18 @@ export default async (system, layout, levels, preselectedLevel) => {
       element.classList.add('levelSelected');
       selectedElement = element;
       if (!selectedElement.dataset.filled) {
-        fillLevelElement(system, level, element, selectLastLevel, () => resolve(level));
+        fillLevelElement(system, level, element, selectLastLevel, () =>
+          resolve(level),
+        );
       }
     };
-    
-    createAvailableLevels(system, layout, availableLevels, preselectedLevel, selectLevel);
+
+    createAvailableLevels(
+      system,
+      layout,
+      availableLevels,
+      preselectedLevel,
+      selectLevel,
+    );
   });
 };

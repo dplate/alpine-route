@@ -8,11 +8,11 @@ export default (cameras, route, renderer, pixels, movementPixels, touched) => {
     cameras.update();
   } else {
     const editPointPixels = proposeRouteEditPoint(
-      cameras.map, 
+      cameras.map,
       route,
       pixels,
       (point) => route.findNearestEditableControlPointByMapMeters(point),
-      (point) => route.findNearestSegmentByMapMeters(point)
+      (point) => route.findNearestSegmentByMapMeters(point),
     );
     if (editPointPixels) {
       cameras.magnifier.setByMapPixels(editPointPixels);

@@ -8,7 +8,10 @@ export default (cameras, route, pixels) => {
   if (!nearestControlPoint) {
     return false;
   }
-  const nearestControlPixels = cameras.map.transformMetersToPixels(nearestControlPoint);
-  route.markEditAsDeletable(calculateMapDistance(pixels, nearestControlPixels) < segmentSnapDistance);
+  const nearestControlPixels =
+    cameras.map.transformMetersToPixels(nearestControlPoint);
+  route.markEditAsDeletable(
+    calculateMapDistance(pixels, nearestControlPixels) < segmentSnapDistance,
+  );
   return true;
 };

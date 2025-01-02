@@ -1,4 +1,8 @@
-import {ROUTE_TYPE_BRIDGE, ROUTE_TYPE_GROUND, ROUTE_TYPE_TUNNEL} from './routeTypes.js';
+import {
+  ROUTE_TYPE_BRIDGE,
+  ROUTE_TYPE_GROUND,
+  ROUTE_TYPE_TUNNEL,
+} from './routeTypes.js';
 
 const createInitialCosts = () => ({
   sum: 0,
@@ -20,7 +24,7 @@ export default (route, level, map) => {
   route.segments.forEach((segment, segmentIndex) => {
     const segmentMeters = segment.meter - (previousSegment?.meter || 0);
 
-    switch(segment.type) {
+    switch (segment.type) {
       case ROUTE_TYPE_TUNNEL:
         if (previousSegment?.type !== ROUTE_TYPE_TUNNEL) {
           tunnelEntranceMeter = previousSegment.meter;
@@ -34,26 +38,47 @@ export default (route, level, map) => {
         }
         const distanceToOutside = Math.min(
           segment.meter - tunnelEntranceMeter,
-          tunnelExitMeter - segment.meter
+          tunnelExitMeter - segment.meter,
         );
-        segment.costs = segmentMeters * level.costs.tunnelMeter * distanceToOutside * level.costs.tunnelDepthFactor;
+        segment.costs =
+          segmentMeters *
+          level.costs.tunnelMeter *
+          distanceToOutside *
+          level.costs.tunnelDepthFactor;
         break;
       case ROUTE_TYPE_BRIDGE:
         const heightAboveGround = segment.z - segment.mapHeight;
-        segment.costs = segmentMeters * level.costs.bridgeMeter * heightAboveGround * level.costs.bridgeHeightFactor;
+        segment.costs =
+          segmentMeters *
+          level.costs.bridgeMeter *
+          heightAboveGround *
+          level.costs.bridgeHeightFactor;
         break;
-      default: 
+      default:
         const slope = map.getSlopeAtPoint(segment);
-        segment.costs = segmentMeters * level.costs.groundMeter * slope * level.costs.groundSlopeFactor;
+        segment.costs =
+          segmentMeters *
+          level.costs.groundMeter *
+          slope *
+          level.costs.groundSlopeFactor;
         break;
     }
 
     route.costs[segment.type].sum += segment.costs;
-    route.costs[segment.type].min = Math.min(route.costs[segment.type].min, segment.costs || route.costs[segment.type].min);
-    route.costs[segment.type].max = Math.max(route.costs[segment.type].max, segment.costs);
+    route.costs[segment.type].min = Math.min(
+      route.costs[segment.type].min,
+      segment.costs || route.costs[segment.type].min,
+    );
+    route.costs[segment.type].max = Math.max(
+      route.costs[segment.type].max,
+      segment.costs,
+    );
 
     route.costs.total.sum += segment.costs;
-    route.costs.total.min = Math.min( route.costs.total.min, segment.costs || route.costs.total.min);
+    route.costs.total.min = Math.min(
+      route.costs.total.min,
+      segment.costs || route.costs.total.min,
+    );
     route.costs.total.max = Math.max(route.costs.total.max, segment.costs);
 
     previousSegment = segment;

@@ -13,23 +13,29 @@ export default (layout, mapCamera, profileCamera) => {
       scale: 1.0,
       normalizedCenter: {
         x: 0.5,
-        y: 0.5
-      }
+        y: 0.5,
+      },
     },
     profile: {
-      normalizedCenter: { 
-        flatMeter: 0.5, 
-        z: 0.5 
+      normalizedCenter: {
+        flatMeter: 0.5,
+        z: 0.5,
       },
-    }
+    },
   };
 
   magnifierCamera.map.transformMetersToPixels = (point) => {
     const normalized = mapCamera.normalizeMeters(point);
-    return ({
-      x: (normalized.x - magnifierCamera.map.normalizedCenter.x) * (canvas.height * magnifierCamera.map.scale) + 0.5 * canvas.width,
-      y: (normalized.y - magnifierCamera.map.normalizedCenter.y) * (canvas.height * magnifierCamera.map.scale) + 0.5 * canvas.height
-    });
+    return {
+      x:
+        (normalized.x - magnifierCamera.map.normalizedCenter.x) *
+          (canvas.height * magnifierCamera.map.scale) +
+        0.5 * canvas.width,
+      y:
+        (normalized.y - magnifierCamera.map.normalizedCenter.y) *
+          (canvas.height * magnifierCamera.map.scale) +
+        0.5 * canvas.height,
+    };
   };
 
   magnifierCamera.update = () => {
@@ -41,12 +47,15 @@ export default (layout, mapCamera, profileCamera) => {
 
   magnifierCamera.profile.transformMetersToPixels = (point) => {
     const normalized = scaleNormalized(profileCamera.normalizeMeters(point));
-    const normalizedCenter = scaleNormalized(magnifierCamera.profile.normalizedCenter);
+    const normalizedCenter = scaleNormalized(
+      magnifierCamera.profile.normalizedCenter,
+    );
     const scaledPixels = profileCamera.transformNormalizedToPixels(normalized);
-    const scaledPixelsCenter = profileCamera.transformNormalizedToPixels(normalizedCenter);
+    const scaledPixelsCenter =
+      profileCamera.transformNormalizedToPixels(normalizedCenter);
     return {
       x: scaledPixels.x - scaledPixelsCenter.x + 0.5 * canvas.width,
-      y: scaledPixels.y - scaledPixelsCenter.y + 0.5 * canvas.height
+      y: scaledPixels.y - scaledPixelsCenter.y + 0.5 * canvas.height,
     };
   };
 
@@ -54,7 +63,8 @@ export default (layout, mapCamera, profileCamera) => {
 
   magnifierCamera.active = magnifierCamera.map;
 
-  magnifierCamera.transformMetersToPixels = (point) => magnifierCamera.active.transformMetersToPixels(point);
+  magnifierCamera.transformMetersToPixels = (point) =>
+    magnifierCamera.active.transformMetersToPixels(point);
 
   magnifierCamera.isProfile = () => magnifierCamera.active?.isProfile();
 
@@ -65,8 +75,8 @@ export default (layout, mapCamera, profileCamera) => {
   magnifierCamera.disable = () => {
     layout.magnifierContainer.style.opacity = 0;
     magnifierCamera.active = null;
-  }
-  
+  };
+
   magnifierCamera.setByMapPixels = (pixels) => {
     const normalized = mapCamera.normalizePixels(pixels);
     magnifierCamera.map.normalizedCenter.x = normalized.x;

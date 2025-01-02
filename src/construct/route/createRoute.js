@@ -16,7 +16,7 @@ const createControlPoint = (point, onGround, editable = true) => ({
   flatMeter: null,
   mapHeight: null,
   editable,
-  onGround
+  onGround,
 });
 
 const limitPointToMap = (point, map) => {
@@ -25,25 +25,30 @@ const limitPointToMap = (point, map) => {
 };
 
 const sortPointsByMapDistance = (points, point) => {
-  return [...points].sort((point1, point2) =>
-    calculateMapDistance(point, point1) - calculateMapDistance(point, point2)
+  return [...points].sort(
+    (point1, point2) =>
+      calculateMapDistance(point, point1) - calculateMapDistance(point, point2),
   );
 };
 
 const sortPointsByProfileDistance = (points, point) => {
-  return [...points].sort((point1, point2) =>
-    calculateProfileDistance(point, point1) - calculateProfileDistance(point, point2)
+  return [...points].sort(
+    (point1, point2) =>
+      calculateProfileDistance(point, point1) -
+      calculateProfileDistance(point, point2),
   );
 };
 
 const loadRoute = (system, level) => {
   const rawControlPoints = system.persistence.loadRoute(level) || [];
-  const editableControlPoints = rawControlPoints.map(([x, y, z]) => createControlPoint({x, y, z}, z === null));
+  const editableControlPoints = rawControlPoints.map(([x, y, z]) =>
+    createControlPoint({ x, y, z }, z === null),
+  );
   return {
     controlPoints: [
       createControlPoint(level.start, true, false),
       ...editableControlPoints,
-      createControlPoint(level.end, true, false)
+      createControlPoint(level.end, true, false),
     ],
     segments: [],
     edit: null,
@@ -51,24 +56,38 @@ const loadRoute = (system, level) => {
 };
 
 const saveRoute = (system, level, route) => {
-  const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
-  const rawControlPoints = editableControlPoints.map(({ x, y, z, onGround }) => [x, y, onGround ? null : z]);
+  const editableControlPoints = route.controlPoints.filter(
+    (controlPoint) => controlPoint.editable,
+  );
+  const rawControlPoints = editableControlPoints.map(
+    ({ x, y, z, onGround }) => [x, y, onGround ? null : z],
+  );
   system.persistence.saveRoute(level, rawControlPoints);
-  const valid = Object.values(route.limits).every(limit => limit.valid);
-  system.persistence.saveCosts(level, valid ? Math.round(route.costs.total.sum) : null);
+  const valid = Object.values(route.limits).every((limit) => limit.valid);
+  system.persistence.saveCosts(
+    level,
+    valid ? Math.round(route.costs.total.sum) : null,
+  );
 };
 
 const smoothControlPointHeights = (controlPoints) => {
-  const reversedControlPoints = controlPoints.toReversed()
+  const reversedControlPoints = controlPoints.toReversed();
   for (let run = 0; run < 4; run++) {
     const points = run % 2 ? controlPoints : reversedControlPoints;
     points.forEach((point, index) => {
       if (point.onGround && index >= 1 && index <= controlPoints.length - 2) {
         const previousPoint = points[index - 1];
         const nextPoint = points[index + 1];
-        const flatMeterFactor = (point.flatMeter - previousPoint.flatMeter) / (nextPoint.flatMeter - previousPoint.flatMeter) 
-        const optimalHeight = previousPoint.z * (1.0 - flatMeterFactor) + nextPoint.z * flatMeterFactor;
-        const newHeight = Math.max(point.mapHeight - 2.0, Math.min(optimalHeight, point.mapHeight + 2.0));
+        const flatMeterFactor =
+          (point.flatMeter - previousPoint.flatMeter) /
+          (nextPoint.flatMeter - previousPoint.flatMeter);
+        const optimalHeight =
+          previousPoint.z * (1.0 - flatMeterFactor) +
+          nextPoint.z * flatMeterFactor;
+        const newHeight = Math.max(
+          point.mapHeight - 2.0,
+          Math.min(optimalHeight, point.mapHeight + 2.0),
+        );
         point.z = newHeight;
       }
     });
@@ -86,17 +105,21 @@ const recalculateSpline = (controlPoints) => {
 
 const updateSegments = (map, route, spline) => {
   route.segments = [];
-  for (let meter = 0; meter <= spline.length; meter += Math.max(0.1, Math.min(segmentDistance, spline.length - meter))) {
+  for (
+    let meter = 0;
+    meter <= spline.length;
+    meter += Math.max(0.1, Math.min(segmentDistance, spline.length - meter))
+  ) {
     const point = spline.getAtMeter(meter);
     limitPointToMap(point, map);
     const mapHeight = map.getHeightAtPoint(point);
-    
+
     route.segments.push({
       ...point,
       mapHeight,
       meter,
       type: null,
-      costs: null
+      costs: null,
     });
   }
 };
@@ -118,10 +141,10 @@ export default (system, level, map) => {
     });
     recalculateSpline(route.controlPoints);
     smoothControlPointHeights(route.controlPoints);
-   
+
     const spline = recalculateSpline(route.controlPoints);
     updateSegments(map, route, spline);
-    
+
     determineTypes(route);
     calculateAttributes(route);
     calculateCosts(route, level, map);
@@ -130,43 +153,59 @@ export default (system, level, map) => {
   route.calculateRoute();
 
   route.findNearestEditableControlPointByMapMeters = (point) => {
-    const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
-    const sortedControlPoints = sortPointsByMapDistance(editableControlPoints, point);
+    const editableControlPoints = route.controlPoints.filter(
+      (controlPoint) => controlPoint.editable,
+    );
+    const sortedControlPoints = sortPointsByMapDistance(
+      editableControlPoints,
+      point,
+    );
     return sortedControlPoints[0];
   };
 
   route.findNearestEditableControlPointByProfileMeters = (point) => {
-    const editableControlPoints = route.controlPoints.filter(controlPoint => controlPoint.editable);
-    const sortedControlPoints = sortPointsByProfileDistance(editableControlPoints, point);
+    const editableControlPoints = route.controlPoints.filter(
+      (controlPoint) => controlPoint.editable,
+    );
+    const sortedControlPoints = sortPointsByProfileDistance(
+      editableControlPoints,
+      point,
+    );
     return sortedControlPoints[0];
   };
 
-  route.findNearestSegmentByMapMeters = (point) => [...route.segments].sort((segment1, segment2) =>
-    calculateMapDistance(point, segment1) - calculateMapDistance(point, segment2)
-  )[0];
+  route.findNearestSegmentByMapMeters = (point) =>
+    [...route.segments].sort(
+      (segment1, segment2) =>
+        calculateMapDistance(point, segment1) -
+        calculateMapDistance(point, segment2),
+    )[0];
 
-  route.findNearestSegmentByProfileMeters = (point) => [...route.segments].sort((segment1, segment2) =>
-    calculateProfileDistance(point, segment1) - calculateProfileDistance(point, segment2)
-  )[0];
+  route.findNearestSegmentByProfileMeters = (point) =>
+    [...route.segments].sort(
+      (segment1, segment2) =>
+        calculateProfileDistance(point, segment1) -
+        calculateProfileDistance(point, segment2),
+    )[0];
 
   route.createEditByControlPoint = (controlPoint) => {
     if (route.edit?.status === 'moveable') {
       return;
-    };
+    }
     route.edit = {
       controlPoint,
-      status: 'marked'
-    }
+      status: 'marked',
+    };
   };
 
   route.createEditBySegment = (segment) => {
     if (route.edit?.status === 'moveable') {
       return;
-    };
+    }
     route.edit = {
       segment,
-      status: 'marked'
-    }
+      status: 'marked',
+    };
   };
 
   route.activateEdit = (createOnGround) => {
@@ -181,14 +220,22 @@ export default (system, level, map) => {
       if (edit.activateFactor > 1.0) {
         let controlPointIndex = 1;
         for (const segment of route.segments) {
-          if (calculateMapDistance(segment, route.controlPoints[controlPointIndex]) < segmentDistance) {
+          if (
+            calculateMapDistance(
+              segment,
+              route.controlPoints[controlPointIndex],
+            ) < segmentDistance
+          ) {
             controlPointIndex++;
           }
           if (segment === edit.segment) {
             break;
           }
         }
-        const newControlPoint = createControlPoint(edit.segment, createOnGround);
+        const newControlPoint = createControlPoint(
+          edit.segment,
+          createOnGround,
+        );
         route.controlPoints.splice(controlPointIndex, 0, newControlPoint);
         edit.controlPoint = newControlPoint;
         edit.segment = null;
@@ -210,8 +257,13 @@ export default (system, level, map) => {
     route.edit.controlPoint.y = newPoint.y;
     route.calculateRoute();
 
-    const otherControlPoints = route.controlPoints.filter(controlPoint => controlPoint !== route.edit.controlPoint);
-    const nearestControlPoints = sortPointsByMapDistance(otherControlPoints, newPoint);
+    const otherControlPoints = route.controlPoints.filter(
+      (controlPoint) => controlPoint !== route.edit.controlPoint,
+    );
+    const nearestControlPoints = sortPointsByMapDistance(
+      otherControlPoints,
+      newPoint,
+    );
     return nearestControlPoints[0];
   };
 
@@ -231,7 +283,7 @@ export default (system, level, map) => {
   };
 
   route.markEditAsDeletable = (deletable) => {
-    route.edit.deletable = deletable
+    route.edit.deletable = deletable;
   };
 
   route.confirmEdit = () => {
@@ -239,7 +291,9 @@ export default (system, level, map) => {
       return;
     }
     if (route.edit.deletable) {
-      const controlPointIndex = route.controlPoints.indexOf(route.edit.controlPoint);
+      const controlPointIndex = route.controlPoints.indexOf(
+        route.edit.controlPoint,
+      );
       route.controlPoints.splice(controlPointIndex, 1);
       route.calculateRoute();
     }
@@ -253,10 +307,13 @@ export default (system, level, map) => {
 
   route.isEditingSegment = (segment) => {
     if (route.edit?.controlPoint) {
-      return calculateMapDistance(route.edit.controlPoint, segment) <= segmentDistance;
+      return (
+        calculateMapDistance(route.edit.controlPoint, segment) <=
+        segmentDistance
+      );
     }
     return route.edit?.segment === segment;
-  }
+  };
 
   return route;
 };

@@ -22,27 +22,45 @@ export default (layout, cameras, route, renderer) => {
     event.preventDefault();
   };
 
-  layout.mapContainer.addEventListener('wheel', (event) => {
-    console.log('wheel event', event.offsetX, event.offsetY, event.deltaY);
-    
-    const pixels = { x: event.offsetX, y: event.offsetY };
-    const amount = event.deltaY / 90.0;
-    amount < 0 ? cameras.map.zoomIn(-amount, pixels) : cameras.map.zoomOut(amount, pixels);
-    renderer.renderAll();
+  layout.mapContainer.addEventListener(
+    'wheel',
+    (event) => {
+      console.log('wheel event', event.offsetX, event.offsetY, event.deltaY);
 
-    event.stopPropagation();
-    event.preventDefault();
-  }, { passive: false });
+      const pixels = { x: event.offsetX, y: event.offsetY };
+      const amount = event.deltaY / 90.0;
+      amount < 0
+        ? cameras.map.zoomIn(-amount, pixels)
+        : cameras.map.zoomOut(amount, pixels);
+      renderer.renderAll();
+
+      event.stopPropagation();
+      event.preventDefault();
+    },
+    { passive: false },
+  );
 
   layout.mapContainer.onmousedown = (event) => {
-    console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
+    console.log(
+      cameras.map.transformPixelsToMeters({
+        x: event.offsetX,
+        y: event.offsetY,
+      }),
+    );
     startEditing(true);
-  }
+  };
 
   layout.mapContainer.onmousemove = (event) => {
     const pixels = { x: event.offsetX, y: event.offsetY };
     const movementPixels = { x: -event.movementX, y: -event.movementY };
-    handleMapDrag(cameras, route, renderer, pixels, movementPixels, event.buttons === 1);
+    handleMapDrag(
+      cameras,
+      route,
+      renderer,
+      pixels,
+      movementPixels,
+      event.buttons === 1,
+    );
   };
 
   layout.mapContainer.onmouseup = stopEditing;

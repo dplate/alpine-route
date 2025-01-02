@@ -6,11 +6,12 @@ const loadMapTexture = (system, map) => {
     label: 'Map texture',
     format: 'rgba8unorm',
     size: [textureSource.width, textureSource.height],
-    usage: GPUTextureUsage.TEXTURE_BINDING |
-           GPUTextureUsage.COPY_DST |
-           GPUTextureUsage.RENDER_ATTACHMENT,
+    usage:
+      GPUTextureUsage.TEXTURE_BINDING |
+      GPUTextureUsage.COPY_DST |
+      GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  
+
   system.gpuDevice.queue.copyExternalImageToTexture(
     { source: textureSource, flipY: true },
     { texture },
@@ -25,12 +26,12 @@ const createPipeline = (system, presentationFormat, map) => {
     label: 'map shaders',
     code: mapShader,
   });
-  
+
   return system.gpuDevice.createRenderPipeline({
     label: 'map pipeline',
     layout: 'auto',
-    primitive: { 
-      topology: `triangle-strip` 
+    primitive: {
+      topology: `triangle-strip`,
     },
     vertex: {
       module,
@@ -41,29 +42,37 @@ const createPipeline = (system, presentationFormat, map) => {
       entryPoint: 'fs',
       targets: [{ format: presentationFormat }],
       constants: {
-        resolutionInMeters: map.resolutionInMeters
+        resolutionInMeters: map.resolutionInMeters,
       },
     },
   });
 };
 
-const createBindGroup = (system, pipeline, buffer, texture) => system.gpuDevice.createBindGroup({
-  layout: pipeline.getBindGroupLayout(0),
-  entries: [
-    { 
-      binding: 0, 
-      resource: { 
-        buffer
-      }
-    },
-    { 
-      binding: 1, 
-      resource: texture.createView()
-    },
-  ],
-});
+const createBindGroup = (system, pipeline, buffer, texture) =>
+  system.gpuDevice.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer,
+        },
+      },
+      {
+        binding: 1,
+        resource: texture.createView(),
+      },
+    ],
+  });
 
-const createRenderTarget = (system, presentationFormat, pipeline, texture, camera, canvas) => {
+const createRenderTarget = (
+  system,
+  presentationFormat,
+  pipeline,
+  texture,
+  camera,
+  canvas,
+) => {
   const context = canvas.getContext('webgpu');
   context.configure({
     device: system.gpuDevice,
@@ -82,16 +91,26 @@ const createRenderTarget = (system, presentationFormat, pipeline, texture, camer
     camera,
     values,
     buffer,
-    bindGroup
+    bindGroup,
   };
 };
 
 const copyCameraToGpu = (system, renderTarget) => {
   const aspect = renderTarget.canvas.width / renderTarget.canvas.height;
   renderTarget.values.set([aspect], 0);
-  renderTarget.values.set([renderTarget.camera.scale], 1); 
-  renderTarget.values.set([renderTarget.camera.normalizedCenter.x, renderTarget.camera.normalizedCenter.y], 2); 
-  system.gpuDevice.queue.writeBuffer(renderTarget.buffer, 0, renderTarget.values);
+  renderTarget.values.set([renderTarget.camera.scale], 1);
+  renderTarget.values.set(
+    [
+      renderTarget.camera.normalizedCenter.x,
+      renderTarget.camera.normalizedCenter.y,
+    ],
+    2,
+  );
+  system.gpuDevice.queue.writeBuffer(
+    renderTarget.buffer,
+    0,
+    renderTarget.values,
+  );
 };
 
 const executeRenderPass = (encoder, renderTarget, pipeline) => {
@@ -102,7 +121,7 @@ const executeRenderPass = (encoder, renderTarget, pipeline) => {
         clearValue: [0, 0, 0, 1],
         loadOp: 'clear',
         storeOp: 'store',
-        view: renderTarget.context.getCurrentTexture().createView()
+        view: renderTarget.context.getCurrentTexture().createView(),
       },
     ],
   });
@@ -113,20 +132,39 @@ const executeRenderPass = (encoder, renderTarget, pipeline) => {
 };
 
 export default (system, layout, cameras, map) => {
-  const presentationFormat = system.window.navigator.gpu.getPreferredCanvasFormat();
+  const presentationFormat =
+    system.window.navigator.gpu.getPreferredCanvasFormat();
   const pipeline = createPipeline(system, presentationFormat, map);
   const texture = loadMapTexture(system, map);
 
   const renderTargets = [
-    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.map, layout.map),
-    createRenderTarget(system, presentationFormat, pipeline, texture, cameras.magnifier.map, layout.magnifier)
+    createRenderTarget(
+      system,
+      presentationFormat,
+      pipeline,
+      texture,
+      cameras.map,
+      layout.map,
+    ),
+    createRenderTarget(
+      system,
+      presentationFormat,
+      pipeline,
+      texture,
+      cameras.magnifier.map,
+      layout.magnifier,
+    ),
   ];
 
   const render = () => {
-    const encoder = system.gpuDevice.createCommandEncoder({ label: 'map command encoder' });
+    const encoder = system.gpuDevice.createCommandEncoder({
+      label: 'map command encoder',
+    });
 
-    renderTargets.forEach(renderTarget => {
-      if (!renderTarget.canvas.width || !renderTarget.canvas.height || 
+    renderTargets.forEach((renderTarget) => {
+      if (
+        !renderTarget.canvas.width ||
+        !renderTarget.canvas.height ||
         renderTarget.camera.isDisabled() ||
         renderTarget.camera.isProfile()
       ) {
@@ -141,14 +179,14 @@ export default (system, layout, cameras, map) => {
   };
 
   system.handleCanvasResize(
-    renderTargets.map(renderTarget => renderTarget.canvas), 
+    renderTargets.map((renderTarget) => renderTarget.canvas),
     () => {
       cameras.update();
       render();
-    }
+    },
   );
 
   return {
-    render
+    render,
   };
 };

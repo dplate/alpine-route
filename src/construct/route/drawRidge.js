@@ -1,15 +1,18 @@
 const drawContourLines = (context, renderCamera, profileCamera) => {
   context.lineCap = 'round';
   context.strokeStyle = 'rgb(126, 119, 51, 0.5)';
-  context.shadowBlur = 0; 
-  
-  const distances = [ 1, 2, 5, 10, 20, 100 ];
-  const distanceHint = Math.floor(Math.sqrt(Math.sqrt((profileCamera.maxHeight - profileCamera.minHeight))));
-  const distance = distances[Math.max(0, Math.min(distanceHint, distances.length - 1))];
- 
+  context.shadowBlur = 0;
+
+  const distances = [1, 2, 5, 10, 20, 100];
+  const distanceHint = Math.floor(
+    Math.sqrt(Math.sqrt(profileCamera.maxHeight - profileCamera.minHeight)),
+  );
+  const distance =
+    distances[Math.max(0, Math.min(distanceHint, distances.length - 1))];
+
   for (
-    let height = profileCamera.minHeight - profileCamera.minHeight % distance; 
-    height < profileCamera.maxHeight; 
+    let height = profileCamera.minHeight - (profileCamera.minHeight % distance);
+    height < profileCamera.maxHeight;
     height += distance
   ) {
     if (height % 100 === 0) {
@@ -18,29 +21,33 @@ const drawContourLines = (context, renderCamera, profileCamera) => {
       context.lineWidth = 0.5;
     }
     context.beginPath();
-    const startPixels = renderCamera.transformMetersToPixels({ 
-      flatMeter: profileCamera.minFlatMeter, 
-      z: height
+    const startPixels = renderCamera.transformMetersToPixels({
+      flatMeter: profileCamera.minFlatMeter,
+      z: height,
     });
     context.moveTo(startPixels.x, startPixels.y);
 
-    const endPixels = renderCamera.transformMetersToPixels({ 
-      flatMeter: profileCamera.maxFlatMeter, 
-      z: height
+    const endPixels = renderCamera.transformMetersToPixels({
+      flatMeter: profileCamera.maxFlatMeter,
+      z: height,
     });
     context.lineTo(endPixels.x, endPixels.y);
 
-    context.stroke(); 
+    context.stroke();
   }
 };
 
 export default (context, route, renderTarget, profileCamera) => {
-  const transformToPixels = (segment) => renderTarget.camera.transformMetersToPixels({ 
-    flatMeter: segment.flatMeter, 
-    z: Math.abs(segment.mapHeight - segment.z) < 5 ? segment.z : segment.mapHeight
-  });
+  const transformToPixels = (segment) =>
+    renderTarget.camera.transformMetersToPixels({
+      flatMeter: segment.flatMeter,
+      z:
+        Math.abs(segment.mapHeight - segment.z) < 5
+          ? segment.z
+          : segment.mapHeight,
+    });
   const startPixels = transformToPixels(route.segments[0]);
-  
+
   context.save();
   context.moveTo(startPixels.x, renderTarget.canvas.height);
   context.beginPath();
@@ -59,16 +66,16 @@ export default (context, route, renderTarget, profileCamera) => {
   context.lineCap = 'round';
   context.strokeStyle = 'rgb(150, 150, 150)';
   context.shadowColor = 'rgba(0, 0, 0)';
-  context.shadowBlur = 30; 
-  
+  context.shadowBlur = 30;
+
   context.beginPath();
   route.segments.forEach((segment) => {
     const pixels = transformToPixels(segment);
     context.lineTo(pixels.x, pixels.y);
   });
-  context.stroke(); 
+  context.stroke();
 
   drawContourLines(context, renderTarget.camera, profileCamera);
-  
+
   context.restore();
 };

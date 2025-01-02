@@ -2,30 +2,40 @@ import calculateCurrentMoney from './calculateCurrentMoney.js';
 
 const getWeightedRandom = () => {
   const randomValue = Math.random();
-  const weightedRandom =  Math.sqrt(Math.sin(Math.PI * randomValue)) * 0.5;
-  return randomValue < 0.5 ? weightedRandom : (1.0 - weightedRandom);
-}
+  const weightedRandom = Math.sqrt(Math.sin(Math.PI * randomValue)) * 0.5;
+  return randomValue < 0.5 ? weightedRandom : 1.0 - weightedRandom;
+};
 
 const shuffleCoins = (coins) => {
-  const needNewPositionCoins = [ ...coins ];
-  coins.forEach(() => { 
+  const needNewPositionCoins = [...coins];
+  coins.forEach(() => {
     const x = getWeightedRandom();
     const y = getWeightedRandom();
     const coin = needNewPositionCoins.sort((coin1, coin2) => {
-      const oldPosition1 = { x: Number(coin1.dataset.x), y: Number(coin1.dataset.y) };
-      const oldPosition2 = { x: Number(coin2.dataset.x), y: Number(coin2.dataset.y) };
-      const distance1 = Math.sqrt((oldPosition1.x - x) ** 2 + (oldPosition1.y - y) ** 2);
-      const distance2 = Math.sqrt((oldPosition2.x - x) ** 2 + (oldPosition2.y - y) ** 2);
+      const oldPosition1 = {
+        x: Number(coin1.dataset.x),
+        y: Number(coin1.dataset.y),
+      };
+      const oldPosition2 = {
+        x: Number(coin2.dataset.x),
+        y: Number(coin2.dataset.y),
+      };
+      const distance1 = Math.sqrt(
+        (oldPosition1.x - x) ** 2 + (oldPosition1.y - y) ** 2,
+      );
+      const distance2 = Math.sqrt(
+        (oldPosition2.x - x) ** 2 + (oldPosition2.y - y) ** 2,
+      );
       return distance1 - distance2;
     })[0];
     needNewPositionCoins.shift();
     coin.dataset.x = x;
     coin.dataset.y = y;
     coin.style.top = `calc(${x * 100}% - ${x * 75}px)`;
-    coin.style.left =`calc(${y * 100}% - ${y * 75}px)`;
+    coin.style.left = `calc(${y * 100}% - ${y * 75}px)`;
     coin.children[0].style.transform = `rotate(${Math.random()}turn)`;
   });
-}
+};
 
 export default async (system, layout, levels) => {
   const money = calculateCurrentMoney(system, levels);
@@ -73,5 +83,4 @@ export default async (system, layout, levels) => {
   accountBalance.appendChild(accountBalanceValue);
 
   layout.account.appendChild(accountBalance);
-
 };

@@ -8,10 +8,10 @@ const loadState = (window) => {
   }
 };
 
-const createState = () => ({ 
+const createState = () => ({
   levels: {},
   helps: {},
-  finished: false
+  finished: false,
 });
 
 const saveState = (window, state) => {
@@ -23,7 +23,7 @@ const getLevelState = (state, level) => {
     state.levels[level.id] = {
       available: false,
       route: null,
-      costs: null
+      costs: null,
     };
   }
   return state.levels[level.id];
@@ -32,7 +32,7 @@ const getLevelState = (state, level) => {
 export default (window) => {
   const state = {
     ...createState(),
-    ...loadState(window)
+    ...loadState(window),
   };
 
   return {
@@ -72,12 +72,12 @@ export default (window) => {
     },
     markHelpAsSeen: (help) => {
       state.helps[help.id] = {
-        seen: true
+        seen: true,
       };
       saveState(window, state);
     },
     hasHelpSeen: (help) => {
       return state.helps[help.id]?.seen;
-    }
+    },
   };
 };

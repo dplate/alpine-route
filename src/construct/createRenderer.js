@@ -8,7 +8,14 @@ export default (system, level, layout, cameras, map, route) => {
 
   const renderer = {
     map: createMapRenderer(system, layout, cameras, map),
-    route: createRouteRenderer(system, level, layout, cameras, route, labelRenderer),
+    route: createRouteRenderer(
+      system,
+      level,
+      layout,
+      cameras,
+      route,
+      labelRenderer,
+    ),
     notes: createNotesRenderer(system, level, layout, cameras, route),
   };
 
@@ -17,6 +24,6 @@ export default (system, level, layout, cameras, map, route) => {
     renderer.route.render();
     renderer.notes.render();
   };
-  
+
   return renderer;
-}
+};

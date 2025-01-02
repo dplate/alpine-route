@@ -215,49 +215,21 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  z-index: 100;
 }
 
-#bridge, #road, #mule, #train, #mapDrawing {
+.photo {
   position: absolute;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
   border-radius: 5px;
-}
-
-#bridge {
-  width: 500px;
-  height: 500px;
-  background-image: url("../images/bridge.webp");
-}
-
-#road {
-  width: 400px;
-  height: 400px;
-  background-image: url("../images/road.webp");
-}
-
-#mule {
-  width: 350px;
-  height: 350px;
-  background-image: url("../images/mule.webp");
-}
-
-#train {
-  width: 370px;
-  height: 370px;
-  background-image: url("../images/train.webp");
-}
-
-#mapDrawing {
-  width: 450px;
-  height: 450px;
-  background-image: url("../images/mapDrawing.webp");
+  max-width: 500px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5)) sepia(60%);
 }
 
 @media screen and (max-width: 800px) {
-  .stain, #ruler, #bridge, #road, #mule, #train, #mapDrawing {
+  .stain, #ruler, .photo {
     display: none;
   }
 }

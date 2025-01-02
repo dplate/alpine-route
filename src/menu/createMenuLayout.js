@@ -34,15 +34,6 @@ export default (system) => {
     desk.appendChild(stain);
   }
 
-  ['train', 'mule', 'road', 'mapDrawing', 'bridge'].sort(() => 0.5 - Math.random()).forEach(drawingId => {
-    const drawing = document.createElement('div');
-    drawing.id = drawingId;
-    drawing.style.left = `calc(600px + ${Math.random()} * (100vw - 700px))`;
-    drawing.style.bottom = `${-10 + Math.random() * 70}vh`;
-    drawing.style.transform = `rotate(${-0.05 + Math.random() * 0.1}turn)`;
-    desk.appendChild(drawing);
-  });
-
   const ruler = document.createElement('div');
   ruler.id = 'ruler';
   ruler.style.left = `calc(600px + ${Math.random()} * (100vw - 800px))`;

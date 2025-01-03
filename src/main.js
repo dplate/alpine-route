@@ -9,6 +9,11 @@ async function main() {
   window.document.documentElement.lang = language;
   const system = await setupSystem(window, language);
   if (!system) {
+    window.document.body.innerHTML = '<div style="padding: 10px">' + 
+      (language === 'de' ?
+        'Anscheinend unterstützt dein Browser oder dein System kein WebGPU. :(<br />Du kannst versuchen Alpine Route in einem anderem Browser zu starten.' : 
+        'It seems your browser or system does not support WebGPU. :(<br />You can try to run Alpine Route in another browser.') + 
+        '</div>';
     return;
   }
 

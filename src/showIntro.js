@@ -16,18 +16,12 @@ export default async (window) => {
 
     const germanButton = document.createElement('button');
     germanButton.innerText = 'Dein Büro betreten';
-    germanButton.onclick = () => {
-      document.body.requestFullscreen();
-      resolve('de');
-    };
+    germanButton.onclick = () => resolve('de');
     languageSelection.appendChild(germanButton);
 
     const englishButton = document.createElement('button');
     englishButton.innerText = 'Enter your office';
-    englishButton.onclick = () => {
-      document.body.requestFullscreen();
-      resolve('en');
-    };
+    englishButton.onclick = () => resolve('en');
     languageSelection.appendChild(englishButton);
 
     introContainer.appendChild(languageSelection);

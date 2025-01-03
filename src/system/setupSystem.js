@@ -26,6 +26,8 @@ export default async (window, language) => {
   }
   await loadFonts(window);
 
+  window.document.body.requestFullscreen();
+
   return {
     window,
     gpuDevice,

@@ -1,6 +1,6 @@
 import maps from './maps.js';
 
-const resolutionInMeters = 2;
+const resolutionInMeters = 2.0;
 const slopeDistanceInMeters = 5;
 
 export default async (system, level) => {

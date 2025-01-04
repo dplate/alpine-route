@@ -31,7 +31,7 @@ struct MapVertexShaderOutput {
   return vsOutput;
 }
 
-override resolutionInMeters: f32;
+override resolutionInMeters: f32 = 2.0;
 
 const northWestOffset = vec2i(-1, 1);
 const westOffset = vec2i(-1, 0);
@@ -45,7 +45,7 @@ const northOffset = vec2i(0, 1);
 @group(0) @binding(1) var mapTexture: texture_2d<f32>;
 
 fn convertColorToHeight(color: vec4f) -> f32 {
-  return dot(color, vec4f(256.0, 1.0, 0, 0)) * 25.5;
+  return dot(color, vec4f(256.0, 1.0, 0.0, 0.0)) * 25.5;
 }
 
 fn getNeighbor(height: f32, offset: vec2i) -> vec3f {
@@ -80,9 +80,14 @@ fn getInterpolatedHeight(textureCoordinate: vec2f) -> f32 {
   return mix(interpolated1, interpolated2, fraction[1]);
 }
 
-fn getNeighbors(textureCoordinate: vec2f) -> array<vec3f, 8> {
+struct NeighborsContainer {
+  neighbors: array<vec3f, 8>
+};
+
+fn getNeighbors(textureCoordinate: vec2f) -> NeighborsContainer {
   let textureSize = vec2f(textureDimensions(mapTexture));
-  return array(
+  var container: NeighborsContainer;
+  container.neighbors = array(
     getNeighbor(
       getInterpolatedHeight(textureCoordinate + vec2f(northWestOffset) / textureSize ), 
       northWestOffset
@@ -116,6 +121,7 @@ fn getNeighbors(textureCoordinate: vec2f) -> array<vec3f, 8> {
       northOffset
     ),
   );
+  return container;
 }
 
 fn calculateSmoothHeight(neighbors: array<vec3f, 8>) -> f32 {
@@ -123,11 +129,11 @@ fn calculateSmoothHeight(neighbors: array<vec3f, 8>) -> f32 {
   for (var i: i32 = 0; i < 8; i++) {
     height = height + neighbors[i][2];
   }
-  return height / 8;
+  return height / 8.0;
 }
 
 fn calculateNormal(neighbors: array<vec3f, 8>) -> vec3f {
-  var normal = vec3f(0, 0, 0);
+  var normal = vec3f(0.0, 0.0, 0.0);
   for (var i: i32 = 0; i < 8; i++) {
     let pointA = neighbors[i];
     let pointB = neighbors[(i + 2) % 8];
@@ -138,15 +144,15 @@ fn calculateNormal(neighbors: array<vec3f, 8>) -> vec3f {
 }
 
 fn calculateSlope(normal: vec3f) -> f32 {
-  return 1.0 - asin(normal[2] / 1) / asin(1);
+  return 1.0 - asin(normal[2] / 1.0) / asin(1.0);
 }
 
 fn calculateShading(normal: vec3f) -> f32 {
-  let directLight = normalize(vec3f(1, 1, -1));
+  let directLight = normalize(vec3f(1.0, 1.0, -1.0));
   let maxDirectLightShading = length(directLight + normalize(vec3f(1, 1, 0)));
   let directLightShading = length(directLight + normal) / maxDirectLightShading;
 
-  let slopeLight = normalize(vec3f(0, 0, -1));
+  let slopeLight = normalize(vec3f(0.0, 0.0, -1.0));
   let maxSlopeLightShading = length(slopeLight + normalize(vec3f(0, 1, 0)));
   let slopeLightShading = length(slopeLight + normal) / maxSlopeLightShading;
   
@@ -195,7 +201,7 @@ fn simplexNoise(textureCoordinate: vec2f, details: vec2f) -> f32 {
 fn addStones(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
   let slopeProbability = 1.0 - step(0.7, slope);
 
-  let heightProbability = smoothstep(1800, 2200, height);
+  let heightProbability = smoothstep(1800.0, 2200.0, height);
   let heightNoiseProbability = step(1.0 - heightProbability * 0.7, simplexNoise(textureCoordinate, vec2f(10)));
 
   let stonePattern = simplexNoise(textureCoordinate, vec2f(1000));
@@ -203,7 +209,7 @@ fn addStones(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32
   let probability = min(slopeProbability, heightNoiseProbability);
   let smoothMask = min(probability, stonePattern);
   
-  let detailFactor = fwidth(smoothMask) * 2;
+  let detailFactor = fwidth(smoothMask) * 2.0;
   let stonesMask = smoothstep(0.68, 0.68 + detailFactor, smoothMask);
   let stonesColor = vec3f(150.0/255.0);
   
@@ -215,7 +221,7 @@ fn addForest(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32
   let upperSlopeMask = 1.0 - smoothstep(0.35, 0.7, slope);
   let slopeMask = lowerSlopeMask * upperSlopeMask;
 
-  let heightMask = 1.0 - smoothstep(1700, 2300, height);
+  let heightMask = 1.0 - smoothstep(1700.0, 2300.0, height);
 
   let probability = heightMask * slopeMask;
   let noise = simplexNoise(textureCoordinate, vec2f(10));
@@ -229,10 +235,10 @@ fn addForest(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32
 fn addSnow(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) -> vec3f {
   let slopeMask = 1.0 - smoothstep(0.2, 0.6, slope);
 
-  let heightMask = smoothstep(2300, 2500, height);
+  let heightMask = smoothstep(2300.0, 2500.0, height);
 
   let probability = heightMask * slopeMask;
-  let noise = simplexNoise(textureCoordinate, vec2f(10));
+  let noise = simplexNoise(textureCoordinate, vec2f(10.0));
   let limit = 1.0 - probability * 0.7;
   let snowMask = step(limit, noise);
 
@@ -242,10 +248,10 @@ fn addSnow(baseColor: vec3f, textureCoordinate: vec2f, slope: f32, height: f32) 
 }
 
 fn addContour(baseColor: vec3f, height: f32, distance: f32, contourWidth: f32, contourColor: vec3f) -> vec3f {
-  let heightFraction = abs(fract((height + distance / 2) / distance) - 0.5); 
-  let detailFactor = fwidth(height / distance) / 2;
+  let heightFraction = abs(fract((height + distance / 2.0) / distance) - 0.5); 
+  let detailFactor = fwidth(height / distance) / 2.0;
   let smoothWidth = 2.0;
-  let contourMask = (1 - smoothstep(
+  let contourMask = (1.0 - smoothstep(
     contourWidth * detailFactor, 
     (contourWidth + smoothWidth) * detailFactor, 
     heightFraction
@@ -257,7 +263,7 @@ fn addContour(baseColor: vec3f, height: f32, distance: f32, contourWidth: f32, c
 fn addDefaultContours(baseColor: vec3f, height: f32) -> vec3f {
   let contourColor = vec3f(126.0/255.0, 119.0/255.0, 51.0/255.0);
   let subContourAmounts = array(1.0, 5.0, 10.0, 20.0, 50.0, 100.0);
-  let subContourAmount = subContourAmounts[min(max(0, i32(round(sqrt(camera.scale / 10)))), 5)];
+  let subContourAmount = subContourAmounts[min(max(0, i32(round(sqrt(camera.scale / 10.0)))), 5)];
   return addContour(
     addContour(baseColor, height, 100.0 / subContourAmount, 0.0, contourColor), 
     height, 100.0, 0.7, contourColor
@@ -279,7 +285,7 @@ fn addContours(baseColor: vec3f, height: f32, textureCoordinate: vec2f, slope: f
 }
   
 @fragment fn fs(fsInput: MapVertexShaderOutput) -> @location(0) vec4f {
-  let neighbors = getNeighbors(fsInput.textureCoordinate);
+  let neighbors = getNeighbors(fsInput.textureCoordinate).neighbors;
   let smoothHeight = calculateSmoothHeight(neighbors);
   let normal = calculateNormal(neighbors);
   let slope = calculateSlope(normal);
@@ -293,7 +299,7 @@ fn addContours(baseColor: vec3f, height: f32, textureCoordinate: vec2f, slope: f
   let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
   return vec4f(
     addContours(baseColor, smoothHeight, fsInput.textureCoordinate, slope),
-    1
+    1.0
   );
 }
 

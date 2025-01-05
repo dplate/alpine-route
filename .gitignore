@@ -4,6 +4,7 @@
 node_modules
 tmp.zip
 map.png
+/marketing/video.mp4
 /android/.gradle
 /android/local.properties
 /android/build

@@ -26,7 +26,11 @@ export default async (window, language) => {
   }
   await loadFonts(window);
 
-  window.document.body.requestFullscreen();
+  try {
+    window.document.body.requestFullscreen({ navigationUI: 'hide' });
+  } catch(e) { 
+    console.log(e); 
+  }
 
   return {
     window,

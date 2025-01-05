@@ -32,6 +32,22 @@ The current development version can be played here: https://dplate.github.io/alp
 
 `npx prettier -w ./**/*.js`
 
+## Create Android app
+
+Copy the following files/folders into the folder 
+
+/android/app/src/main/assets/www
+
+- assets
+- src
+- index.html
+- site.webmanifest
+- *.ico
+- *.png
+- *.svg
+
+and build the project in folder android with Android Studio.
+
 ## Evaluation 
 
 ### height data

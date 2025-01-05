@@ -3,9 +3,23 @@ import maps from './maps.js';
 const resolutionInMeters = 2.0;
 const slopeDistanceInMeters = 5;
 
+const loadFile = (path) => {
+  return new Promise((resolve, reject) => {
+      try {
+        const req = new XMLHttpRequest();
+        req.open("GET", path, true);
+        req.responseType = "blob";
+        req.onload = () => resolve(req.response);
+        req.send();
+      } catch (e) {
+          reject(e);
+      }
+  });
+};
+
 export default async (system, level) => {
-  const data = await fetch(`assets/maps/${level.map}.webp`);
-  const bitmap = await createImageBitmap(await data.blob(), {
+  const data = await loadFile(`assets/maps/${level.map}.webp`);
+  const bitmap = await createImageBitmap(data, {
     colorSpaceConversion: 'none',
   });
 

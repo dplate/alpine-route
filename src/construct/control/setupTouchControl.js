@@ -36,8 +36,6 @@ export default (layout, cameras, route, renderer) => {
   };
 
   layout.mapContainer.ontouchstart = (event) => {
-    console.log('touchstart event', event.targetTouches[0]);
-
     startEditing(true);
     const touch = event.targetTouches[0];
     const pixels = transformTouchToPixels(touch, layout.mapContainer);
@@ -47,12 +45,6 @@ export default (layout, cameras, route, renderer) => {
   layout.mapContainer.addEventListener(
     'touchmove',
     (event) => {
-      console.log(
-        'touchmove event',
-        event.targetTouches[0],
-        event.targetTouches[1],
-      );
-
       const touch = event.targetTouches[0];
       const pixels = transformTouchToPixels(touch, layout.mapContainer);
 

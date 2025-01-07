@@ -25,13 +25,10 @@ export default (layout, cameras, route, renderer) => {
   layout.mapContainer.addEventListener(
     'wheel',
     (event) => {
-      console.log('wheel event', event.offsetX, event.offsetY, event.deltaY);
-
       const pixels = { x: event.offsetX, y: event.offsetY };
-      const amount = event.deltaY / 90.0;
-      amount < 0
-        ? cameras.map.zoomIn(-amount, pixels)
-        : cameras.map.zoomOut(amount, pixels);
+      event.deltaY < 0
+        ? cameras.map.zoomIn(1.1, pixels)
+        : cameras.map.zoomOut(1.1, pixels);
       renderer.renderAll();
 
       event.stopPropagation();
@@ -40,13 +37,7 @@ export default (layout, cameras, route, renderer) => {
     { passive: false },
   );
 
-  layout.mapContainer.onmousedown = (event) => {
-    console.log(
-      cameras.map.transformPixelsToMeters({
-        x: event.offsetX,
-        y: event.offsetY,
-      }),
-    );
+  layout.mapContainer.onmousedown = () => {
     startEditing(true);
   };
 

@@ -26,9 +26,13 @@ export default (layout, cameras, route, renderer) => {
     'wheel',
     (event) => {
       const pixels = { x: event.offsetX, y: event.offsetY };
+      const scrollPixels = Math.abs(
+        event.deltaMode === 1 ? event.deltaY * 40.0 : event.deltaY
+      );
+      const zoomAmount = 1.0 + scrollPixels * 0.001;
       event.deltaY < 0
-        ? cameras.map.zoomIn(1.1, pixels)
-        : cameras.map.zoomOut(1.1, pixels);
+        ? cameras.map.zoomIn(zoomAmount, pixels)
+        : cameras.map.zoomOut(zoomAmount, pixels);
       renderer.renderAll();
 
       event.stopPropagation();

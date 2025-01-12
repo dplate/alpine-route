@@ -6,6 +6,14 @@ On a high resolution map (displayed in 2D) a route between two points must be pl
 
 The current development version can be played here: https://dplate.github.io/alpine-route/
 
+## Links
+
+Official website of the Alpine Route:
+https://www.dplate.de/games/alpine-route
+
+Android App:
+https://play.google.com/store/apps/details?id=de.dplate.alpine_route
+
 ## Todo
 
 - [X] Automate process to create high resolution height maps from public available data
@@ -25,8 +33,8 @@ The current development version can be played here: https://dplate.github.io/alp
 - [X] Level selection (including description and money)
 - [X] Create levels
 - [X] Finalize game (start screen, credits...)
-- [ ] Create Android app
-- [ ] Fix pinch to Zoom on Apple devices
+- [X] Create Android app
+- [X] Fix pinch to Zoom on Apple devices
 
 ## Run prettier
 

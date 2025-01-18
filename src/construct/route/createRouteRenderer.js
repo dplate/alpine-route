@@ -1,7 +1,6 @@
 import drawRadiusLimits from './drawRadiusLimits.js';
 import drawRidge from './drawRidge.js';
 import drawSegments from './drawSegments.js';
-import { HIGHLIGHT_MIN_RADIUS_LIMIT } from '../cameras/highlightTypes.js';
 
 const pointVariants = {
   fixPoint: {

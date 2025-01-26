@@ -24,10 +24,16 @@ import scheideggLauberhorn from './levels/scheideggLauberhorn.js';
 import truemmelbachWengernalp from './levels/truemmelbachWengernalp.js';
 import jungfraujochMoenchsjochhuette from './levels/jungfraujochMoenchsjochhuette.js';
 import predaCrapAlv from './levels/predaCrapAlv.js';
+import sitterdorfZihlschlacht from './levels/sitterdorfZihlschlacht.js';
+import bischofszellHauptwil from './levels/bischofszellHauptwil.js';
+import sulgenBischofszell from './levels/sulgenBischofszell.js';
 
 export default [
+  sitterdorfZihlschlacht,
+  bischofszellHauptwil,
   predaCrapAlv,
   ebenalpSchaefler,
+  sulgenBischofszell,
   furkastrasseOberwaldGletsch,
   saentisbahnWasserauenSeealp,
   berguenAlpDaTisch,

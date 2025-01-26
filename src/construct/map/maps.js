@@ -357,4 +357,116 @@ export default {
       },
     ],
   },
+  thurgau: {
+    labels: [
+      {
+        x: 4629, 
+        y: 5271,
+        name: 'Bischofszell',
+        type: 'place'
+      },
+      {
+        x: 5165, 
+        y: 4386,
+        name: 'Sitterdorf',
+        type: 'place'
+      },
+      {
+        x: 6108, 
+        y: 2132,
+        name: 'Zihlschlacht',
+        type: 'place'
+      },
+      {
+        x: 1659, 
+        y: 1787,
+        name: 'Kradolf',
+        type: 'place'
+      },
+      {
+        x: 4998, 
+        y: 6324,
+        name: 'Bischofsberg',
+        type: 'peak'
+      },
+      {
+        x: 5721, 
+        y: 6874,
+        name: 'Hauptwil',
+        type: 'place'
+      },
+      {
+        x: 1872, 
+        y: 7971,
+        name: 'Niederbüren',
+        type: 'place'
+      },
+      {
+        x: 3504, 
+        y: 3653,
+        name: 'Hohentannen',
+        type: 'place'
+      },
+      {
+        x: 3256, 
+        y: 1406,
+        name: 'Heldswil',
+        type: 'place'
+      },
+      {
+        x: 7400, 
+        y: 5338,
+        name: 'Bärg',
+        type: 'peak'
+      },
+      {
+        x: 7325, 
+        y: 6226,
+        name: 'Frohburg',
+        type: 'peak'
+      },
+      {
+        x: 2367, 
+        y: 4023,
+        name: 'Halden',
+        type: 'place'
+      },
+      {
+        x: 4778, 
+        y: 3202,
+        name: 'Felsenholz',
+        type: 'peak'
+      },
+      {
+        x: 7972, 
+        y: 5137,
+        name: 'Wilen',
+        type: 'place'
+      },
+      {
+        x: 7354, 
+        y: 4294,
+        name: 'Leutswil',
+        type: 'place'
+      },
+      {
+        x: 3341, 
+        y: 5565,
+        name: 'Katzensteig',
+        type: 'place'
+      },
+      {
+        x: 789, 
+        y: 7278,
+        name: 'Niederhelfenschwil',
+        type: 'place'
+      },
+      {
+        x: 503, 
+        y: 527,
+        name: 'Sulgen',
+        type: 'place'
+      }
+    ]
+  }
 };

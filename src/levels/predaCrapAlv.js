@@ -18,7 +18,7 @@ export default {
     x: 5061,
     y: 5601,
   },
-  budget: 15000,
+  budget: 20000,
   costs: {
     tunnelMeter: 7,
     tunnelDepthFactor: 1,

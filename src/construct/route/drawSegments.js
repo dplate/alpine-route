@@ -68,8 +68,7 @@ const getNormalizedForLimit = (level, route, segment, highlightType) => {
     case LIMIT_TYPE_MIN_GAP:
       return (
         1.0 -
-        (segment.gap - level.limits[limitType]) /
-          (2 * level.limits[limitType])
+        (segment.gap - level.limits[limitType]) / (2 * level.limits[limitType])
       );
     default:
       return null;

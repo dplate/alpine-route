@@ -360,113 +360,113 @@ export default {
   thurgau: {
     labels: [
       {
-        x: 4629, 
+        x: 4629,
         y: 5271,
         name: 'Bischofszell',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 5165, 
+        x: 5165,
         y: 4386,
         name: 'Sitterdorf',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 6108, 
+        x: 6108,
         y: 2132,
         name: 'Zihlschlacht',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 1659, 
+        x: 1659,
         y: 1787,
         name: 'Kradolf',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 4998, 
+        x: 4998,
         y: 6324,
         name: 'Bischofsberg',
-        type: 'peak'
+        type: 'peak',
       },
       {
-        x: 5721, 
+        x: 5721,
         y: 6874,
         name: 'Hauptwil',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 1872, 
+        x: 1872,
         y: 7971,
         name: 'Niederbüren',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 3504, 
+        x: 3504,
         y: 3653,
         name: 'Hohentannen',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 3256, 
+        x: 3256,
         y: 1406,
         name: 'Heldswil',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 7400, 
+        x: 7400,
         y: 5338,
         name: 'Bärg',
-        type: 'peak'
+        type: 'peak',
       },
       {
-        x: 7325, 
+        x: 7325,
         y: 6226,
         name: 'Frohburg',
-        type: 'peak'
+        type: 'peak',
       },
       {
-        x: 2367, 
+        x: 2367,
         y: 4023,
         name: 'Halden',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 4778, 
+        x: 4778,
         y: 3202,
         name: 'Felsenholz',
-        type: 'peak'
+        type: 'peak',
       },
       {
-        x: 7972, 
+        x: 7972,
         y: 5137,
         name: 'Wilen',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 7354, 
+        x: 7354,
         y: 4294,
         name: 'Leutswil',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 3341, 
+        x: 3341,
         y: 5565,
         name: 'Katzensteig',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 789, 
+        x: 789,
         y: 7278,
         name: 'Niederhelfenschwil',
-        type: 'place'
+        type: 'place',
       },
       {
-        x: 503, 
+        x: 503,
         y: 527,
         name: 'Sulgen',
-        type: 'place'
-      }
-    ]
-  }
+        type: 'place',
+      },
+    ],
+  },
 };

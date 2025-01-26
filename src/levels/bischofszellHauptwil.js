@@ -11,8 +11,8 @@ export default {
   },
   type: 'road',
   start: {
-    x: 4684, 
-    y: 5271
+    x: 4684,
+    y: 5271,
   },
   end: {
     x: 5615,

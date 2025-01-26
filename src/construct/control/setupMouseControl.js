@@ -27,7 +27,7 @@ export default (layout, cameras, route, renderer) => {
     (event) => {
       const pixels = { x: event.offsetX, y: event.offsetY };
       const scrollPixels = Math.abs(
-        event.deltaMode === 1 ? event.deltaY * 20.0 : event.deltaY
+        event.deltaMode === 1 ? event.deltaY * 20.0 : event.deltaY,
       );
       const zoomAmount = 1.0 + scrollPixels * 0.001;
       event.deltaY < 0
@@ -42,7 +42,12 @@ export default (layout, cameras, route, renderer) => {
   );
 
   layout.mapContainer.onmousedown = (event) => {
-    console.log(cameras.map.transformPixelsToMeters({ x: event.offsetX, y: event.offsetY }));
+    console.log(
+      cameras.map.transformPixelsToMeters({
+        x: event.offsetX,
+        y: event.offsetY,
+      }),
+    );
     startEditing(true);
   };
 

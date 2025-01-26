@@ -5,15 +5,15 @@ const slopeDistanceInMeters = 5;
 
 const loadFile = (path) => {
   return new Promise((resolve, reject) => {
-      try {
-        const req = new XMLHttpRequest();
-        req.open("GET", path, true);
-        req.responseType = "blob";
-        req.onload = () => resolve(req.response);
-        req.send();
-      } catch (e) {
-          reject(e);
-      }
+    try {
+      const req = new XMLHttpRequest();
+      req.open('GET', path, true);
+      req.responseType = 'blob';
+      req.onload = () => resolve(req.response);
+      req.send();
+    } catch (e) {
+      reject(e);
+    }
   });
 };
 

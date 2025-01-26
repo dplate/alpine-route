@@ -28,8 +28,8 @@ export default async (window, language) => {
 
   try {
     window.document.body.requestFullscreen({ navigationUI: 'hide' });
-  } catch(e) { 
-    console.log(e); 
+  } catch (e) {
+    console.log(e);
   }
 
   return {

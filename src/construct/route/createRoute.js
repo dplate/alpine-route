@@ -226,7 +226,10 @@ export default (system, level, map) => {
               route.controlPoints[controlPointIndex],
             ) < segmentDistance
           ) {
-            controlPointIndex++;
+            controlPointIndex = Math.min(
+              controlPointIndex + 1,
+              route.controlPoints.length - 1,
+            );
           }
           if (segment === edit.segment) {
             break;

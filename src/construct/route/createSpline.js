@@ -161,15 +161,17 @@ const measureSegment = (
     };
   }
   return {
-    length: detailLength,
-    flatLength:
+    length: Math.max(0.001, detailLength),
+    flatLength: Math.max(
+      0.001,
       Math.sqrt(
         (pointStart.x - pointCenter.x) ** 2 +
           (pointStart.y - pointCenter.y) ** 2,
       ) +
-      Math.sqrt(
-        (pointEnd.x - pointCenter.x) ** 2 + (pointEnd.y - pointCenter.y) ** 2,
-      ),
+        Math.sqrt(
+          (pointEnd.x - pointCenter.x) ** 2 + (pointEnd.y - pointCenter.y) ** 2,
+        ),
+    ),
   };
 };
 

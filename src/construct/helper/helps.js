@@ -65,15 +65,15 @@ export default [
   {
     id: 'highlights',
     text: {
-      de: 'Zu Beginn wird die Steigung der Strecke farblich visualisiert. Je roter, desto näher am Limit. Lila markiert zu steile Abschnitte, die korrigiert werden müssen. Durch Auswahl einzelner Daten im Bereich links der Karte können diese stattdessen dargestellt werden (Augensymbol).',
-      en: 'At the beginning, the gradient of the route is visualized in color. The redder the color, the closer to the limit. Purple indicates sections that are too steep and need to be corrected. By selecting individual data in the area to the left of the map, these can be displayed instead (eye symbol).',
+      de: 'Zu Beginn wird die Steigung der Strecke farblich visualisiert. Je blauer, desto näher am Limit. Rot markiert zu steile Abschnitte, die korrigiert werden müssen. Durch Auswahl einzelner Daten im Bereich links der Karte können diese stattdessen dargestellt werden (Augensymbol).',
+      en: 'At the beginning, the gradient of the route is visualized in color. The bluer the color, the closer to the limit. Red indicates sections that are too steep and need to be corrected. By selecting individual data in the area to the left of the map, these can be displayed instead (eye symbol).',
     },
   },
   {
     id: 'radius',
     text: {
-      de: 'Diese Strecke darf einen minimalen Kurvenradius nicht unterschreiten. Ist dies der Fall, wird der Radius mit lila Strichen auf der Karte visualisiert und die Kurve muss weniger scharf gestaltet werden.',
-      en: 'This route must not fall below a minimum curve radius. If this is the case, the radius is visualized with purple lines on the map and the curve must be made less sharp.',
+      de: 'Diese Strecke darf einen minimalen Kurvenradius nicht unterschreiten. Ist dies der Fall, wird der Radius mit roten Strichen auf der Karte visualisiert und die Kurve muss weniger scharf gestaltet werden.',
+      en: 'This route must not fall below a minimum curve radius. If this is the case, the radius is visualized with red lines on the map and the curve must be made less sharp.',
     },
   },
   {

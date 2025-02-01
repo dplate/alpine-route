@@ -15,20 +15,29 @@ import {
 } from './routeTypes.js';
 
 const neutralColor = 'rgba(200, 200, 255, 1.0)';
-const impossibleColor = 'rgba(150, 0, 255, 1.0)';
+const impossibleColor = 'red';
 
-const convertNormalizedToColor = (normalized) => {
+const convertNormalizedToColor = (normalized, coloredLimits) => {
   if (normalized === null) {
     return neutralColor;
   }
   if (normalized > 1.0) {
     return impossibleColor;
   }
-  const red = Math.round(255 * Math.max(0.0, Math.min(normalized * 2.0, 1.0)));
-  const green = Math.round(
-    255 * Math.max(0.0, Math.min((1.0 - normalized) * 2.0, 1.0)),
-  );
-  return `rgba(${red}, ${green}, 0, 1.0)`;
+  if (coloredLimits) {
+    const green = Math.round(
+      255.0 * Math.max(0.0, Math.min(1.0 - normalized, 1.0)),
+    );
+    return `rgba(0, ${green}, 255, 1.0)`;
+  } else {
+    const red = Math.round(
+      255.0 * Math.max(0.0, Math.min(normalized * 2.0, 1.0)),
+    );
+    const green = Math.round(
+      255.0 * Math.max(0.0, Math.min((1.0 - normalized) * 2.0, 1.0)),
+    );
+    return `rgba(${red}, ${green}, 0, 1.0)`;
+  }
 };
 
 const mergeNormalized = (normalized1, normalized2) => {
@@ -121,7 +130,7 @@ const getColorForSegment = (level, route, segment, highlights) => {
   const normalized = coloredLimits
     ? getNormalizedForLimits(level, route, segment, highlights)
     : getNormalizedForCosts(route, segment, highlights);
-  return convertNormalizedToColor(normalized);
+  return convertNormalizedToColor(normalized, coloredLimits);
 };
 
 export default (context, level, route, renderTarget, highlights) => {

@@ -50,13 +50,7 @@ const mergeNormalized = (normalized1, normalized2) => {
   return Math.max(normalized1, normalized2);
 };
 
-const getNormalizedForLimit = (level, route, segment, highlightType) => {
-  const limitType = LIMIT_TYPES.find(
-    (limitType) => highlightType === LIMIT_TYPES_TO_HIGHLIGHTS[limitType],
-  );
-  if (!segment.limits[limitType]) {
-    return 1.1;
-  }
+const getNormalizedForLimit = (level, route, segment, limitType) => {
   if (level.limits[limitType] === null) {
     return null;
   }
@@ -85,10 +79,16 @@ const getNormalizedForLimit = (level, route, segment, highlightType) => {
 };
 
 const getNormalizedForLimits = (level, route, segment, highlights) => {
-  return highlights.values().reduce((normalized, highlightType) => {
+  return LIMIT_TYPES.reduce((normalized, limitType) => {
+    if (!segment.limits[limitType]) {
+      return mergeNormalized(normalized, 1.1);
+    }
+    if (!highlights.has(LIMIT_TYPES_TO_HIGHLIGHTS[limitType])) {
+      return normalized;
+    }
     return mergeNormalized(
       normalized,
-      getNormalizedForLimit(level, route, segment, highlightType),
+      getNormalizedForLimit(level, route, segment, limitType),
     );
   }, null);
 };

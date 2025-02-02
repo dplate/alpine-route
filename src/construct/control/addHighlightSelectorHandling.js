@@ -12,8 +12,7 @@ export default (cameras, renderer, elements, highlightType) => {
         if (
           (COSTS_HIGHLIGHTS.has(highlightType) &&
             !COSTS_HIGHLIGHTS.has(cameras.highlights.values().next().value)) ||
-          (LIMIT_HIGHLIGHTS.has(highlightType) &&
-            !LIMIT_HIGHLIGHTS.has(cameras.highlights.values().next().value))
+          LIMIT_HIGHLIGHTS.has(highlightType)
         ) {
           cameras.highlights.clear();
         }

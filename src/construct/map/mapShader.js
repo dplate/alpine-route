@@ -296,7 +296,7 @@ fn addContours(baseColor: vec3f, height: f32, textureCoordinate: vec2f, slope: f
   terrainColor = addSnow(terrainColor, fsInput.textureCoordinate, slope, smoothHeight);
 
   let shading = calculateShading(normal);
-  let baseColor = mix(terrainColor, terrainColor * shading, 0.7);
+  let baseColor = terrainColor * shading;
   return vec4f(
     addContours(baseColor, smoothHeight, fsInput.textureCoordinate, slope),
     1.0

@@ -29,6 +29,6 @@ export default (layout, map, route) => {
     magnifier: magnifierCamera,
     profile: profileCamera,
     update,
-    highlights: new Set([ HIGHLIGHT_MAX_GRADIENT_LIMIT ]),
+    highlights: new Set([HIGHLIGHT_MAX_GRADIENT_LIMIT]),
   };
 };

@@ -42,12 +42,6 @@ export default (layout, cameras, route, renderer) => {
   );
 
   layout.mapContainer.onmousedown = (event) => {
-    console.log(
-      cameras.map.transformPixelsToMeters({
-        x: event.offsetX,
-        y: event.offsetY,
-      }),
-    );
     startEditing(true);
   };
 

@@ -162,16 +162,7 @@
 
 @media screen and (max-height: 500px) {
   #magnifierContainer {
-    right: -10px;
-    left: auto;
-    bottom: -10px;
-  }
-  
-  #magnifierBorder {
-    left: -3px;
-    right: auto;
-    background-position: left top;
-    transform: scaleX(-1);
+    display: none;
   }
 
   #mapContainer {
@@ -209,18 +200,9 @@
   }
 }
 
-@media screen and ((max-width: 700px) and (min-height: 500px)) {
+@media screen and (max-width: 700px) and (min-height: 500px) {
   #magnifierContainer {
-    right: -10px;
-    left: auto;
-    bottom: 20vh;
-  }
-  
-  #magnifierBorder {
-    left: -3px;
-    right: auto;
-    background-position: left top;
-    transform: scaleX(-1);
+    display: none;
   }
 }
 

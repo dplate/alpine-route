@@ -28,9 +28,11 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
-        WindowCompat.setDecorFitsSystemWindows(window, false);
         WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(window, window.getDecorView());
         insetsController.hide(WindowInsetsCompat.Type.systemBars());
+        insetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
 
         setContentView(R.layout.activity_fullscreen);
 

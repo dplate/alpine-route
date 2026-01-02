@@ -43,10 +43,6 @@ export default (system) => {
 
   document.body.appendChild(desk);
 
-  const shadow = document.createElement('div');
-  shadow.id = 'shadow';
-  document.body.appendChild(shadow);
-
   return {
     desk,
     levelSelector,

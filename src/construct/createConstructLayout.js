@@ -153,10 +153,6 @@ export default (system, level) => {
 
   document.body.appendChild(messageContainer);
 
-  const shadow = document.createElement('div');
-  shadow.id = 'shadow';
-  document.body.appendChild(shadow);
-
   system.window.addEventListener('resize', () => {
     profileToggle.style.removeProperty('display');
     notesToggle.style.removeProperty('display');

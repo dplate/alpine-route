@@ -83,17 +83,3 @@ button:hover {
 #desk.loading > * {
   opacity: 0;
 }
-
-#shadow {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  mix-blend-mode: multiply;
-  background-image: url("../images/shadow.webp");
-  background-size: calc(max(600px, 100%)) 100%;
-  pointer-events: none;
-  z-index: 10000;
-  opacity: 0.4;
-}

@@ -1,6 +1,7 @@
 export default {
   id: 'jungfraubahn-alpiglen-scheidegg',
   map: 'jungfrau',
+  dependsOn: 'jungfraubahn-wengen-scheidegg',
   name: {
     de: 'Jungfraubahn III: Kleine Scheidegg Ost',
     en: 'Jungfraubahn III: Kleine Scheidegg Ost',
@@ -10,6 +11,7 @@ export default {
     en: 'For the further arduous construction of the railway to the Jungfrau, we unfortunately lack the necessary financial means. Thus, we intend first to secure additional revenues by connecting Grindelwald to the Kleine Scheidegg. A cog railway has already been constructed up to Mountain House of Alpiglen. The planning of the remaining 400 meters in elevation is now entrusted to you. While this task does not appear overly challenging, only modest funds are available for its execution. We place our trust in your prudence to complete this work with wise guidance and frugal management.',
   },
   type: 'cogRailway',
+  difficulty: 'medium',
   start: {
     x: 7178,
     y: 1020,

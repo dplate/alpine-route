@@ -1,6 +1,7 @@
 export default {
   id: 'furkastrasse-oberwald-gletsch',
   map: 'furka',
+  dependsOn: null,
   name: {
     de: 'Furkastraße I: Oberwald - Gletsch',
     en: 'Furka road I: Oberwald - Gletsch',
@@ -10,6 +11,7 @@ export default {
     en: 'The long-awaited plan to finally connect the Furka Pass from the west with a road is now set in motion. The first section to be designed will extend 400 meters from the village of Oberwald up to the tongue of the Rhone Glacier. Given that the heavy stagecoaches can handle a maximum incline of 12 percent, the use of switchbacks will be unavoidable. Thus, the route must be skillfully laid out through the steep terrain to ease the ascent and bring this ambitious endeavor to fruition.',
   },
   type: 'road',
+  difficulty: 'medium',
   start: {
     x: 2949,
     y: 7031,

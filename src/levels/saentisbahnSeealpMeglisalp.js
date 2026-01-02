@@ -1,6 +1,7 @@
 export default {
   id: 'saentisbahn-seealp-meglisalp',
   map: 'saentis',
+  dependsOn: 'saentisbahn-wasserauen-seealp',
   name: {
     de: 'Säntisbahn II: Meglisalp',
     en: 'Säntisbahn II: Meglisalp',
@@ -10,6 +11,7 @@ export default {
     en: 'Having at last reached the plateau of the picturesque Seealpsee, we now face the implementation of the steepest section of the Säntis Railway: from Seealp through the rock walls to the settlement of Meglisalp. This entails an ascent of 400 meters over a short distance, for which we have considered the construction of a funicular railway.',
   },
   type: 'funicular',
+  difficulty: 'medium',
   start: {
     x: 4860,
     y: 4597,

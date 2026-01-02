@@ -1,6 +1,7 @@
 export default {
   id: 'furkastrasse-gletsch-furkapass',
   map: 'furka',
+  dependsOn: 'furkastrasse-oberwald-gletsch',
   name: {
     de: 'Furkastraße II: Gletsch - Furkapass',
     en: 'Furka road II: Gletsch - Furkapass',
@@ -10,6 +11,7 @@ export default {
     en: 'Having reached Gletsch, the remaining 650 meters of elevation to the Furka Pass now lie ahead. Several routes are available for the ascent, but we are confident that your esteemed expertise will not only consider the costs but also select a path that attracts affluent tourists to our region. Nevertheless, a gradient of 12 percent must not be exceeded under any circumstances.',
   },
   type: 'road',
+  difficulty: 'medium',
   start: {
     x: 3694,
     y: 4058,

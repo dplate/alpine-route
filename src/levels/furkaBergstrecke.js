@@ -1,6 +1,7 @@
 export default {
   id: 'furka-bergstrecke',
   map: 'furka',
+  dependsOn: null,
   name: {
     de: 'Furka Bergstrecke',
     en: 'Furka Railway',
@@ -10,6 +11,7 @@ export default {
     en: 'I wish to inform you that the mountain section from Realp up to the summit tunnel beneath the Furka Pass has already been completed. The construction of the summit tunnel is also well underway and progressing smoothly. We would now kindly ask you to take on the planning of the section from Oberwald up to the tunnel entrance at Muttbach-Belvédère. This stretch will require the ascent of 750 meters in altitude, to be achieved with a cog railway with a maximum incline of 11%.',
   },
   type: 'cogRailway',
+  difficulty: 'hard',
   start: {
     x: 2495,
     y: 7354,

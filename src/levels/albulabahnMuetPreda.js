@@ -1,6 +1,7 @@
 export default {
   id: 'albulabahn-muet-preda',
   map: 'albula',
+  dependsOn: 'albulabahn-berguen-muet',
   name: {
     de: 'Albulabahn II: Muet - Preda',
     en: 'Albulabahn II: Muet - Preda',
@@ -10,6 +11,7 @@ export default {
     en: 'After the first two hundred meters of elevation from Bergün to Muet were surmounted with a truly ingenious route, we deem it entirely possible to overcome the next two hundred meters of elevation to Preda in a similar manner. Given that the distance to be covered is again quite short and only a gradient of thirty-five per mille is permitted, it will be necessary to devise an equally original and carefully considered route for this section as well.',
   },
   type: 'narrowGaugeRailway',
+  difficulty: 'hard',
   start: {
     x: 1656,
     y: 2833,

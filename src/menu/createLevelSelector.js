@@ -33,6 +33,14 @@ const createInfo = (system, level) => {
   infoTypeValue.innerText = system.text.get('TYPES')[level.type];
   info.appendChild(infoTypeValue);
 
+  const infoDifficultyLabel = system.window.document.createElement('div');
+  infoDifficultyLabel.innerText = system.text.get('DIFFICULTY');
+  info.appendChild(infoDifficultyLabel);
+  const infoDifficultyValue = system.window.document.createElement('div');
+  infoDifficultyValue.innerText =
+    system.text.get('DIFFICULTIES')[level.difficulty];
+  info.appendChild(infoDifficultyValue);
+
   const infoBudgetLabel = system.window.document.createElement('div');
   infoBudgetLabel.innerText = system.text.get('BUDGET_LABEL');
   info.appendChild(infoBudgetLabel);
@@ -89,7 +97,7 @@ const createStartButton = (system, level, onStart) => {
   const startButton = document.createElement('button');
   startButton.classList.add('levelStartButton');
   startButton.onclick = (event) => {
-    onStart();
+    onStart(level);
     event.stopPropagation();
   };
   startButton.innerText =
@@ -100,14 +108,22 @@ const createStartButton = (system, level, onStart) => {
   return startButton;
 };
 
-const createAvailableLevels = (
-  system,
-  layout,
-  availableLevels,
-  preselectedLevel,
-  onSelect,
-) => {
+const createAvailableLevels = (system, layout, availableLevels, onStart) => {
   const document = system.window.document;
+
+  let selectedElement = null;
+  const deselectLevel = () => {
+    if (selectedElement !== null) {
+      selectedElement.classList.remove('levelSelected');
+      selectedElement = null;
+    }
+  };
+  const selectLevel = (level, element) => {
+    deselectLevel();
+    element.classList.add('levelSelected');
+    selectedElement = element;
+  };
+
   availableLevels.forEach((level, index) => {
     const element = document.createElement('div');
     element.classList.add('paper');
@@ -130,55 +146,33 @@ const createAvailableLevels = (
       status.innerText = system.text.formatCurrency(balance);
       status.style.color = balance < 0 ? '#e66d3d' : '#5bb798';
     } else {
-      status.innerText = system.text.get('STATUS_INVALID');
+      status.innerText = system.text.get('DIFFICULTIES')[level.difficulty];
       status.style.color = 'rgba(150, 150, 150, 1.0)';
     }
-
     element.appendChild(status);
 
-    element.onclick = () => onSelect(level, element);
+    const closeButton = document.createElement('div');
+    closeButton.classList.add('levelCloseButton');
+    closeButton.onclick = (event) => {
+      deselectLevel();
+      event.stopPropagation();
+    };
+    element.appendChild(closeButton);
+
+    const description = document.createElement('div');
+    description.classList.add('levelDescription');
+    description.appendChild(createImage(system, level));
+    description.appendChild(createDescriptionText(system, level));
+    element.appendChild(description);
+
+    element.appendChild(createInfo(system, level));
+
+    element.appendChild(createStartButton(system, level, onStart));
+
+    element.onclick = () => selectLevel(level, element);
+
     layout.levelSelector.appendChild(element);
-
-    if (
-      level === preselectedLevel ||
-      (!preselectedLevel && index === availableLevels.length - 1)
-    ) {
-      element.onclick();
-    }
   });
-};
-
-const fillLevelElement = (system, level, element, onClose, onStart) => {
-  const document = system.window.document;
-  const closeButton = document.createElement('div');
-  closeButton.classList.add('levelCloseButton');
-  closeButton.onclick = (event) => {
-    onClose();
-    event.stopPropagation();
-  };
-  element.appendChild(closeButton);
-
-  const description = document.createElement('div');
-
-  description.classList.add('levelDescription');
-  description.appendChild(createImage(system, level));
-  description.appendChild(createDescriptionText(system, level));
-  element.appendChild(description);
-
-  element.appendChild(createInfo(system, level));
-
-  element.appendChild(createStartButton(system, level, onStart));
-
-  element.dataset.filled = true;
-};
-
-const showNewLevel = (system, layout, level, onStart) => {
-  layout.message.appendChild(createLevelName(system, level));
-  layout.message.appendChild(createImage(system, level));
-  layout.message.appendChild(createDescriptionText(system, level));
-  layout.message.appendChild(createInfo(system, level));
-  layout.message.appendChild(createStartButton(system, level, onStart));
-  layout.messageContainer.style = 'display: block; animation: fadeIn 0.5s;';
 };
 
 const showFinish = (system, layout, levels) => {
@@ -203,55 +197,52 @@ const showFinish = (system, layout, levels) => {
   };
 };
 
-const handleNewLevel = (system, layout, availableLevels, levels, resolve) => {
+const handleFinish = (system, layout, availableLevels, levels) => {
   const money = calculateCurrentMoney(system, availableLevels);
   const allValid = availableLevels.every(system.persistence.loadCosts);
   if (money >= 0 && allValid) {
-    const newLevel = levels.find((level) => !availableLevels.includes(level));
-    if (newLevel) {
-      showNewLevel(system, layout, newLevel, () => resolve(newLevel));
-      system.persistence.markAsAvailable(newLevel);
-    } else if (!system.persistence.hasFinished()) {
+    const unavailableLevel = levels.find(
+      (level) => !availableLevels.includes(level),
+    );
+    if (!unavailableLevel && !system.persistence.hasFinished()) {
       showFinish(system, layout, levels);
       system.persistence.markAsFinished();
     }
   }
 };
 
-export default async (system, layout, levels, preselectedLevel) => {
-  return new Promise((resolve) => {
-    const availableLevels = levels.filter(system.persistence.isAvailable);
-
-    handleNewLevel(system, layout, availableLevels, levels, resolve);
-
-    var selectedElement = null;
-
-    const selectLastLevel = () => {
-      const level = availableLevels[availableLevels.length - 1];
-      const element =
-        layout.levelSelector.children[layout.levelSelector.children.length - 1];
-      selectLevel(level, element);
-    };
-
-    const selectLevel = (level, element) => {
-      if (selectedElement !== null) {
-        selectedElement.classList.remove('levelSelected');
-      }
-      element.classList.add('levelSelected');
-      selectedElement = element;
-      if (!selectedElement.dataset.filled) {
-        fillLevelElement(system, level, element, selectLastLevel, () =>
-          resolve(level),
-        );
-      }
-    };
-
-    createAvailableLevels(
-      system,
-      layout,
-      availableLevels,
-      preselectedLevel,
-      selectLevel,
+const updateAvailableLevels = (system, levels) => {
+  const shouldBeAvailableLevels = levels.filter((level) => {
+    if (system.persistence.isAvailable(level)) {
+      return false;
+    }
+    if (!level.dependsOn) {
+      return true;
+    }
+    const dependsOnLevel = levels.find(
+      (checkLevel) => checkLevel.id === level.dependsOn,
     );
+    if (!dependsOnLevel) {
+      console.error('DependsOnLevel not found!', level.dependsOn);
+      return true;
+    }
+    const dependsOnLevelCosts = system.persistence.loadCosts(dependsOnLevel);
+    return (
+      dependsOnLevelCosts !== null &&
+      dependsOnLevelCosts <= dependsOnLevel.budget
+    );
+  });
+  shouldBeAvailableLevels.forEach((level) => {
+    system.persistence.markAsAvailable(level);
+  });
+};
+
+export default async (system, layout, levels) => {
+  return new Promise((resolve) => {
+    updateAvailableLevels(system, levels);
+    const availableLevels = levels.filter(system.persistence.isAvailable);
+    handleFinish(system, layout, availableLevels, levels);
+
+    createAvailableLevels(system, layout, availableLevels, resolve);
   });
 };

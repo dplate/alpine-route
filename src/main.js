@@ -18,9 +18,8 @@ async function main() {
     return;
   }
 
-  var currentLevel = null;
   while (1) {
-    currentLevel = await startMenu(system, levels, currentLevel);
+    const currentLevel = await startMenu(system, levels);
     await startConstruct(system, currentLevel);
   }
 }

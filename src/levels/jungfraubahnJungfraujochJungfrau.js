@@ -1,6 +1,7 @@
 export default {
   id: 'jungfraubahn-jungfraujoch-jungfrau',
   map: 'jungfrau',
+  dependsOn: 'jungfraubahn-scheidegg-jungfraujoch',
   name: {
     de: 'Jungfraubahn V: Jungfrau',
     en: 'Jungfraubahn V: Jungfrau',
@@ -10,6 +11,7 @@ export default {
     en: 'The railway to the Jungfraujoch has already garnered widespread acclaim and popularity among visitors from across the globe, a truly remarkable success. You are now entrusted with the task of designing the final stretch, ascending the remaining 600 meters to the summit of the venerable Jungfrau, towering at an impressive height of 4100 meters. With the recent advancements in rack-and-pinion technology, allowing for gradients of up to 30 percent, you are afforded a significant advantage in planning the course of this ambitious route with precision and ingenuity.',
   },
   type: 'cogRailway',
+  difficulty: 'hard',
   start: {
     x: 5444,
     y: 6944,

@@ -1,6 +1,7 @@
 export default {
   id: 'berguen-alp-da-tisch',
   map: 'albula',
+  dependsOn: null,
   name: {
     de: 'Zugang zur Alp da Tisch',
     en: 'Access to Alp da Tisch',
@@ -10,6 +11,7 @@ export default {
     en: 'To adequately supply the Alp in Val Tisch from Bergün, a path that is passable for both cattle and pack animals is required. However, the construction of this path should not be overly expensive, as only modest funds are available.',
   },
   type: 'muleTrack',
+  difficulty: 'medium',
   start: {
     x: 711,
     y: 437,

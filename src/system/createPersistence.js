@@ -21,7 +21,7 @@ const saveState = (window, state) => {
 const getLevelState = (state, level) => {
   if (!state.levels[level.id]) {
     state.levels[level.id] = {
-      available: false,
+      available: !level.dependsOn,
       route: null,
       costs: null,
     };

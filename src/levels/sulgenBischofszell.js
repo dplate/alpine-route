@@ -1,6 +1,7 @@
 export default {
   id: 'sulgen-bischofszell',
   map: 'thurgau',
+  dependsOn: null,
   name: {
     de: 'Eisenbahn nach Bischofszell',
     en: 'Train to Bischofszell',
@@ -10,6 +11,7 @@ export default {
     en: 'As part of a railway connection between Constance and St. Gallen, a plan is required for the section from Sulgen to Bischofszell. Since Sulgen lies in the valley and Bischofszell is situated on an elevation, the routing is likely to present certain challenges—especially as sharp curves must be avoided.',
   },
   type: 'narrowGaugeRailway',
+  difficulty: 'easy',
   start: {
     x: 498,
     y: 679,

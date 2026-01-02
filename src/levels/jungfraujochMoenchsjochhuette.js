@@ -1,6 +1,7 @@
 export default {
   id: 'jungfraujoch-moenchsjochhuette',
   map: 'jungfrau',
+  dependsOn: 'jungfraubahn-scheidegg-jungfraujoch',
   name: {
     de: 'Gletscherpfad zur Mönchsjochhütte',
     en: 'Glacier trail to the Mönchsjoch Hut',
@@ -10,6 +11,7 @@ export default {
     en: "It is proposed to construct a hut upon the Mönchsjoch, at an elevation of 3,600 meters. The path leading from the Jungfraujoch railway station to this location is intended to traverse the glacier, thereby rendering it accessible even to those tourists who possess but little inclination for mountaineering. We foresee no significant obstacles in the planning of the path's course.",
   },
   type: 'muleTrack',
+  difficulty: 'easy',
   start: {
     x: 5484,
     y: 6963,

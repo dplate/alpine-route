@@ -1,6 +1,7 @@
 export default {
   id: 'bischofszell-hauptwil',
   map: 'thurgau',
+  dependsOn: null,
   name: {
     de: 'Straße nach Hauptwil',
     en: 'Road to Hauptwil',
@@ -10,6 +11,7 @@ export default {
     en: 'In Hauptwil, plans have been made to establish a textile dyeing facility. For this purpose, a road is required to bring the necessary building materials from Bischofszell. It is emphasized that the gradient of the road must not be too steep, so that the heavy materials can be transported safely and without undue hardship by horse-drawn carts.',
   },
   type: 'road',
+  difficulty: 'easy',
   start: {
     x: 4684,
     y: 5271,

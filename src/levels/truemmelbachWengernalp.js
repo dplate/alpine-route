@@ -1,6 +1,7 @@
 export default {
   id: 'truemmelbach-wengernalp',
   map: 'jungfrau',
+  dependsOn: null,
   name: {
     de: 'Weg zur Wengernalp',
     en: 'Path to Wengernalp',
@@ -10,6 +11,7 @@ export default {
     en: 'The Wengernalp is desirous of establishing a direct access route from the Lauterbrunnen Valley. Given that the valley is flanked by precipitous and forbidding cliffs, the planning of a navigable path will undoubtedly prove a task of no small difficulty. Should you, however, succeed in identifying a suitable route, it may also serve as a charming passage for affluent travelers, who might, on horseback, seek to visit the magnificent Trümmelbach Falls.',
   },
   type: 'muleTrack',
+  difficulty: 'hard',
   start: {
     x: 287,
     y: 4453,

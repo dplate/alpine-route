@@ -1,6 +1,7 @@
 export default {
   id: 'oberwald-schaerlichwang',
   map: 'furka',
+  dependsOn: null,
   name: {
     de: 'Zugang zur Alp Schärlichwang',
     en: 'Access to Alp Schärlichwang',
@@ -10,6 +11,7 @@ export default {
     en: 'In the secluded valley of Schärlichwang, near Oberwald, plans have been made to establish an alp. It is desired that cows may graze there, and that the cheese produced be transported down to the valley. However, to facilitate this, a walkable path is required, suitable for the movement of both cattle and goods. It must be noted that no funds are available for demanding construction works through rock, and thus, the path should, wherever possible, follow simpler terrain.',
   },
   type: 'muleTrack',
+  difficulty: 'medium',
   start: {
     x: 3027,
     y: 7130,

@@ -1,6 +1,7 @@
 export default {
   id: 'berguen-albula',
   map: 'albula',
+  dependsOn: null,
   name: {
     de: 'Albula - Passstraße',
     en: 'Albula - pass road',
@@ -10,6 +11,7 @@ export default {
     en: 'A stagecoach line is to be established over the Albula Pass, connecting Davos to St. Moritz, necessitating a road passable for teams of horses from Bergün to the pass. The planned paved road must not exceed a maximum gradient of 12 percent. It is anticipated that, through a well-considered route, the construction of high bridges and long tunnels can likely be avoided, thereby significantly reducing costs.',
   },
   type: 'road',
+  difficulty: 'medium',
   start: {
     x: 711,
     y: 437,

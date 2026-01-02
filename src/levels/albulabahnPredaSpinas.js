@@ -1,6 +1,7 @@
 export default {
   id: 'albulabahn-preda-spinas',
   map: 'albula',
+  dependsOn: 'albulabahn-muet-preda',
   name: {
     de: 'Albulabahn III: Preda - Spinas',
     en: 'Albulabahn III: Preda - Spinas',
@@ -10,6 +11,7 @@ export default {
     en: 'The elaborate route to Preda is now complete. However, it seems unwise to ascend an additional five hundred meters to the Albula Pass, as the railway is intended to operate even during the winter months, bringing guests safely to St. Moritz. Therefore, a considerable sum of money is now being allocated to construct a long tunnel into the neighboring valley of Spina. After the challenging two stages, this section through the tunnel is expected to be easier to plan. Nevertheless, efforts will be made to keep the tunnel route as short as possible, in order to avoid excessive costs and minimize construction time.',
   },
   type: 'narrowGaugeRailway',
+  difficulty: 'easy',
   start: {
     x: 2813,
     y: 4554,

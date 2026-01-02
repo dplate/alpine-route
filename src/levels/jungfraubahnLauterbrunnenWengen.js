@@ -1,6 +1,7 @@
 export default {
   id: 'jungfraubahn-lauterbrunnen-wengen',
   map: 'jungfrau',
+  dependsOn: null,
   name: {
     de: 'Jungfraubahn I: Wengen',
     en: 'Jungfraubahn I: Wengen',
@@ -10,6 +11,7 @@ export default {
     en: 'We harbor a daring notion, one that might well border on madness: a railway ascending to the awe-inspiring height of the Jungfrau at 4100 meters! The first stage of this bold endeavor requires a cog railway to rise 400 meters from the picturesque Lauterbrunnen Valley to the quaint village of Wengen. We are fully aware that overcoming the steep rock face will necessitate the construction of several tunnels and bridges. Nevertheless, we place our trust in the technical ingenuity of our age to surmount even such formidable challenges with success.',
   },
   type: 'cogRailway',
+  difficulty: 'hard',
   start: {
     x: 253,
     y: 2322,

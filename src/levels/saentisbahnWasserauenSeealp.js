@@ -1,6 +1,7 @@
 export default {
   id: 'saentisbahn-wasserauen-seealp',
   map: 'saentis',
+  dependsOn: null,
   name: {
     de: 'Säntisbahn I: Seealp',
     en: 'Säntisbahn I: Seealp',
@@ -10,6 +11,7 @@ export default {
     en: 'To invigorate tourism in the Alpstein region, the construction of a railway from the 870-meter-high Wasserauen to the 2500-meter-high Säntis is proposed. It would already be a significant achievement if this first stage to the Seealpsee could be realized within the limited budget. A narrow-gauge railway is to be employed along this route, supplemented in part by cogwheel support.',
   },
   type: 'cogRailway',
+  difficulty: 'medium',
   start: {
     x: 7442,
     y: 2226,

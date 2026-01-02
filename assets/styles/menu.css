@@ -12,6 +12,8 @@
   padding: 2px 10px 40px;
   width: calc(100% - 10px);
   max-width: 600px;
+  max-height: 50px;
+  overflow: hidden;
   font-family: notesFont;
   font-style: normal;
   font-size: 24px;
@@ -138,6 +140,7 @@
 
 #levelSelector>div.levelSelected {
   z-index: 1000 !important;
+  max-height: fit-content;
   cursor: inherit;
   filter: inherit;
 }
@@ -149,10 +152,6 @@
 
 #levelSelector>div.levelSelected .levelCloseButton {
   display: block;
-}
-
-#levelSelector>div:last-child .levelCloseButton {
-  display: none;
 }
 
 #account {

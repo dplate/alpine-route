@@ -1,6 +1,7 @@
 export default {
   id: 'grimselstrasse-aelplersulz-grimselpass',
   map: 'furka',
+  dependsOn: 'oberwald-grimselpass',
   name: {
     de: 'Grimselstraße: Nordaufstieg',
     en: 'Grimsel road: North ascent',
@@ -10,6 +11,7 @@ export default {
     en: 'A route from Meiringen to Älpersulz, reaching an altitude of 1700 meters, has already been established in the effort to construct a passable road over the Grimsel Pass. However, the final 450 meters to the summit remain, and in order to overcome this section, three steep gradients must be surmounted, likely requiring the construction of switchbacks. For this reason, we now humbly ask for your assistance, so that this important undertaking may be successfully brought to completion.',
   },
   type: 'road',
+  difficulty: 'medium',
   start: {
     x: 900,
     y: 168,

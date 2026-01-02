@@ -1,6 +1,7 @@
 export default {
   id: 'sitterdorf-zihlschlacht',
   map: 'thurgau',
+  dependsOn: null,
   name: {
     de: 'Saumpfad nach Sitterdorf',
     en: 'Path to Sitterdorf',
@@ -10,6 +11,7 @@ export default {
     en: 'An orchardist in Zihlschlacht, situated in the canton of Thurgau, expresses his desire for the construction of a passable and well-leveled path to facilitate the transport of his apples with mules. This path should descend into the valley, leading to the more accessible village of Sitterdorf below. However, he laments that the necessary funds for the construction of tunnels and lofty bridges are not available. Thus, it seems advisable to strive for a path with the most even gradient possible, so as to meet the demands of the pack animals and ease the labor involved.',
   },
   type: 'muleTrack',
+  difficulty: 'easy',
   start: {
     x: 5971,
     y: 2037,

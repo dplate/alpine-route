@@ -1,6 +1,7 @@
 export default {
   id: 'ebenalp-schaefler',
   map: 'saentis',
+  dependsOn: null,
   name: {
     de: 'Pfad auf den Schäfler',
     en: 'Mule track onto Schäfler',
@@ -10,6 +11,7 @@ export default {
     en: 'To construct an inn on the summit of Schäfler, it is essential to build an improved path leading up from Ebenalp. This path must not be too steep, so that pack animals bearing heavy loads can traverse it with ease. Additionally, it is of utmost importance that the costs for the construction of this path be kept as low as possible, as the majority of funds will be required for the actual building of the inn.',
   },
   type: 'muleTrack',
+  difficulty: 'easy',
   start: {
     x: 6198,
     y: 2327,

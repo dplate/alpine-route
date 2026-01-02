@@ -1,6 +1,7 @@
 export default {
   id: 'scheidegg-lauberhorn',
   map: 'jungfrau',
+  dependsOn: 'jungfraubahn-wengen-scheidegg',
   name: {
     de: 'Lauberhornbahn',
     en: 'Lauberhornbahn',
@@ -10,6 +11,7 @@ export default {
     en: 'To promote winter sports in the vicinity of the Kleine Scheidegg, the construction of a funicular railway to the 2400-meter-high Lauberhorn is under consideration. It is therefore requested that a route plan be prepared to assess the feasibility of this undertaking. Particular attention must be paid to ensuring a consistent gradient along the route, as this is of great importance for smooth operation. Equally essential is the consideration of a large minimum curve radius, which is fundamental to the design and functionality of a funicular railway.',
   },
   type: 'funicular',
+  difficulty: 'easy',
   start: {
     x: 4038,
     y: 2714,

@@ -1,6 +1,7 @@
 export default {
   id: 'grimselstrasse-gletsch-grimselpass',
   map: 'furka',
+  dependsOn: 'grimselstrasse-aelplersulz-grimselpass',
   name: {
     de: 'Grimselstraße: Südaufstieg',
     en: 'Grimsel road: South ascent',
@@ -10,6 +11,7 @@ export default {
     en: 'The road leading from the north to the hospice on the Grimsel Pass has already proven to be a great success. However, both goods and travelers must transfer to mules there to navigate the steep descent into the Valais. It is now your task to close this gap and design a road from Gletsch to the Grimsel Pass. On the shortest route, 400 meters of elevation must be overcome; without numerous switchbacks, it will be impossible to maintain the maximum allowable gradient of 12 percent.',
   },
   type: 'road',
+  difficulty: 'hard',
   start: {
     x: 3694,
     y: 4058,

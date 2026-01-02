@@ -1,6 +1,7 @@
 export default {
   id: 'oberwald-grimselpass',
   map: 'furka',
+  dependsOn: null,
   name: {
     de: 'Saumpfad Grimselpass',
     en: 'Grimsel Pass mule track',
@@ -10,6 +11,7 @@ export default {
     en: 'The transport of goods over the Grimsel Pass offers a promising opportunity for considerable profit. Therefore, we request that you undertake the planning of a mule path from Oberwald to the Grimsel Pass. The path must be designed to ensure easy passage for mules and should not be overly steep.',
   },
   type: 'muleTrack',
+  difficulty: 'hard',
   start: {
     x: 2814,
     y: 7095,

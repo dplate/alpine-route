@@ -1,6 +1,7 @@
 export default {
   id: 'jungfraubahn-scheidegg-jungfraujoch',
   map: 'jungfrau',
+  dependsOn: 'jungfraubahn-alpiglen-scheidegg',
   name: {
     de: 'Jungfraubahn IV: Jungfraujoch',
     en: 'Jungfraubahn IV: Jungfraujoch',
@@ -10,6 +11,7 @@ export default {
     en: 'From the elevation of 2000 meters at the Kleine Scheidegg, the most arduous phase of construction is to commence: a passage through the formidable North Face of the Eiger, ascending to the Jungfraujoch at a towering height of 3500 meters. Given the extreme nature of the terrain, the endeavor necessitates the creation of extended tunnels. To preserve the allotted budget, it is deemed prudent to incorporate regular tunnel openings for the disposal of excavated material.',
   },
   type: 'cogRailway',
+  difficulty: 'hard',
   start: {
     x: 4113,
     y: 2792,

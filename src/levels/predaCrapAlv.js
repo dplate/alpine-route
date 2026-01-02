@@ -1,6 +1,7 @@
 export default {
   id: 'preda-crap-alv',
   map: 'albula',
+  dependsOn: null,
   name: {
     de: 'Weg nach Crap Alv',
     en: 'Path to Crap Alv',
@@ -10,6 +11,7 @@ export default {
     en: 'It is proposed to establish a brick factory at Crap Alv on the Albula Pass. For the transportation of the manufactured bricks, an expanded path suitable for mules will be required. In the planning, however, strict attention must be paid to avoiding costly bridges or tunnels, and the gradient of the path must remain moderate.',
   },
   type: 'muleTrack',
+  difficulty: 'easy',
   start: {
     x: 2849,
     y: 4767,

@@ -1,6 +1,7 @@
 export default {
   id: 'albulabahn-berguen-muet',
   map: 'albula',
+  dependsOn: null,
   name: {
     de: 'Albulabahn I: Bergün - Muet',
     en: 'Albulabahn I: Bergün - Muet',
@@ -10,6 +11,7 @@ export default {
     en: 'It is intended to establish a railway connection over the Albula to reach the spa town of St. Moritz from the north. As heavy freight trains are also to be employed, the narrow-gauge track must have a gradient of no more than 35 per mille. To accomplish this arduous endeavor, we have divided the project into three construction phases. The first phase involves overcoming the approximately 200 meters of elevation from the village of Bergün to Muet. Due to the short distance, elaborate switchbacks will likely be necessary, which are expected to incur considerable costs.',
   },
   type: 'narrowGaugeRailway',
+  difficulty: 'hard',
   start: {
     x: 850,
     y: 231,

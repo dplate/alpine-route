@@ -1,6 +1,7 @@
 export default {
   id: 'bollenwees-zwinglipass',
   map: 'saentis',
+  dependsOn: null,
   name: {
     de: 'Pfad zum Zwinglipass',
     en: 'Mule track to Zwinglipass',
@@ -10,6 +11,7 @@ export default {
     en: 'The hutkeeper of the small Zwinglipass Hut desires an accessible path for mules. This path should start at the well-established Bollenwees Inn and ascend approximately 550 meters through the Alpstein. Fortunately, there are no gorges to cross or tunnels to build, making the project cost-effective. However, careful and economical execution is essential.',
   },
   type: 'muleTrack',
+  difficulty: 'hard',
   start: {
     x: 7317,
     y: 5733,

@@ -1,6 +1,7 @@
 export default {
   id: 'saentisbahn-meglisalp-saentis',
   map: 'saentis',
+  dependsOn: 'saentisbahn-seealp-meglisalp',
   name: {
     de: 'Säntisbahn III: Gipfel',
     en: 'Säntisbahn III: Peak',
@@ -10,6 +11,7 @@ export default {
     en: 'Following the successful operation of the Säntisbahn from Wasserauen to Meglisalp, the honorable investors have now provided sufficient funds to undertake the final stage to the summit of Säntis. In view of the considerable length of the route and the elevation gain of over one thousand meters, the construction of a continuous cog railway is indispensable. Furthermore, it will be necessary to construct longer tunnels at the summit to overcome the rocky terrain.',
   },
   type: 'cogRailway',
+  difficulty: 'hard',
   start: {
     x: 4423,
     y: 5385,
